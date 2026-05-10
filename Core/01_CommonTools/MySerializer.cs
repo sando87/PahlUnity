@@ -138,11 +138,37 @@ namespace PahlUnity
         public static void SetValue(MonoBehaviour obj, MySerializableInfo info)
         {
             object infoValue = ParseValue(info.fieldType, info.fieldValue);
-            obj.ExSetPrivateFieldValue(info.fieldName, infoValue);
+            SetPrivateFieldValue(obj, info.fieldName, infoValue);
         }
         public static T GetValue<T>(MonoBehaviour obj, MySerializableInfo info)
         {
-            return obj.ExGetPrivateFieldValue<T>(info.fieldName);
+            return GetPrivateFieldValue<T>(obj, info.fieldName);
+        }
+        private static void SetPrivateFieldValue(object obj, string propName, object val)
+        {
+            if (obj == null) return;
+            Type t = obj.GetType();
+            FieldInfo fi = null;
+            while (fi == null && t != null)
+            {
+                fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                t = t.BaseType;
+            }
+            if (fi == null) return;
+            fi.SetValue(obj, val);
+        }
+        private static T GetPrivateFieldValue<T>(object obj, string propName)
+        {
+            if (obj == null) return default;
+            Type t = obj.GetType();
+            FieldInfo fi = null;
+            while (fi == null && t != null)
+            {
+                fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                t = t.BaseType;
+            }
+            if (fi == null) return default;
+            return (T)fi.GetValue(obj);
         }
         private static object ParseValue(string fieldType, string value)
         {
