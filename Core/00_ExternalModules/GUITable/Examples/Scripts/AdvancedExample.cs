@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class AdvancedExample : MonoBehaviour {
+public class AdvancedExample : MonoBehaviour
+{
 
 	private static AdvancedExample instance = null;
 	public static AdvancedExample Instance
@@ -11,7 +12,7 @@ public class AdvancedExample : MonoBehaviour {
 		get
 		{
 			if (instance == null)
-				instance = FindObjectOfType<AdvancedExample>();
+				instance = FindAnyObjectByType<AdvancedExample>();
 			return instance;
 		}
 	}
@@ -35,9 +36,9 @@ public class AdvancedExample : MonoBehaviour {
 
 	public List<Spawner> spawners = new List<Spawner>();
 
-	void OnGUI ()
+	void OnGUI()
 	{
-		GUILayout.Label ("Select the AdvancedExample scene object to visualize the table in the editor");
+		GUILayout.Label("Select the AdvancedExample scene object to visualize the table in the editor");
 	}
 
 }

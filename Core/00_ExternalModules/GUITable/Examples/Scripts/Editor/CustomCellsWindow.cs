@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using EditorGUITable;
 
-public class CustomCellsWindow : EditorWindow 
+public class CustomCellsWindow : EditorWindow
 {
 
 	SerializedObject serializedObject;
@@ -12,40 +12,40 @@ public class CustomCellsWindow : EditorWindow
 	GUITableState tableState;
 
 
-	void OnEnable ()
+	void OnEnable()
 	{
 		tableState = new GUITableState("tableState5");
 	}
 
-	void OnGUI () 
+	void OnGUI()
 	{
 
-		GUILayout.Label ("Customize the cells", EditorStyles.boldLabel);
+		GUILayout.Label("Customize the cells", EditorStyles.boldLabel);
 
-		DrawCustomCells ();
+		DrawCustomCells();
 
 	}
 
-	void DrawCustomCells ()
+	void DrawCustomCells()
 	{
 		SerializedObject serializedObject = new SerializedObject(SimpleExample.Instance);
-		
+
 		List<TableColumn> columns = new List<TableColumn>()
 		{
-			new TableColumn("String", 60f),
-			new TableColumn("Float", 50f),
-			new TableColumn("Object", 110f),
+			new TableColumn("String", new TableColumnOption(TableColumnOption.Type.Width, 60f)),
+			new TableColumn("Float", new TableColumnOption(TableColumnOption.Type.Width, 50f)),
+			new TableColumn("Object", new TableColumnOption(TableColumnOption.Type.Width, 110f)),
 			new TableColumn("", TableColumn.Width(100f), TableColumn.EnabledTitle(false)),
 		};
 
 		List<List<TableCell>> rows = new List<List<TableCell>>();
 
-		SimpleExample targetObject = (SimpleExample) serializedObject.targetObject;
+		SimpleExample targetObject = (SimpleExample)serializedObject.targetObject;
 
-		for (int i = 0 ; i < targetObject.simpleObjects.Count ; i++)
+		for (int i = 0; i < targetObject.simpleObjects.Count; i++)
 		{
 			SimpleExample.SimpleObject entry = targetObject.simpleObjects[i];
-			rows.Add (new List<TableCell>()
+			rows.Add(new List<TableCell>()
 			{
 				new LabelCell (entry.stringProperty),
 				new PropertyCell (serializedObject, string.Format("simpleObjects.Array.data[{0}].floatProperty", i)),
@@ -54,7 +54,7 @@ public class CustomCellsWindow : EditorWindow
 			});
 		}
 
-		tableState = GUITableLayout.DrawTable (tableState, columns, rows);
+		tableState = GUITableLayout.DrawTable(tableState, columns, rows);
 	}
 
 }

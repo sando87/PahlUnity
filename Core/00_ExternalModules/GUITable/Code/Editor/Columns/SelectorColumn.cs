@@ -15,11 +15,9 @@ namespace EditorGUITable
 	public abstract class SelectorColumn : TableColumn
 	{
 
-		public SelectorColumn (string title, params TableColumnOption[] options) : base (title, options) {}
+		public SelectorColumn(string title, params TableColumnOption[] options) : base(title, options) { }
 
-		public SelectorColumn (string title, float width, params TableColumnOption[] options) : base (title, width, options) {}
-
-		public abstract TableCell GetCell (SerializedProperty elementProperty);
+		public abstract TableCell GetCell(SerializedProperty elementProperty);
 
 	}
 

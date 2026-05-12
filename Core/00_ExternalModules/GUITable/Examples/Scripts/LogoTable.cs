@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class LogoTable : MonoBehaviour {
+public class LogoTable : MonoBehaviour
+{
 
 	private static LogoTable instance = null;
 	public static LogoTable Instance
@@ -11,7 +12,7 @@ public class LogoTable : MonoBehaviour {
 		get
 		{
 			if (instance == null)
-				instance = FindObjectOfType<LogoTable>();
+				instance = FindAnyObjectByType<LogoTable>();
 			return instance;
 		}
 	}
@@ -33,9 +34,9 @@ public class LogoTable : MonoBehaviour {
 		new LogoLine(){letter1 = LogoLetter.e, letter2 = "", color = Color.blue},
 	};
 
-	void OnGUI ()
+	void OnGUI()
 	{
-		GUILayout.Label ("Select the Logo Table scene object to visualize the table in the editor");
+		GUILayout.Label("Select the Logo Table scene object to visualize the table in the editor");
 	}
 
 }

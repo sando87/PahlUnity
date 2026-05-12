@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SimpleExample : MonoBehaviour {
+public class SimpleExample : MonoBehaviour
+{
 
 	private static SimpleExample instance = null;
 	public static SimpleExample Instance
@@ -11,7 +12,7 @@ public class SimpleExample : MonoBehaviour {
 		get
 		{
 			if (instance == null)
-				instance = FindObjectOfType<SimpleExample>();
+				instance = FindAnyObjectByType<SimpleExample>();
 			return instance;
 		}
 	}
@@ -22,7 +23,7 @@ public class SimpleExample : MonoBehaviour {
 		public string stringProperty;
 		public float floatProperty;
 		public GameObject objectProperty;
-		public void Reset ()
+		public void Reset()
 		{
 			stringProperty = "";
 			floatProperty = 0f;
@@ -32,9 +33,9 @@ public class SimpleExample : MonoBehaviour {
 
 	public List<SimpleObject> simpleObjects;
 
-	void OnGUI ()
+	void OnGUI()
 	{
-		GUILayout.Label ("Select the SimpleExample scene object to visualize the table in the inspector");
+		GUILayout.Label("Select the SimpleExample scene object to visualize the table in the inspector");
 	}
 
 }
