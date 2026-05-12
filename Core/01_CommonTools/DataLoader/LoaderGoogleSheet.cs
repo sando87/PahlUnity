@@ -1,38 +1,47 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
+using UnityEngine.Networking;
 
-public class LoaderGoogleSheet : ILoaderInterface
+namespace PahlUnity
 {
-    // ex) "1pe25syvJ-AiuEs4kVEwtqGZD7TwsUvlOXe8mqmPkXn8";
-    private string mGoogleSheetUrlId;
-    // ex) "playerSpec";
-    private string mSheetName;
-
-    public LoaderGoogleSheet(string spreadsheetId, string sheetName)
+    public class LoaderGoogleSheet : IDataProvider
     {
-        mGoogleSheetUrlId = spreadsheetId;
-        mSheetName = sheetName;
-    }
+        // ex) "1pe25syvJ-AiuEs4kVEwtqGZD7TwsUvlOXe8mqmPkXn8";
+        private string mGoogleSheetUrlId;
+        // ex) "playerSpec";
+        private string mSheetName;
 
-    public string Load()
-    {
-        return LoadGoogleSheetData(mGoogleSheetUrlId, mSheetName);
-    }
-
-    public static string LoadGoogleSheetData(string urlId, string sheetName)
-    {
-        string url = $"https://docs.google.com/spreadsheets/d/{urlId}/gviz/tq?tqx=out:csv&sheet={sheetName}";
-
-        UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Get(url);
-        var operation = www.SendWebRequest();
-        while (!operation.isDone)
-            System.Threading.Thread.Sleep(100);
-
-        if (www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+        public LoaderGoogleSheet(string spreadsheetId, string sheetName)
         {
-            throw new Exception($"Failed to load google sheet: {www.error}");
+            mGoogleSheetUrlId = spreadsheetId;
+            mSheetName = sheetName;
         }
 
-        string rawDataCsvFormat = www.downloadHandler.text;
-        return rawDataCsvFormat;
+
+        public async UniTask<string> LoadAsync()
+        {
+            return await LoadGoogleSheetData(mGoogleSheetUrlId, mSheetName);
+        }
+
+        private static async UniTask<string> LoadGoogleSheetData(string urlId, string sheetName)
+        {
+            string url = $"https://docs.google.com/spreadsheets/d/{urlId}/gviz/tq?tqx=out:csv&sheet={sheetName}";
+
+            using UnityWebRequest www = UnityWebRequest.Get(url);
+
+            await www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                throw new Exception($"Failed to load google sheet: {www.error}");
+            }
+
+            return www.downloadHandler.text;
+        }
+
+        public UniTask SaveAsync(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

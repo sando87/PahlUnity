@@ -5,319 +5,321 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 
-public static class CSVParser<T>
-    where T : new()
+namespace PahlUnity
 {
-    public static T[] Parse(string csv)
+    public static class CSVParser<T> where T : new()
     {
-        List<List<string>> table = ParseTable(csv);
-
-        if (table.Count <= 1)
-            return Array.Empty<T>();
-
-        List<T> result = new List<T>();
-
-        // header
-        List<string> header = table[0];
-
-        // field/property cache
-        Dictionary<int, MemberInfo> memberMap =
-            BuildMemberMap(header);
-
-        // rows
-        for (int row = 1; row < table.Count; row++)
+        public static T[] Parse(string csv)
         {
-            List<string> rowData = table[row];
+            List<List<string>> table = ParseTable(csv);
 
-            // 빈 row skip
-            if (IsEmptyRow(rowData))
-                continue;
+            if (table.Count <= 1)
+                return Array.Empty<T>();
 
-            T obj = new T();
+            List<T> result = new List<T>();
 
-            foreach (var pair in memberMap)
+            // header
+            List<string> header = table[0];
+
+            // field/property cache
+            Dictionary<int, MemberInfo> memberMap =
+                BuildMemberMap(header);
+
+            // rows
+            for (int row = 1; row < table.Count; row++)
             {
-                int col = pair.Key;
+                List<string> rowData = table[row];
 
-                if (col >= rowData.Count)
+                // 빈 row skip
+                if (IsEmptyRow(rowData))
                     continue;
 
-                string raw = rowData[col];
+                T obj = new T();
 
-                MemberInfo member = pair.Value;
+                foreach (var pair in memberMap)
+                {
+                    int col = pair.Key;
 
-                try
-                {
-                    SetMemberValue(obj, member, raw);
+                    if (col >= rowData.Count)
+                        continue;
+
+                    string raw = rowData[col];
+
+                    MemberInfo member = pair.Value;
+
+                    try
+                    {
+                        SetMemberValue(obj, member, raw);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(
+                            $"CSV Parse Error " +
+                            $"Type={typeof(T).Name} " +
+                            $"Row={row} Col={col} " +
+                            $"Value={raw}\n{e}");
+                    }
                 }
-                catch (Exception e)
-                {
-                    Debug.LogError(
-                        $"CSV Parse Error " +
-                        $"Type={typeof(T).Name} " +
-                        $"Row={row} Col={col} " +
-                        $"Value={raw}\n{e}");
-                }
+
+                result.Add(obj);
             }
 
-            result.Add(obj);
+            return result.ToArray();
         }
 
-        return result.ToArray();
-    }
+        // =========================================================
+        // CSV TABLE PARSER
+        // =========================================================
 
-    // =========================================================
-    // CSV TABLE PARSER
-    // =========================================================
-
-    private static List<List<string>> ParseTable(string csv)
-    {
-        List<List<string>> result = new List<List<string>>();
-
-        List<string> row = new List<string>();
-        StringBuilder cell = new StringBuilder();
-
-        bool inQuotes = false;
-
-        for (int i = 0; i < csv.Length; i++)
+        private static List<List<string>> ParseTable(string csv)
         {
-            char c = csv[i];
+            List<List<string>> result = new List<List<string>>();
 
-            // quote
-            if (c == '"')
+            List<string> row = new List<string>();
+            StringBuilder cell = new StringBuilder();
+
+            bool inQuotes = false;
+
+            for (int i = 0; i < csv.Length; i++)
             {
-                // escaped quote ""
-                if (inQuotes &&
-                    i + 1 < csv.Length &&
-                    csv[i + 1] == '"')
+                char c = csv[i];
+
+                // quote
+                if (c == '"')
                 {
-                    cell.Append('"');
-                    i++;
-                }
-                else
-                {
-                    inQuotes = !inQuotes;
+                    // escaped quote ""
+                    if (inQuotes &&
+                        i + 1 < csv.Length &&
+                        csv[i + 1] == '"')
+                    {
+                        cell.Append('"');
+                        i++;
+                    }
+                    else
+                    {
+                        inQuotes = !inQuotes;
+                    }
+
+                    continue;
                 }
 
-                continue;
+                // comma
+                if (c == ',' && !inQuotes)
+                {
+                    row.Add(cell.ToString().Trim());
+                    cell.Clear();
+                    continue;
+                }
+
+                // newline
+                if ((c == '\n' || c == '\r') && !inQuotes)
+                {
+                    // \r\n
+                    if (c == '\r' &&
+                        i + 1 < csv.Length &&
+                        csv[i + 1] == '\n')
+                    {
+                        i++;
+                    }
+
+                    row.Add(cell.ToString().Trim());
+                    cell.Clear();
+
+                    result.Add(row);
+
+                    row = new List<string>();
+
+                    continue;
+                }
+
+                cell.Append(c);
             }
 
-            // comma
-            if (c == ',' && !inQuotes)
+            // last cell
+            row.Add(cell.ToString().Trim());
+
+            // last row
+            if (row.Count > 0)
             {
-                row.Add(cell.ToString().Trim());
-                cell.Clear();
-                continue;
-            }
-
-            // newline
-            if ((c == '\n' || c == '\r') && !inQuotes)
-            {
-                // \r\n
-                if (c == '\r' &&
-                    i + 1 < csv.Length &&
-                    csv[i + 1] == '\n')
-                {
-                    i++;
-                }
-
-                row.Add(cell.ToString().Trim());
-                cell.Clear();
-
                 result.Add(row);
-
-                row = new List<string>();
-
-                continue;
             }
 
-            cell.Append(c);
+            return result;
         }
 
-        // last cell
-        row.Add(cell.ToString().Trim());
+        // =========================================================
+        // MEMBER MAP
+        // =========================================================
 
-        // last row
-        if (row.Count > 0)
+        private static Dictionary<int, MemberInfo> BuildMemberMap(
+            List<string> header)
         {
-            result.Add(row);
-        }
+            Dictionary<int, MemberInfo> map =
+                new Dictionary<int, MemberInfo>();
 
-        return result;
-    }
+            Type type = typeof(T);
 
-    // =========================================================
-    // MEMBER MAP
-    // =========================================================
+            BindingFlags flags =
+                BindingFlags.Public |
+                BindingFlags.Instance;
 
-    private static Dictionary<int, MemberInfo> BuildMemberMap(
-        List<string> header)
-    {
-        Dictionary<int, MemberInfo> map =
-            new Dictionary<int, MemberInfo>();
-
-        Type type = typeof(T);
-
-        BindingFlags flags =
-            BindingFlags.Public |
-            BindingFlags.Instance;
-
-        for (int i = 0; i < header.Count; i++)
-        {
-            string name = header[i];
-
-            // field 우선
-            FieldInfo field = type.GetField(name, flags);
-
-            if (field != null)
+            for (int i = 0; i < header.Count; i++)
             {
-                map[i] = field;
-                continue;
+                string name = header[i];
+
+                // field 우선
+                FieldInfo field = type.GetField(name, flags);
+
+                if (field != null)
+                {
+                    map[i] = field;
+                    continue;
+                }
+
+                // property
+                PropertyInfo property =
+                    type.GetProperty(name, flags);
+
+                if (property != null &&
+                    property.CanWrite)
+                {
+                    map[i] = property;
+                }
             }
 
-            // property
-            PropertyInfo property =
-                type.GetProperty(name, flags);
+            return map;
+        }
 
-            if (property != null &&
-                property.CanWrite)
+        // =========================================================
+        // VALUE SET
+        // =========================================================
+
+        private static void SetMemberValue(
+            T obj,
+            MemberInfo member,
+            string raw)
+        {
+            Type valueType;
+
+            if (member is FieldInfo field)
             {
-                map[i] = property;
+                valueType = field.FieldType;
+
+                object value = ConvertValue(raw, valueType);
+
+                field.SetValue(obj, value);
+
+                return;
+            }
+
+            if (member is PropertyInfo property)
+            {
+                valueType = property.PropertyType;
+
+                object value = ConvertValue(raw, valueType);
+
+                property.SetValue(obj, value);
+
+                return;
             }
         }
 
-        return map;
-    }
-
-    // =========================================================
-    // VALUE SET
-    // =========================================================
-
-    private static void SetMemberValue(
-        T obj,
-        MemberInfo member,
-        string raw)
-    {
-        Type valueType;
-
-        if (member is FieldInfo field)
+        private static object ConvertValue(string raw, Type type)
         {
-            valueType = field.FieldType;
+            if (type == typeof(string))
+                return raw;
 
-            object value = ConvertValue(raw, valueType);
+            if (string.IsNullOrEmpty(raw))
+            {
+                if (type.IsValueType)
+                    return Activator.CreateInstance(type);
 
-            field.SetValue(obj, value);
+                return null;
+            }
 
-            return;
-        }
+            if (type == typeof(int))
+            {
+                return int.Parse(
+                    raw,
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture);
+            }
 
-        if (member is PropertyInfo property)
-        {
-            valueType = property.PropertyType;
+            if (type == typeof(float))
+            {
+                return float.Parse(
+                    raw,
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture);
+            }
 
-            object value = ConvertValue(raw, valueType);
+            if (type == typeof(double))
+            {
+                return double.Parse(
+                    raw,
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture);
+            }
 
-            property.SetValue(obj, value);
+            if (type == typeof(decimal))
+            {
+                return decimal.Parse(
+                    raw,
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture);
+            }
 
-            return;
-        }
-    }
+            if (type == typeof(bool))
+                return bool.Parse(raw);
 
-    private static object ConvertValue(string raw, Type type)
-    {
-        if (type == typeof(string))
-            return raw;
+            if (type == typeof(long))
+            {
+                return long.Parse(
+                    raw,
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture);
+            }
 
-        if (string.IsNullOrEmpty(raw))
-        {
-            if (type.IsValueType)
-                return Activator.CreateInstance(type);
+            if (type == typeof(short))
+            {
+                return short.Parse(
+                    raw,
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture);
+            }
 
-            return null;
-        }
+            if (type == typeof(byte))
+            {
+                return byte.Parse(
+                    raw,
+                    NumberStyles.Integer,
+                    CultureInfo.InvariantCulture);
+            }
 
-        if (type == typeof(int))
-        {
-            return int.Parse(
+            if (type.IsEnum)
+            {
+                return Enum.Parse(type, raw);
+            }
+
+            return Convert.ChangeType(
                 raw,
-                NumberStyles.Integer,
+                type,
                 CultureInfo.InvariantCulture);
         }
 
-        if (type == typeof(float))
+        // =========================================================
+        // UTIL
+        // =========================================================
+
+        private static bool IsEmptyRow(List<string> row)
         {
-            return float.Parse(
-                raw,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture);
+            for (int i = 0; i < row.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(row[i]))
+                    return false;
+            }
+
+            return true;
         }
-
-        if (type == typeof(double))
-        {
-            return double.Parse(
-                raw,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture);
-        }
-
-        if (type == typeof(decimal))
-        {
-            return decimal.Parse(
-                raw,
-                NumberStyles.Float,
-                CultureInfo.InvariantCulture);
-        }
-
-        if (type == typeof(bool))
-            return bool.Parse(raw);
-
-        if (type == typeof(long))
-        {
-            return long.Parse(
-                raw,
-                NumberStyles.Integer,
-                CultureInfo.InvariantCulture);
-        }
-
-        if (type == typeof(short))
-        {
-            return short.Parse(
-                raw,
-                NumberStyles.Integer,
-                CultureInfo.InvariantCulture);
-        }
-
-        if (type == typeof(byte))
-        {
-            return byte.Parse(
-                raw,
-                NumberStyles.Integer,
-                CultureInfo.InvariantCulture);
-        }
-
-        if (type.IsEnum)
-        {
-            return Enum.Parse(type, raw);
-        }
-
-        return Convert.ChangeType(
-            raw,
-            type,
-            CultureInfo.InvariantCulture);
-    }
-
-    // =========================================================
-    // UTIL
-    // =========================================================
-
-    private static bool IsEmptyRow(List<string> row)
-    {
-        for (int i = 0; i < row.Count; i++)
-        {
-            if (!string.IsNullOrEmpty(row[i]))
-                return false;
-        }
-
-        return true;
     }
 }
