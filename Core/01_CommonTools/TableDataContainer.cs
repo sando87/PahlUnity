@@ -87,7 +87,7 @@ namespace PahlUnity
     // 실제 구조체에서 아래 항목을 override해서 사용
     public interface ITableRecord
     {
-        long ID { get { return -1; } } // 데이터 접근을 위한 id값
+        long ID { get; } // 데이터 접근을 위한 id값
         int RowIndex { get; set; } // 전체 csv 테이블상에서 각 Row의 인덱스정보
         static long ToID(string stringID) { return stringID.GetHashCode(); } // 데이터 접근을 위한 id값
         void OnLoad() { } // 추가로 초기화 할 데이터 있으면 여기서 처리
