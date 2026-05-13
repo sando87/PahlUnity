@@ -42,5 +42,9 @@ namespace PahlUnity
                 throw new Exception(ex.Message);
             }
         }
+        static public int Sizeof<T>()
+        {
+            return Marshal.SizeOf(typeof(T));
+        }
     }
 }

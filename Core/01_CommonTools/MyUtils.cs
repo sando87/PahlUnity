@@ -42,10 +42,6 @@ namespace PahlUnity
         {
             return (UnityEngine.Random.Range(0, 1000) % 100) < percent;
         }
-        static public int Sizeof<T>()
-        {
-            return Marshal.SizeOf(typeof(T));
-        }
         public static string[] GetFileNames(string folderName, string ext) // ext like this... ".png" ".json" ".asset" etc...
         {
             List<string> filenames = new List<string>();
