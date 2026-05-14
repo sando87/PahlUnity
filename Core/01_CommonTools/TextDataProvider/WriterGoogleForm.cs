@@ -32,26 +32,19 @@ using UnityEngine.Networking;
 
 namespace PahlUnity
 {
-    public class WriterGoogleForm : IDataProvider
+    public class WriterGoogleForm : ITextDataProvider
     {
-        private string mGoogleFormURL;
-
-        public WriterGoogleForm(string googleFormURL)
-        {
-            mGoogleFormURL = googleFormURL;
-        }
-
-        public UniTask<string> LoadAsync()
+        public UniTask<string> LoadAsync(string googleFormURL)
         {
             throw new NotImplementedException();
         }
 
-        public async UniTask SaveAsync(string data)
+        public async UniTask SaveAsync(string googleFormURL, string data)
         {
-            await SendAsync(data);
+            await SendAsync(googleFormURL, data);
         }
 
-        private async UniTask SendAsync<T>(T data)
+        private async UniTask SendAsync<T>(string googleFormURL, T data)
         {
             WWWForm form = new WWWForm();
 
@@ -87,7 +80,7 @@ namespace PahlUnity
                 form.AddField(attr.EntryID, value?.ToString() ?? "");
             }
 
-            using UnityWebRequest www = UnityWebRequest.Post(mGoogleFormURL, form);
+            using UnityWebRequest www = UnityWebRequest.Post(googleFormURL, form);
             await www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

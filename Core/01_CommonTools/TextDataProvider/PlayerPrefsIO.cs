@@ -15,41 +15,34 @@ using UnityEngine;
 /// </summary>
 namespace PahlUnity
 {
-    public class PlayerPrefsIO : IDataProvider
+    public class PlayerPrefsIO : ITextDataProvider
     {
-        private string mKey;
-
-        public PlayerPrefsIO(string key)
-        {
-            mKey = key;
-        }
-
         // =========================================================
         // LOAD
         // =========================================================
 
-        public async UniTask<string> LoadAsync()
+        public async UniTask<string> LoadAsync(string key)
         {
             await UniTask.CompletedTask;
 
-            if (!PlayerPrefs.HasKey(mKey))
+            if (!PlayerPrefs.HasKey(key))
             {
                 return string.Empty;
             }
 
-            return PlayerPrefs.GetString(mKey);
+            return PlayerPrefs.GetString(key);
         }
 
         // =========================================================
         // SAVE
         // =========================================================
 
-        public async UniTask SaveAsync(string data)
+        public async UniTask SaveAsync(string key, string data)
         {
             await UniTask.CompletedTask;
 
             PlayerPrefs.SetString(
-                mKey,
+                key,
                 data ?? string.Empty);
 
             PlayerPrefs.Save();

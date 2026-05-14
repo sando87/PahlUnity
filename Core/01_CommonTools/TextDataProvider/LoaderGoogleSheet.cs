@@ -4,23 +4,20 @@ using UnityEngine.Networking;
 
 namespace PahlUnity
 {
-    public class LoaderGoogleSheet : IDataProvider
+    public class LoaderGoogleSheet : ITextDataProvider
     {
         // ex) "1pe25syvJ-AiuEs4kVEwtqGZD7TwsUvlOXe8mqmPkXn8";
         private string mGoogleSheetUrlId;
-        // ex) "playerSpec";
-        private string mSheetName;
 
-        public LoaderGoogleSheet(string spreadsheetId, string sheetName)
+        public LoaderGoogleSheet(string spreadsheetId)
         {
             mGoogleSheetUrlId = spreadsheetId;
-            mSheetName = sheetName;
         }
 
-
-        public async UniTask<string> LoadAsync()
+        // ex) key is sheetName like "playerSpec";
+        public async UniTask<string> LoadAsync(string sheetName)
         {
-            return await LoadGoogleSheetData(mGoogleSheetUrlId, mSheetName);
+            return await LoadGoogleSheetData(mGoogleSheetUrlId, sheetName);
         }
 
         private static async UniTask<string> LoadGoogleSheetData(string urlId, string sheetName)
@@ -39,7 +36,7 @@ namespace PahlUnity
             return www.downloadHandler.text;
         }
 
-        public UniTask SaveAsync(string data)
+        public UniTask SaveAsync(string key, string data)
         {
             throw new NotImplementedException();
         }

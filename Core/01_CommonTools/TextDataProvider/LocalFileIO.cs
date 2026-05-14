@@ -15,29 +15,22 @@ using UnityEngine;
 /// </summary>
 namespace PahlUnity
 {
-    public class LocalFileIO : IDataProvider
+    public class LocalFileIO : ITextDataProvider
     {
-        private string mFilePath;
-
-        public LocalFileIO(string relativePath)
-        {
-            mFilePath = Path.Combine(Application.persistentDataPath, relativePath);
-        }
-
         // =========================================================
         // LOAD
         // =========================================================
 
-        public async UniTask<string> LoadAsync()
+        public async UniTask<string> LoadAsync(string fullPath)
         {
-            if (!File.Exists(mFilePath))
+            if (!File.Exists(fullPath))
             {
-                throw new FileNotFoundException($"File not found : {mFilePath}");
+                throw new FileNotFoundException($"File not found : {fullPath}");
             }
 
             using FileStream fs =
                 new FileStream(
-                    mFilePath,
+                    fullPath,
                     FileMode.Open,
                     FileAccess.Read,
                     FileShare.Read,
@@ -52,9 +45,9 @@ namespace PahlUnity
         // SAVE
         // =========================================================
 
-        public async UniTask SaveAsync(string data)
+        public async UniTask SaveAsync(string fullPath, string data)
         {
-            string dir = Path.GetDirectoryName(mFilePath);
+            string dir = Path.GetDirectoryName(fullPath);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -62,7 +55,7 @@ namespace PahlUnity
 
             using FileStream fs =
                 new FileStream(
-                    mFilePath,
+                    fullPath,
                     FileMode.Create,
                     FileAccess.Write,
                     FileShare.None,
