@@ -23,13 +23,13 @@ namespace PahlUnity
         private GUIStyle mGuiStyle = null;
         private List<(string, System.Action)> mActions = new List<(string, System.Action)>();
 
-        public void Register(string name, System.Action action)
+        public void Register(string btnName, System.Action action)
         {
-            mActions.Add((name, action));
+            mActions.Add((btnName, action));
         }
-        public void Unregister(string name)
+        public void Unregister(string btnName)
         {
-            mActions.RemoveAll(x => x.Item1 == name);
+            mActions.RemoveAll(x => x.Item1 == btnName);
         }
 
         void OnEnable()

@@ -4,14 +4,21 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class PoolingManager : MonoBehaviour
+    public class PoolingManager : SingletonMono<PoolingManager>
     {
         // 요청한 객체가 부족할때 추가 할당해주는 객체의 개수
         private const int AllocCount = 10;
 
         private Dictionary<string, Transform> mObjectPool = new Dictionary<string, Transform>();
 
-        public GameObject Pop(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+        public GameObject PopForDuration(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, float duration)
+        {
+            GameObject obj = Pop(prefab, position, rotation, parent);
+            PushBack(obj, duration);
+            return obj;
+        }
+
+        public GameObject Pop(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
         {
             GameObject obj = Pop(prefab);
             obj.transform.position = position;
@@ -84,11 +91,11 @@ namespace PahlUnity
 
         public void PushBack(GameObject obj)
         {
+            LOG.errorif(obj == null, "obj is null");
+
             // 대상객체가 이미 풀링 안에 있는 상태이면 그냥 반환
             if (IsAlreadyInPoolingGroup(obj))
-            {
                 return;
-            }
 
             // 다 사용한 객체는 재활용을 위해 다시 Pool에 넣어준다
             string key = obj.name;
@@ -116,17 +123,13 @@ namespace PahlUnity
             {
                 this.ExDelayedCoroutine(delay, () =>
                 {
-                    if (obj != null)
-                        PushBack(obj);
+                    PushBack(obj);
                 });
             }
         }
 
         public bool IsAlreadyInPoolingGroup(GameObject obj)
         {
-            if (obj.activeSelf)
-                return false;
-
             PoolingManager poolRoot = obj.GetComponentInParent<PoolingManager>();
             if (poolRoot == null)
                 return false;

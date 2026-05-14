@@ -84,8 +84,8 @@ namespace PahlUnity
                     mHandlerTable[head.RequestID] = response;
 
             }
-            catch (SocketException ex) { LOG.warn(ex.Message); DisConnect(); return false; }
-            catch (Exception ex) { LOG.warn(ex.Message); DisConnect(); return false; }
+            catch (SocketException ex) { LOG.log(ex.Message); DisConnect(); return false; }
+            catch (Exception ex) { LOG.log(ex.Message); DisConnect(); return false; }
             return true;
         }
         public bool Request(NetCMD cmd, ByteSerializer body, Action<byte[]> response)
@@ -109,8 +109,8 @@ namespace PahlUnity
                     mHandlerTable[head.RequestID] = response;
 
             }
-            catch (SocketException ex) { LOG.warn(ex.Message); DisConnect(); return false; }
-            catch (Exception ex) { LOG.warn(ex.Message); DisConnect(); return false; }
+            catch (SocketException ex) { LOG.log(ex.Message); DisConnect(); return false; }
+            catch (Exception ex) { LOG.log(ex.Message); DisConnect(); return false; }
             return true;
         }
 
@@ -129,8 +129,8 @@ namespace PahlUnity
                     mSession.Connect(ServerAddress, ServerPort);
                     return mSession.Connected;
                 }
-                catch (SocketException ex) { LOG.warn(ex.Message); }
-                catch (Exception ex) { LOG.warn(ex.Message); }
+                catch (SocketException ex) { LOG.log(ex.Message); }
+                catch (Exception ex) { LOG.log(ex.Message); }
                 return false;
             });
 
@@ -140,7 +140,7 @@ namespace PahlUnity
             if (mSession != null && mSession.Connected)
             {
                 mStream = mSession.GetStream();
-                LOG.warn(mSession.Client.LocalEndPoint.ToString());
+                LOG.log(mSession.Client.LocalEndPoint.ToString());
                 EventConnection?.Invoke();
             }
             else
@@ -158,7 +158,7 @@ namespace PahlUnity
         {
             if (mStream != null)
             {
-                LOG.warn(mSession.Client.LocalEndPoint.ToString());
+                LOG.log(mSession.Client.LocalEndPoint.ToString());
                 mStream.Close();
                 mStream = null;
             }
@@ -194,8 +194,8 @@ namespace PahlUnity
                     mRecvBuffer.AddRange(subBuf);
                 }
             }
-            catch (SocketException ex) { LOG.warn(ex.Message); DisConnect(); }
-            catch (Exception ex) { LOG.warn(ex.Message); DisConnect(); }
+            catch (SocketException ex) { LOG.log(ex.Message); DisConnect(); }
+            catch (Exception ex) { LOG.log(ex.Message); DisConnect(); }
         }
         private void ParseAndInvokeCallback()
         {
@@ -207,7 +207,7 @@ namespace PahlUnity
                 byte[] recvBuf = mRecvBuffer.ToArray();
                 if (!NetProtocol.IsValid(recvBuf))
                 {
-                    LOG.warn("Invalid data detected : Clear RecvBuffer");
+                    LOG.log("Invalid data detected : Clear RecvBuffer");
                     mRecvBuffer.Clear();
                     return;
                 }
@@ -230,8 +230,8 @@ namespace PahlUnity
                     EventMessage?.Invoke(recvMsg, resBody);
                 }
             }
-            catch (SocketException ex) { LOG.warn(ex.Message); DisConnect(); }
-            catch (Exception ex) { LOG.warn(ex.Message); DisConnect(); }
+            catch (SocketException ex) { LOG.log(ex.Message); DisConnect(); }
+            catch (Exception ex) { LOG.log(ex.Message); DisConnect(); }
 
         }
 
@@ -283,8 +283,8 @@ namespace PahlUnity
                 if (entry != null && entry.AddressList.Length > 0)
                     return true;
             }
-            catch (SocketException ex) { LOG.warn(ex.Message); }
-            catch (Exception ex) { LOG.warn(ex.Message); }
+            catch (SocketException ex) { LOG.log(ex.Message); }
+            catch (Exception ex) { LOG.log(ex.Message); }
             return false;
         }
 

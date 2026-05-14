@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class LocalizationManager : MonoBehaviour, IInitializer
+    public class LocalizationManager : SingletonMono<LocalizationManager>, IInitializer
     {
         [SerializeField] TextAsset _LanguageTableAsset = null;
 

@@ -28,6 +28,7 @@ namespace PahlUnity
             UnityEngine.Debug.Log(message);
         }
 
+        // trace는 디버깅용 임시 로그(디버깅시 필요에 따라 그때그때 남기고 완료되면 다 지울 것)
         static public void trace(string val = "",
             [CallerFilePath] string file = null,
             [CallerMemberName] string caller = null,
@@ -36,6 +37,7 @@ namespace PahlUnity
             LogOut(val, file, caller, lineNumber, "trace");
         }
 
+        // trace는 디버깅용 임시 로그(디버깅시 필요에 따라 그때그때 남기고 완료되면 다 지울 것)
         static public void trace<T>(T val,
             [CallerFilePath] string file = null,
             [CallerMemberName] string caller = null,
@@ -44,7 +46,8 @@ namespace PahlUnity
             LogOut(val.ToString(), file, caller, lineNumber, "trace");
         }
 
-        static public void warn(string val,
+        // log는 출시용 로그를 남기기 위한 용도
+        static public void log(string val,
             [CallerFilePath] string file = null,
             [CallerMemberName] string caller = null,
             [CallerLineNumber] int lineNumber = 0)
@@ -52,7 +55,8 @@ namespace PahlUnity
             LogOut(val, file, caller, lineNumber, "warn");
         }
 
-        static public void warn<T>(T val,
+        // log는 출시용 로그를 남기기 위한 용도
+        static public void log<T>(T val,
             [CallerFilePath] string file = null,
             [CallerMemberName] string caller = null,
             [CallerLineNumber] int lineNumber = 0)
@@ -60,6 +64,8 @@ namespace PahlUnity
             LogOut(val.ToString(), file, caller, lineNumber, "warn");
         }
 
+        // errorif는 개발용 로그 출력용도이기는 하나 출시때도 지울 필요 없음(Release빌드시 자동 삭제됨)
+        // 즉 개발 중 항상 예외처리를 확인하고 싶은 곳에 배치
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD"), Conditional("DEBUG")]
         static public void errorif<T>(bool isError, T val,
             [CallerFilePath] string file = null,
