@@ -6,9 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 팝업관련 UI를 띄우거나 팝업 Depth를 처리하는 등 여러 팝업들을 관리한다.
-/// SomePopup의 프리팹 오브젝트가 등록되어 있어야 한다.
-/// 사용예) SceneUIManager.Inst.Show<SomePopup>();
+/// 씬마다 기본으로 가장 BaseLayer에 배치되는 UI들을 관리한다.
+/// 한번에 두개 이상의 씬UI가 존재할 수 없다.(씬UI는 스위칭만 가능)
+/// 씬UI 전환시마다 실제 유니티 씬이 전환된다.
+/// 사용예) SceneUIManager.Instance.Switch<SomeSceneUI>();
 /// </summary>
 namespace PahlUnity
 {

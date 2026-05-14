@@ -5,9 +5,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// 팝업관련 UI를 띄우거나 팝업 Depth를 처리하는 등 여러 팝업들을 관리한다.
-/// SomePopup의 프리팹 오브젝트가 등록되어 있어야 한다.
-/// 사용예) UIPopupManager.Inst.Show<SomePopup>();
+/// UI 팝업창들을 관리한다.
+/// 팝업창은 화면 내에서 하나만 존재할 수 있다.
+/// 스택형태로 팝업창들이 관리되며
+/// 팝업창이 열릴 때마다 가장 위에 배치되며 Top팝업만 활성화되고 이전 팝업은 비활성화된다.
+/// 닫힐 때는 바로 아래에 있는 팝업창이 활성화 된다.
+/// 사용예) PopupManager.Instance.Open<SomePopup>();
 /// </summary>
 namespace PahlUnity
 {
