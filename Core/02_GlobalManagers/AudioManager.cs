@@ -13,7 +13,7 @@ using System;
 
 namespace PahlUnity
 {
-    public class SoundPlayManager : SingletonMono<SoundPlayManager>
+    public class AudioManager : SingletonMono<AudioManager>
     {
         class PlayingClipInfo
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class PoolingManager : SingletonMono<PoolingManager>
+    public class ObjectPoolingManager : SingletonMono<ObjectPoolingManager>
     {
         // 요청한 객체가 부족할때 추가 할당해주는 객체의 개수
         private const int AllocCount = 10;
@@ -130,7 +130,7 @@ namespace PahlUnity
 
         public bool IsAlreadyInPoolingGroup(GameObject obj)
         {
-            PoolingManager poolRoot = obj.GetComponentInParent<PoolingManager>();
+            ObjectPoolingManager poolRoot = obj.GetComponentInParent<ObjectPoolingManager>();
             if (poolRoot == null)
                 return false;
 
