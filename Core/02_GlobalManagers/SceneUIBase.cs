@@ -6,21 +6,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 각 Popup들의 부모 클래스
-/// 각 Popup들의 공통 기능들은 이곳에서 처리한다.
-/// 공통기능 : 전체화면 잠금, 뒤로가기(닫기), 생성 및 소멸시 애니메이션 효과, FadeInOut(알파제어), DimToDark 기능 등
+/// 각 ScreenUIBase들의 부모 클래스
 /// </summary>
 namespace PahlUnity
 {
-    public class SceneUIBase : MonoBehaviour
+    public class ScreenUIBase : MonoBehaviour
     {
-        [SceneSelector] string _SceneName = string.Empty;
-
         // popup 최상단에 배치된 sprite
         // 전체화면 잠금, Dim과 같은 기능을 수행하는데 사용
         [SerializeField] Image TopOverlay = null;
-
-        public string SceneName => _SceneName;
 
         public virtual async UniTask Open()
         {

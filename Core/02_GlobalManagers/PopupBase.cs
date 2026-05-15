@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 각 Popup들의 부모 클래스
-/// 각 Popup들의 공통 기능들은 이곳에서 처리한다.
 /// 공통기능 : 전체화면 잠금, 뒤로가기(닫기), 생성 및 소멸시 애니메이션 효과, FadeInOut(알파제어), DimToDark 기능 등
 /// </summary>
 namespace PahlUnity

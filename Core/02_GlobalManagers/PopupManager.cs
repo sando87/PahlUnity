@@ -6,11 +6,11 @@ using UnityEngine;
 
 /// <summary>
 /// UI 팝업창들을 관리한다.
-/// 팝업창은 화면 내에서 하나만 존재할 수 있다.
-/// 스택형태로 팝업창들이 관리되며
+/// 팝업창은 스택형태로 쌓이며 화면 내에서 최상위 하나만 활성화 된다.
 /// 팝업창이 열릴 때마다 가장 위에 배치되며 Top팝업만 활성화되고 이전 팝업은 비활성화된다.
 /// 닫힐 때는 바로 아래에 있는 팝업창이 활성화 된다.
 /// 사용예) PopupManager.Instance.Open<SomePopup>();
+/// 사용예) PopupManager.Instance.CloseTopPopup();
 /// </summary>
 namespace PahlUnity
 {

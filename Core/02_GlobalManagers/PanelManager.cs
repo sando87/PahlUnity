@@ -8,6 +8,7 @@ using UnityEngine;
 /// 화면 내의 여러 패널들을 관리한다.
 /// 패널은 화면 내에서 여러개가 동시에 존재할 수 있다.
 /// 사용예) PanelManager.Instance.Show<SomePanel>();
+/// 사용예) PanelManager.Instance.Hide<SomePanel>();
 /// </summary>
 namespace PahlUnity
 {
