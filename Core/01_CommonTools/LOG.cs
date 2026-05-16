@@ -67,6 +67,21 @@ namespace PahlUnity
         // errorif는 개발용 로그 출력용도이기는 하나 출시때도 지울 필요 없음(Release빌드시 자동 삭제됨)
         // 즉 개발 중 항상 예외처리를 확인하고 싶은 곳에 배치
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD"), Conditional("DEBUG")]
+        static public void errorif<T>(bool isError, string val = "",
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string caller = null,
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            if (!isError)
+                return;
+
+            string message = LogOut(val, file, caller, lineNumber, "error");
+            throw new Exception(message);
+        }
+
+        // errorif는 개발용 로그 출력용도이기는 하나 출시때도 지울 필요 없음(Release빌드시 자동 삭제됨)
+        // 즉 개발 중 항상 예외처리를 확인하고 싶은 곳에 배치
+        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD"), Conditional("DEBUG")]
         static public void errorif<T>(bool isError, T val,
             [CallerFilePath] string file = null,
             [CallerMemberName] string caller = null,
