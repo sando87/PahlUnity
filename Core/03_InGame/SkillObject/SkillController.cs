@@ -32,8 +32,8 @@ namespace PahlUnity
 
         public void InitSkills(int characterID)
         {
-            UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
-            mPlayerStateData = saveData.Characters[characterID].Stats;
+            // UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
+            // mPlayerStateData = saveData.Characters[characterID].Stats;
 
             SkillBase[] allSkills = GetComponentsInChildren<SkillBase>();
             foreach (SkillBase skillObj in allSkills)

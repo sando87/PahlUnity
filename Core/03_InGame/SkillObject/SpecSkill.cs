@@ -33,9 +33,9 @@ namespace PahlUnity
 
         public void Init(int characterID, string resourceID)
         {
-            ResourceData = SkillResourceTable.Instance.GetInfo(resourceID);
-            UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
-            SaveData = userSaveData.Characters[characterID].Skills[resourceID];
+            // ResourceData = SkillResourceTable.Instance.GetInfo(resourceID);
+            // UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
+            // SaveData = userSaveData.Characters[characterID].Skills[resourceID];
 
             mSpecPlayer = this.ExGetBase().PlayerObj.Spec;
 

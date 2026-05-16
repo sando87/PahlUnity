@@ -14,7 +14,7 @@ namespace PahlUnity
         [SerializeField]
         [Dropdown(nameof(IDList))]
         string _ResourceID = "";
-        List<string> IDList { get => EnemyResourceTable.Instance.GetAllInfo().Select(info => info.EnemyID).ToList(); }
+        List<string> IDList { get => TableDataContainer<EnemyResourceData>.Instance.GetAllInfo().Select(info => info.EnemyID).ToList(); }
 
         public SpecEnemy Spec { get; private set; } = null;
 
@@ -61,8 +61,8 @@ namespace PahlUnity
         }
         void DropGold()
         {
-            Gold itemObj = Instantiate(ResourceManager.Instance.GetPrefabGold(), mBase.Body.Center, Quaternion.identity);
-            itemObj.GoldAmount = Spec.GoldOnDeath;
+            // Gold itemObj = Instantiate(ResourceManager.Instance.GetPrefabGold(), mBase.Body.Center, Quaternion.identity);
+            // itemObj.GoldAmount = Spec.GoldOnDeath;
         }
         static float mPotionDropTime = 0;
         void DropPotion()
@@ -72,10 +72,10 @@ namespace PahlUnity
 
             mPotionDropTime = Time.time;
 
-            if (MyUtils.IsPercentHit(50))
-                Instantiate(ResourceManager.Instance.GetPrefabLifePotion(), mBase.Body.Center, Quaternion.identity);
-            else
-                Instantiate(ResourceManager.Instance.GetPrefabManaPotion(), mBase.Body.Center, Quaternion.identity);
+            // if (MyUtils.IsPercentHit(50))
+            //     Instantiate(ResourceManager.Instance.GetPrefabLifePotion(), mBase.Body.Center, Quaternion.identity);
+            // else
+            //     Instantiate(ResourceManager.Instance.GetPrefabManaPotion(), mBase.Body.Center, Quaternion.identity);
         }
 
         public void DoAttackMelee(BaseObject target)

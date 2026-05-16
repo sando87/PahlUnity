@@ -37,15 +37,15 @@ namespace PahlUnity
 
         public void OnInputUpdate(InputManager inputManager)
         {
-            if (inputManager.JustPressed("PlayerUnitInputType.UIMove"))
+            if (inputManager.JustPressed(PlayerUnitInputType.UIMove))
             {
-                Vector2 moveDir = inputManager.GetInputValue<Vector2>("PlayerUnitInputType.UIMove");
+                Vector2 moveDir = inputManager.GetInputValue<Vector2>(PlayerUnitInputType.UIMove);
                 if (moveDir.magnitude > 0.1f)
                 {
                     Move(moveDir.normalized);
                 }
             }
-            else if (inputManager.JustPressed("PlayerUnitInputType.UIBack"))
+            else if (inputManager.JustPressed(PlayerUnitInputType.UIBack))
             {
                 EventCancel?.Invoke();
             }

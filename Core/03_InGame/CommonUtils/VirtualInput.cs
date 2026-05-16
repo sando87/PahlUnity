@@ -21,11 +21,11 @@ namespace PahlUnity
 
         void Awake()
         {
-            foreach (PlayerUnitInputType type in MyUtils.EnumForeach<PlayerUnitInputType>())
-            {
-                if (type == PlayerUnitInputType.None) continue;
-                mStates[type] = new VirtualState();
-            }
+            // foreach (PlayerUnitInputType type in MyUtils.EnumForeach<PlayerUnitInputType>())
+            // {
+            //     if (type == PlayerUnitInputType.None) continue;
+            //     mStates[type] = new VirtualState();
+            // }
         }
 
         // ===== 버튼 입력 =====

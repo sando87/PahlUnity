@@ -2,10 +2,8 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class EnemyResourceTable : DatabaseCSV<EnemyResourceData> { }
-
     [System.Serializable]
-    public class EnemyResourceData : ICSVFormat
+    public class EnemyResourceData : ITableRecord
     {
         public readonly string EnemyID;
         public readonly string DisplayName;
@@ -27,7 +25,7 @@ namespace PahlUnity
         public readonly string HitChance;
 
         public int RowIndex { get; set; } // 데이터데이블상에 존재하는 순서
-        public long ID { get { return ICSVFormat.ToID(EnemyID); } } // 데이터 접근을 위한 id값
+        public long ID { get { return ITableRecord.ToID(EnemyID); } } // 데이터 접근을 위한 id값
 
         public ParseValue _Health { get; private set; }
         public ParseValue _Mana { get; private set; }
@@ -44,7 +42,7 @@ namespace PahlUnity
         public ParseValue _ExpOnDeath { get; private set; }
         public ParseValue _HitChance { get; private set; }
 
-        void ICSVFormat.OnLoad()
+        void ITableRecord.OnLoad()
         {
             _Health = ParseValue.Parse(Health);
             _Mana = ParseValue.Parse(Mana);

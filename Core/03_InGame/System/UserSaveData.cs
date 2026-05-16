@@ -6,7 +6,7 @@ using UnityEngine;
 namespace PahlUnity
 {
     [System.Serializable]
-    public class UserSaveData : SaveableBase
+    public class UserSaveData
     {
         public int Gold = 0;
 

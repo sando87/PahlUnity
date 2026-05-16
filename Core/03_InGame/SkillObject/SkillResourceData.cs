@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class SkillResourceTable : DatabaseCSV<SkillResourceData> { }
-
     [System.Serializable]
-    public class SkillResourceData : ICSVFormat
+    public class SkillResourceData : ITableRecord
     {
         public readonly string SkillID;
         public readonly string DisplayName;
@@ -30,7 +28,7 @@ namespace PahlUnity
         public readonly string LightningAttack;
 
         public int RowIndex { get; set; } // 데이터데이블상에 존재하는 순서
-        public long ID { get { return ICSVFormat.ToID(SkillID); } } // 데이터 접근을 위한 id값
+        public long ID { get { return ITableRecord.ToID(SkillID); } } // 데이터 접근을 위한 id값
 
         public int _UnlockLevel { get; private set; }
         public int[] _UpgradeStep { get; private set; }
@@ -48,8 +46,7 @@ namespace PahlUnity
         public ParseValue _IceAttack { get; private set; }
         public ParseValue _LightningAttack { get; private set; }
 
-
-        void ICSVFormat.OnLoad()
+        void ITableRecord.OnLoad()
         {
             _UnlockLevel = int.Parse(UnlockLevel);
             string[] steps = UpgradeStep.Split('/');

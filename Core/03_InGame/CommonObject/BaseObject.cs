@@ -10,7 +10,7 @@ namespace PahlUnity
         public AnimatorHelper AnimHelper { get => GetComponentInChildren<AnimatorHelper>(); }
         public ObjectBody Body { get => GetComponentInChildren<ObjectBody>(); }
         public ObjectPhysics Phy { get => GetComponentInChildren<ObjectPhysics>(); }
-        public PlayerUnitInput Input { get => GetComponentInChildren<PlayerUnitInput>(); }
+        public InputPlayer Input { get => GetComponentInChildren<InputPlayer>(); }
         public Health Health { get => GetComponentInChildren<Health>(); }
         public PlayerController Ctrl { get => GetComponentInChildren<PlayerController>(); }
         public BuffController Buffs => GetComponentInChildren<BuffController>();

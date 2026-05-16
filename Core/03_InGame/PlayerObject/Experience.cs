@@ -31,27 +31,27 @@ namespace PahlUnity
 
         void Start()
         {
-            BattleDispatcher battleDispatcher = this.ExGetBase().GetComponentInChildren<BattleDispatcher>();
-            if (battleDispatcher != null)
-            {
-                battleDispatcher.EventOnKillResult.AddListener((result) =>
-                {
-                    if (result.IsKilled)
-                    {
-                        EnemyBase enemy = result.Target.ExGetBase().EnemyObj;
-                        if (enemy != null)
-                        {
-                            float gainedExp = enemy.Spec.ExpOnDeath;
-                            AddExp(gainedExp);
-                        }
-                    }
-                });
-            }
+            // BattleDispatcher battleDispatcher = this.ExGetBase().GetComponentInChildren<BattleDispatcher>();
+            // if (battleDispatcher != null)
+            // {
+            //     battleDispatcher.EventOnKillResult.AddListener((result) =>
+            //     {
+            //         if (result.IsKilled)
+            //         {
+            //             EnemyBase enemy = result.Target.ExGetBase().EnemyObj;
+            //             if (enemy != null)
+            //             {
+            //                 float gainedExp = enemy.Spec.ExpOnDeath;
+            //                 AddExp(gainedExp);
+            //             }
+            //         }
+            //     });
+            // }
         }
 
         public void Init(int characterID)
         {
-            UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
+            UserSaveData userSaveData = null; // SaveFileManager<UserSaveData>.Load();
             mCharacterSaveData = userSaveData.Characters[characterID].Stats;
             CurrentExp = mCharacterSaveData.CurrentExp;
             CurrentLevel = GameSystem.GetLevelFromAccExp(mCharacterSaveData.CurrentExp);

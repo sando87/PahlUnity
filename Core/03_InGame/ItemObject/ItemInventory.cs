@@ -70,7 +70,7 @@ namespace PahlUnity
 
         public void LoadItemsFromData(int characterID)
         {
-            mUserSaveData = SaveFileManager<UserSaveData>.Load();
+            // mUserSaveData = SaveFileManager<UserSaveData>.Load();
             mCharacterSaveData = mUserSaveData.Characters[characterID];
             mSaveData = mCharacterSaveData.Items;
             foreach (var pair in mSaveData)

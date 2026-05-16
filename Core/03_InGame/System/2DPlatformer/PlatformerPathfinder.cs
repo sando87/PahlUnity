@@ -125,54 +125,54 @@ namespace PahlUnity
             List<PathInfo> possiblePaths = new List<PathInfo>();
             foreach (var transition in currentGroup.Transitions)
             {
-                if (transition.TransitionType == NodeTransitionType.JustJumpUp)
-                {
-                    bool isPossibleJump = JumpSimulationTable.IsPossibleJump(
-                        startPos: transition.StartNode.Position,
-                        destPos: transition.EndNode.Position,
-                        horizontalMoveSpeed: moveSpeed,
-                        out int requiredJumpLevel
-                    );
+                // if (transition.TransitionType == NodeTransitionType.JustJumpUp)
+                // {
+                //     bool isPossibleJump = JumpSimulationTable.IsPossibleJump(
+                //         startPos: transition.StartNode.Position,
+                //         destPos: transition.EndNode.Position,
+                //         horizontalMoveSpeed: moveSpeed,
+                //         out int requiredJumpLevel
+                //     );
 
-                    if (isPossibleJump)
-                    {
-                        NodeNav endNode = transition.EndNode.ParentGroup.GetNodeAtWorldPosX(startNode.Position.x);
-                        bool isNoNeedToMove = endNode != null;
+                //     if (isPossibleJump)
+                //     {
+                //         NodeNav endNode = transition.EndNode.ParentGroup.GetNodeAtWorldPosX(startNode.Position.x);
+                //         bool isNoNeedToMove = endNode != null;
 
-                        PathInfo pathInfo = new PathInfo();
-                        pathInfo.Transition = transition;
-                        pathInfo.JumpForce = JumpSimulationTable.JumpLevelToForce(requiredJumpLevel);
-                        pathInfo.IsNoNeedToMove = isNoNeedToMove;
-                        possiblePaths.Add(pathInfo);
-                    }
-                }
-                else if (transition.TransitionType == NodeTransitionType.DropDown)
-                {
-                    NodeNav endNode = transition.EndNode.ParentGroup.GetNodeAtWorldPosX(startNode.Position.x);
-                    bool isNoNeedToMove = endNode != null;
+                //         PathInfo pathInfo = new PathInfo();
+                //         pathInfo.Transition = transition;
+                //         pathInfo.JumpForce = JumpSimulationTable.JumpLevelToForce(requiredJumpLevel);
+                //         pathInfo.IsNoNeedToMove = isNoNeedToMove;
+                //         possiblePaths.Add(pathInfo);
+                //     }
+                // }
+                // else if (transition.TransitionType == NodeTransitionType.DropDown)
+                // {
+                //     NodeNav endNode = transition.EndNode.ParentGroup.GetNodeAtWorldPosX(startNode.Position.x);
+                //     bool isNoNeedToMove = endNode != null;
 
-                    PathInfo pathInfo = new PathInfo();
-                    pathInfo.Transition = transition;
-                    pathInfo.IsNoNeedToMove = isNoNeedToMove;
-                    possiblePaths.Add(pathInfo);
-                }
-                else
-                {
-                    bool isPossibleJump = JumpSimulationTable.IsPossibleJump(
-                        startPos: transition.StartNode.Position,
-                        destPos: transition.EndNode.Position,
-                        horizontalMoveSpeed: moveSpeed,
-                        out int requiredJumpLevel
-                    );
+                //     PathInfo pathInfo = new PathInfo();
+                //     pathInfo.Transition = transition;
+                //     pathInfo.IsNoNeedToMove = isNoNeedToMove;
+                //     possiblePaths.Add(pathInfo);
+                // }
+                // else
+                // {
+                //     bool isPossibleJump = JumpSimulationTable.IsPossibleJump(
+                //         startPos: transition.StartNode.Position,
+                //         destPos: transition.EndNode.Position,
+                //         horizontalMoveSpeed: moveSpeed,
+                //         out int requiredJumpLevel
+                //     );
 
-                    if (isPossibleJump && !transition.IsBlocked(requiredJumpLevel))
-                    {
-                        PathInfo pathInfo = new PathInfo();
-                        pathInfo.Transition = transition;
-                        pathInfo.JumpForce = JumpSimulationTable.JumpLevelToForce(requiredJumpLevel);
-                        possiblePaths.Add(pathInfo);
-                    }
-                }
+                //     if (isPossibleJump && !transition.IsBlocked(requiredJumpLevel))
+                //     {
+                //         PathInfo pathInfo = new PathInfo();
+                //         pathInfo.Transition = transition;
+                //         pathInfo.JumpForce = JumpSimulationTable.JumpLevelToForce(requiredJumpLevel);
+                //         possiblePaths.Add(pathInfo);
+                //     }
+                // }
             }
             return possiblePaths;
         }

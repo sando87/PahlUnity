@@ -15,10 +15,10 @@ namespace PahlUnity
         [SerializeField]
         [Dropdown(nameof(IDList))]
         string _ResourceID = "";
-        List<string> IDList { get => CharResourceTable.Instance.GetAllInfo().Select(info => info.CharacterID).ToList(); }
+        List<string> IDList { get => TableDataContainer<CharResourceData>.Instance.GetAllInfo().Select(info => info.CharacterID).ToList(); }
 
-        private WrapStation mWrapStationAround = null;
-        private EnemyBossBase mSleepingBoss = null;
+        // private WrapStation mWrapStationAround = null;
+        // private EnemyBossBase mSleepingBoss = null;
 
         public List<ItemObject> ItemsAround { get; private set; } = new List<ItemObject>();
 
@@ -56,7 +56,7 @@ namespace PahlUnity
             mBaseObj.Interactor.OnInteractLeave.AddListener(OnColliderLeave);
 
             // 캐릭터별 처음 생성시 주어지는 초기 시작 아이템 및 스킬 부여
-            UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
+            UserSaveData saveData = null; // SaveFileManager<UserSaveData>.Load();
             CharacterSaveData playerData = saveData.Characters[CharacterID];
             if (playerData.IsFirstPlay)
             {
@@ -88,17 +88,17 @@ namespace PahlUnity
                 ItemsAround.Add(itemObj);
             }
 
-            WrapStation wrapStation = col.ExGetCompInBase<WrapStation>();
-            if (wrapStation != null)
-            {
-                mWrapStationAround = wrapStation;
-            }
+            // WrapStation wrapStation = col.ExGetCompInBase<WrapStation>();
+            // if (wrapStation != null)
+            // {
+            //     mWrapStationAround = wrapStation;
+            // }
 
-            EnemyBossBase boss = col.ExGetCompInBase<EnemyBossBase>();
-            if (boss != null && !boss.IsAwaked)
-            {
-                mSleepingBoss = boss;
-            }
+            // EnemyBossBase boss = col.ExGetCompInBase<EnemyBossBase>();
+            // if (boss != null && !boss.IsAwaked)
+            // {
+            //     mSleepingBoss = boss;
+            // }
 
         }
         void OnColliderLeave(Collider2D col)
@@ -109,17 +109,17 @@ namespace PahlUnity
                 ItemsAround.Remove(itemObj);
             }
 
-            WrapStation wrapStation = col.ExGetCompInBase<WrapStation>();
-            if (wrapStation != null)
-            {
-                mWrapStationAround = null;
-            }
+            // WrapStation wrapStation = col.ExGetCompInBase<WrapStation>();
+            // if (wrapStation != null)
+            // {
+            //     mWrapStationAround = null;
+            // }
 
-            EnemyBossBase boss = col.ExGetCompInBase<EnemyBossBase>();
-            if (boss != null)
-            {
-                mSleepingBoss = null;
-            }
+            // EnemyBossBase boss = col.ExGetCompInBase<EnemyBossBase>();
+            // if (boss != null)
+            // {
+            //     mSleepingBoss = null;
+            // }
         }
 
         void Update()
@@ -144,27 +144,27 @@ namespace PahlUnity
                 }
             }
 
-            if (mWrapStationAround != null && mBaseObj.Input.JustPressed(PlayerUnitInputType.Move))
-            {
-                if (mBaseObj.Input.MoveY < 0)
-                {
-                    if (mWrapStationAround.DestScene != SceneType.None)
-                        InGameManager.Instance.Engine.DoWarpStation(mWrapStationAround.DestScene, mWrapStationAround.DestWarpID);
-                }
-            }
+            // if (mWrapStationAround != null && mBaseObj.Input.JustPressed(PlayerUnitInputType.Move))
+            // {
+            //     if (mBaseObj.Input.MoveY < 0)
+            //     {
+            //         if (mWrapStationAround.DestScene != SceneType.None)
+            //             InGameManager.Instance.Engine.DoWarpStation(mWrapStationAround.DestScene, mWrapStationAround.DestWarpID);
+            //     }
+            // }
 
-            if (mSleepingBoss != null && mBaseObj.Input.JustPressed(PlayerUnitInputType.Move))
-            {
-                if (mBaseObj.Input.MoveY < 0)
-                {
-                    InGameEngine.Inst.ShowInventorySelectMode((selectedItem) =>
-                    {
-                        mSleepingBoss.DoAwakeBossWithItem(selectedItem);
-                        Inven.RemoveItem(selectedItem.InstanceID);
-                        mSleepingBoss = null;
-                    });
-                }
-            }
+            // if (mSleepingBoss != null && mBaseObj.Input.JustPressed(PlayerUnitInputType.Move))
+            // {
+            //     if (mBaseObj.Input.MoveY < 0)
+            //     {
+            //         InGameEngine.Inst.ShowInventorySelectMode((selectedItem) =>
+            //         {
+            //             mSleepingBoss.DoAwakeBossWithItem(selectedItem);
+            //             Inven.RemoveItem(selectedItem.InstanceID);
+            //             mSleepingBoss = null;
+            //         });
+            //     }
+            // }
         }
 
         public void UpdateSpecByLevelUp()
@@ -195,17 +195,17 @@ namespace PahlUnity
                 return mCharacterID;
             }
 
-            UserSaveData userData = SaveFileManager<UserSaveData>.Load();
-            if (userData.Characters.ContainsKey(_CharacterID))
-            {
-                mCharacterID = _CharacterID;
-            }
-            else
-            {
-                userData.Characters[_CharacterID] = new CharacterSaveData();
-                mCharacterID = _CharacterID;
-                SaveFileManager<UserSaveData>.Save(userData);
-            }
+            // UserSaveData userData = SaveFileManager<UserSaveData>.Load();
+            // if (userData.Characters.ContainsKey(_CharacterID))
+            // {
+            //     mCharacterID = _CharacterID;
+            // }
+            // else
+            // {
+            //     userData.Characters[_CharacterID] = new CharacterSaveData();
+            //     mCharacterID = _CharacterID;
+            //     SaveFileManager<UserSaveData>.Save(userData);
+            // }
 
             return mCharacterID;
         }

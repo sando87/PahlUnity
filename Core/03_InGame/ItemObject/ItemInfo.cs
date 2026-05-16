@@ -33,7 +33,7 @@ namespace PahlUnity
         static public string GetRandomItemID(int levelLimit)
         {
             List<ItemResourceData> list = new List<ItemResourceData>();
-            foreach (var kvp in ItemResourceTable.Instance.Enums())
+            foreach (var kvp in TableDataContainer<ItemResourceData>.Instance.Enums())
             {
                 if (kvp.LevelLimit > levelLimit)
                     continue;
@@ -49,7 +49,7 @@ namespace PahlUnity
         }
         public void InitItem(string itemID)
         {
-            ResourceData = ItemResourceTable.Instance.GetInfo(itemID);
+            ResourceData = TableDataContainer<ItemResourceData>.Instance.GetInfo(itemID);
 
             SaveData = new ItemSaveData();
             SaveData.InstanceID = System.Guid.NewGuid().ToString();
@@ -65,7 +65,7 @@ namespace PahlUnity
         public void LoadItem(ItemSaveData data)
         {
             SaveData = data;
-            ResourceData = ItemResourceTable.Instance.GetInfo(SaveData.ResourceID);
+            ResourceData = TableDataContainer<ItemResourceData>.Instance.GetInfo(SaveData.ResourceID);
             UpdateOption();
         }
         public void UpdateOption()
@@ -110,14 +110,14 @@ namespace PahlUnity
             if (Option == null)
                 return;
 
-            List<FieldData> fields = new List<FieldData>();
+            List<ReflectionFieldData> fields = new List<ReflectionFieldData>();
             ReflectionFieldExtractor.GetFields(Option, fields);
             foreach (var field in fields)
             {
                 if (field.Value.Equals("0") || field.Value.Equals("0%"))
                     continue;
 
-                DisplayInfo[field.Name] = field.Value;
+                DisplayInfo[field.FieldName] = field.Value;
             }
         }
     }

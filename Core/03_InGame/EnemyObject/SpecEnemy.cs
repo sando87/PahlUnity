@@ -36,7 +36,7 @@ namespace PahlUnity
 
         public void InitData(string resourceID)
         {
-            ResourceData = EnemyResourceTable.Instance.GetInfo(resourceID);
+            ResourceData = TableDataContainer<EnemyResourceData>.Instance.GetInfo(resourceID);
             UpdateBasicStats();
         }
         void UpdateBasicStats()

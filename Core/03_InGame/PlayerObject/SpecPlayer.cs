@@ -33,9 +33,9 @@ namespace PahlUnity
         {
             mBaseObj = this.ExGetBase();
 
-            ResourceData = CharResourceTable.Instance.GetInfo(resourceID);
-            UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
-            SaveData = userSaveData.Characters[characterID].Stats;
+            ResourceData = TableDataContainer<CharResourceData>.Instance.GetInfo(resourceID);
+            // UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
+            // SaveData = userSaveData.Characters[characterID].Stats;
 
             UpdateBasicStat();
         }

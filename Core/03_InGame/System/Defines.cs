@@ -107,5 +107,30 @@ namespace PahlUnity
         public static readonly int ColorFreez = "ColorFreez".GetHashCode();
     }
 
+    public class PlayerUnitInputType
+    {
+        public string mValue;
+        public PlayerUnitInputType(string value) { mValue = value; }
+
+        public static implicit operator string(PlayerUnitInputType info) => info.mValue;
+        public static implicit operator PlayerUnitInputType(string val) => new PlayerUnitInputType(val);
+
+        public static readonly string SkillSlotA = "SkillSlotA";
+        public static readonly string SkillSlotB = "SkillSlotB";
+        public static readonly string SkillSlotC = "SkillSlotC";
+        public static readonly string SkillSlotD = "SkillSlotD";
+        public static readonly string UIMove = "UIMove";
+        public static readonly string UIBack = "UIBack";
+        public static readonly string Move = "Move";
+        public static readonly string Jump = "Jump";
+        public static readonly string Dash = "Dash";
+        public static readonly string PotionA = "PotionA";
+        public static readonly string PotionB = "PotionB";
+        public static readonly string None = "None";
+        public static readonly string ShowPopupStats = "ShowPopupStats";
+        public static readonly string ShowPopupInven = "ShowPopupInven";
+        public static readonly string ShowPopupSkill = "ShowPopupSkill";
+    }
+
 
 }

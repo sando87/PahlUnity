@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using PahlBit;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,7 +23,7 @@ namespace PahlUnity
         IEnumerator CoStartScene(SceneType destScene, int destWarpID)
         {
             DestWarpID = destWarpID;
-            SceneSwtichManager.Instance.LoadSceneImmediately((int)destScene);
+            // SceneSwtichManager.Instance.LoadSceneImmediately((int)destScene);
             yield return new WaitUntil(() => SceneSwtichManager.Instance.IsLoaded);
             Engine = FindAnyObjectByType<InGameEngine>();
         }

@@ -12,11 +12,11 @@ namespace PahlUnity
 {
     public class PlayerInputRecorder : MonoBehaviour
     {
-        [SerializeField] PlayerUnitInput _PlayerInput = null;
+        [SerializeField] InputPlayer _PlayerInput = null;
         [SerializeField] VirtualInput _VirtualInput = null;
         [SerializeField] InputRecordData _RecordData = null;
 
-        public PlayerUnitInput PlayerInput => _PlayerInput;
+        public InputPlayer PlayerInput => _PlayerInput;
         public VirtualInput VirtualInput => _VirtualInput;
 
         public bool IsEditorPlaying() { return Application.isPlaying; }
@@ -71,19 +71,19 @@ namespace PahlUnity
 
         void StartButtonCoroutines()
         {
-            int enumCount = MyUtils.EnumCount<PlayerUnitInputType>();
-            for (int i = 1; i < enumCount; i++)
-            {
-                PlayerUnitInputType buttonType = (PlayerUnitInputType)i;
-                if (buttonType == PlayerUnitInputType.Move)
-                {
-                    StartCoroutine(ProcessMoveInput());
-                }
-                else
-                {
-                    StartCoroutine(ProcessButtonInput(buttonType));
-                }
-            }
+            // int enumCount = MyUtils.EnumCount<PlayerUnitInputType>();
+            // for (int i = 1; i < enumCount; i++)
+            // {
+            //     PlayerUnitInputType buttonType = (PlayerUnitInputType)i;
+            //     if (buttonType == PlayerUnitInputType.Move)
+            //     {
+            //         StartCoroutine(ProcessMoveInput());
+            //     }
+            //     else
+            //     {
+            //         StartCoroutine(ProcessButtonInput(buttonType));
+            //     }
+            // }
         }
 
         IEnumerator ProcessButtonInput(PlayerUnitInputType buttonType)

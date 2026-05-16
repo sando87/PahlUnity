@@ -30,10 +30,10 @@ namespace PahlUnity
 
                 mLayers[state.Layer].AllStates.Add(state);
 
-                if (state is PlayerStateIdle || state is PlayerStateUpperIdle)
-                {
-                    mLayers[state.Layer].IdleState = state;
-                }
+                // if (state is PlayerStateIdle || state is PlayerStateUpperIdle)
+                // {
+                //     mLayers[state.Layer].IdleState = state;
+                // }
             }
         }
 

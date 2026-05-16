@@ -9,7 +9,7 @@ namespace PahlUnity
 {
     public class PlayerStateBase : FiniteStateBase
     {
-        public PlayerUnitInput PlayerInput { get => GetComponentInParent<PlayerUnitInput>(); }
+        public InputPlayer PlayerInput { get => GetComponentInParent<InputPlayer>(); }
         public PlayerMain PlayerMain { get => GetComponentInParent<PlayerMain>(); }
 
         public override void EnterState(object param)
@@ -24,22 +24,22 @@ namespace PahlUnity
 
         public void DoLeaveCurrentState()
         {
-            if (!Base.Ctrl.IsGrounded)
-            {
-                Base.StateMachine.TryChangeState<PlayerStateFloating>();
-            }
-            else
-            {
-                float moveX = PlayerInput.MoveX;
-                if (moveX.ExIsAlmostZero())
-                {
-                    Base.StateMachine.TryChangeState<PlayerStateIdle>();
-                }
-                else
-                {
-                    Base.StateMachine.TryChangeState<PlayerStateWalk>();
-                }
-            }
+            // if (!Base.Ctrl.IsGrounded)
+            // {
+            //     Base.StateMachine.TryChangeState<PlayerStateFloating>();
+            // }
+            // else
+            // {
+            //     float moveX = PlayerInput.MoveX;
+            //     if (moveX.ExIsAlmostZero())
+            //     {
+            //         Base.StateMachine.TryChangeState<PlayerStateIdle>();
+            //     }
+            //     else
+            //     {
+            //         Base.StateMachine.TryChangeState<PlayerStateWalk>();
+            //     }
+            // }
         }
 
 

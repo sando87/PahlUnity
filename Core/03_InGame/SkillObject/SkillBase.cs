@@ -19,7 +19,7 @@ namespace PahlUnity
         [Dropdown(nameof(IDList))]
         string _ResourceID = "";
         public string ResourceID => _ResourceID;
-        List<string> IDList { get => SkillResourceTable.Instance.GetAllInfo().Select(info => info.SkillID).ToList(); }
+        List<string> IDList { get => TableDataContainer<SkillResourceData>.Instance.GetAllInfo().Select(info => info.SkillID).ToList(); }
 
         public SkillController Controller { get => GetComponentInParent<SkillController>(); }
 
@@ -37,7 +37,7 @@ namespace PahlUnity
         public int EnforceCost => 0; // IsLearned ? (20 + (mSkillSaveData.LevelIndex * 15) + ((CurrentSubStep + 1) * 5)) : 20;
 
         protected BaseObject mBaseObj = null;
-        protected PlayerUnitInput mInput = null;
+        protected InputPlayer mInput = null;
 
         private SkillSaveData mSkillSaveData = null;
         private float mCooltime = 0;
@@ -54,14 +54,14 @@ namespace PahlUnity
 
         public void InitSkillInfo(int characterID)
         {
-            UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
-            var saveDataAllSkills = saveData.Characters[characterID].Skills;
-            if (!saveDataAllSkills.ContainsKey(_ResourceID))
-            {
-                saveDataAllSkills[_ResourceID] = new SkillSaveData(_ResourceID);
-            }
+            // UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
+            // var saveDataAllSkills = saveData.Characters[characterID].Skills;
+            // if (!saveDataAllSkills.ContainsKey(_ResourceID))
+            // {
+            //     saveDataAllSkills[_ResourceID] = new SkillSaveData(_ResourceID);
+            // }
 
-            mSkillSaveData = saveDataAllSkills[_ResourceID];
+            // mSkillSaveData = saveDataAllSkills[_ResourceID];
 
             Spec = GetComponentInChildren<SpecSkill>();
             Spec.Init(characterID, _ResourceID);

@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
-using RPGCharacterAnims.Actions;
 using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ItemResourceTable : DatabaseCSV<ItemResourceData> { }
-
     [System.Serializable]
-    public class ItemResourceData : ICSVFormat
+    public class ItemResourceData : ITableRecord
     {
         public readonly string ItemID;
         public readonly string DisplayName;
@@ -45,7 +42,7 @@ namespace PahlUnity
         public readonly string PosionResist;
 
         public int RowIndex { get; set; } // 데이터데이블상에 존재하는 순서
-        public long ID { get { return ICSVFormat.ToID(ItemID); } } // 데이터 접근을 위한 id값
+        public long ID { get { return ITableRecord.ToID(ItemID); } } // 데이터 접근을 위한 id값
 
         public ItemAssetData AssetData { get; private set; }
 
@@ -76,7 +73,7 @@ namespace PahlUnity
         public ParseValue _LightningResist { get; private set; }
         public ParseValue _PosionResist { get; private set; }
 
-        void ICSVFormat.OnLoad()
+        void ITableRecord.OnLoad()
         {
             AssetData = Resources.Load<ItemAssetData>("ScriptableObjects/" + ItemID);
 

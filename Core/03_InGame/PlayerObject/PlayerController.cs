@@ -31,26 +31,26 @@ namespace PahlUnity
 
         BaseObject mBaseObj = null;
         SpecPlayer mSpec = null;
-        PlayerUnitInput mPlayerInput = null;
+        InputPlayer mPlayerInput = null;
         FiniteStateMachine mFSM = null;
         SkillController mSkillCtrl = null;
 
-        PlayerStateIdle mFsmIdle = null;
-        PlayerStateWalk mFsmWalk = null;
-        PlayerStateFloating mFsmFloat = null;
+        // PlayerStateIdle mFsmIdle = null;
+        // PlayerStateWalk mFsmWalk = null;
+        // PlayerStateFloating mFsmFloat = null;
         bool mIsSecondJump = false;
 
         private void Awake()
         {
             mBaseObj = GetComponentInParent<BaseObject>();
             mSpec = mBaseObj.GetComponentInChildren<SpecPlayer>();
-            mPlayerInput = mBaseObj.GetComponentInChildren<PlayerUnitInput>();
+            mPlayerInput = mBaseObj.GetComponentInChildren<InputPlayer>();
             mSkillCtrl = mBaseObj.GetComponentInChildren<SkillController>();
 
             mFSM = mBaseObj.StateMachine;
-            mFsmIdle = mFSM.FindState<PlayerStateIdle>();
-            mFsmWalk = mFSM.FindState<PlayerStateWalk>();
-            mFsmFloat = mFSM.FindState<PlayerStateFloating>();
+            // mFsmIdle = mFSM.FindState<PlayerStateIdle>();
+            // mFsmWalk = mFSM.FindState<PlayerStateWalk>();
+            // mFsmFloat = mFSM.FindState<PlayerStateFloating>();
         }
         void Start()
         {
@@ -69,22 +69,22 @@ namespace PahlUnity
             if (LockMove)
                 return;
 
-            if (IsGrounded)
-            {
-                float moveX = mPlayerInput.MoveX;
-                if (!moveX.ExIsAlmostZero())
-                {
-                    mFSM.TryChangeState(mFsmWalk);
-                }
-                else
-                {
-                    mFSM.TryChangeState(mFsmIdle);
-                }
-            }
-            else
-            {
-                mFSM.TryChangeState(mFsmFloat);
-            }
+            // if (IsGrounded)
+            // {
+            //     float moveX = mPlayerInput.MoveX;
+            //     if (!moveX.ExIsAlmostZero())
+            //     {
+            //         mFSM.TryChangeState(mFsmWalk);
+            //     }
+            //     else
+            //     {
+            //         mFSM.TryChangeState(mFsmIdle);
+            //     }
+            // }
+            // else
+            // {
+            //     mFSM.TryChangeState(mFsmFloat);
+            // }
 
         }
         void Jump()
@@ -101,7 +101,7 @@ namespace PahlUnity
                     mIsSecondJump = false;
                     // SimulateJumpPoints();
                     mBaseObj.Phy.DoJump(_JumpForce);
-                    mFSM.ForceChangeState(mFsmFloat);
+                    // mFSM.ForceChangeState(mFsmFloat);
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace PahlUnity
                         mSkillCtrl.ReleaseAllSkillSlot();
                         mIsSecondJump = true;
                         mBaseObj.Phy.DoJump(_JumpForce);
-                        mFSM.ForceChangeState(mFsmFloat);
+                        // mFSM.ForceChangeState(mFsmFloat);
                     }
                 }
             }
@@ -141,7 +141,7 @@ namespace PahlUnity
             if (mPlayerInput.JustPressed(PlayerUnitInputType.Dash))
             {
                 mSkillCtrl.ReleaseAllSkillSlot();
-                mFSM.TryChangeState<PlayerStateDash>();
+                // mFSM.TryChangeState<PlayerStateDash>();
             }
         }
         void SkillInput()
@@ -176,7 +176,7 @@ namespace PahlUnity
         [Button("Simulate Jump Points")]
         public void SimulateJumpPoints()
         {
-            JumpSimulationTable.DrawSimulationPoints(mBaseObj.transform.position, _JumpForce);
+            // JumpSimulationTable.DrawSimulationPoints(mBaseObj.transform.position, _JumpForce);
         }
 
     }
