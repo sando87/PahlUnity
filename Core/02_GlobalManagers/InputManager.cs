@@ -18,7 +18,13 @@ namespace PahlUnity
         Gamepad,
         Touch,
     }
-    public class GameInputSystem : SingletonMono<GameInputSystem>
+    public interface IInputHandler
+    {
+        void OnInputEnter(InputManager inputManager) { }
+        void OnInputExit(InputManager inputManager) { }
+        void OnInputUpdate(InputManager inputManager);
+    }
+    public class InputManager : SingletonMono<InputManager>
     {
         // =========================
         // Events
@@ -87,6 +93,8 @@ namespace PahlUnity
         private InputActionMap _playerMap;
         private InputActionMap _uiMap;
 
+        private IInputHandler mHandlerInput = null;
+
         // =========================
         // Unity
         // =========================
@@ -101,6 +109,11 @@ namespace PahlUnity
         private void Update()
         {
             IsAnyInputDetectedThisFrame = false;
+
+            if (mHandlerInput != null)
+            {
+                mHandlerInput.OnInputUpdate(this);
+            }
         }
 
         private void OnDestroy()
@@ -345,6 +358,43 @@ namespace PahlUnity
         public bool HasTouch()
         {
             return Touchscreen.current != null;
+        }
+
+        public bool JustPressed(string actionName) => GetInputAction(actionName).triggered;
+        public bool IsPressing(string actionName) => GetInputAction(actionName).IsPressed();
+        public bool JustReleased(string actionName) => GetInputAction(actionName).WasReleasedThisFrame();
+
+        public TValue GetInputValue<TValue>(string actionName) where TValue : struct
+        {
+            InputAction action = GetInputAction(actionName);
+            return action.ReadValue<TValue>();
+        }
+
+        private InputAction GetInputAction(string actionName)
+        {
+            var action = inputActions.FindAction(actionName);
+            LOG.errorif(action == null);
+            return action;
+        }
+
+
+        public IInputHandler GetHandlerInput()
+        {
+            return mHandlerInput;
+        }
+        public void SetHandlerInput(IInputHandler handler)
+        {
+            if (mHandlerInput == null)
+            {
+                mHandlerInput = handler;
+                mHandlerInput.OnInputEnter(this);
+            }
+            else
+            {
+                mHandlerInput.OnInputExit(this);
+                mHandlerInput = handler;
+                mHandlerInput.OnInputEnter(this);
+            }
         }
     }
 }

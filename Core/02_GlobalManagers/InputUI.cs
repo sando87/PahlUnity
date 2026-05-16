@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace PahlBit
+namespace PahlUnity
 {
-    public class UIInputHandler : MonoBehaviour, IInputHandler
+    public class InputUI : MonoBehaviour, IInputHandler
     {
         [SerializeField] UIPartsHandler[] _UIParts;
 
@@ -35,17 +35,17 @@ namespace PahlBit
             }
         }
 
-        public void OnInputUpdate(InputSystemManager inputManager)
+        public void OnInputUpdate(InputManager inputManager)
         {
-            if (inputManager.JustPressed(PlayerUnitInputType.UIMove))
+            if (inputManager.JustPressed("PlayerUnitInputType.UIMove"))
             {
-                Vector2 moveDir = inputManager.GetInputValue<Vector2>(PlayerUnitInputType.UIMove);
+                Vector2 moveDir = inputManager.GetInputValue<Vector2>("PlayerUnitInputType.UIMove");
                 if (moveDir.magnitude > 0.1f)
                 {
                     Move(moveDir.normalized);
                 }
             }
-            else if (inputManager.JustPressed(PlayerUnitInputType.UIBack))
+            else if (inputManager.JustPressed("PlayerUnitInputType.UIBack"))
             {
                 EventCancel?.Invoke();
             }
