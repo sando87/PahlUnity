@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public static class UtilitiesPhy2D
     {

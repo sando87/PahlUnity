@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
 
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class EnemyStateBase : FiniteStateBase
     {

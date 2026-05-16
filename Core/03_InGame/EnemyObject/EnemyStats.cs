@@ -1,5 +1,5 @@
 
-namespace PahlBit
+namespace PahlUnity
 {
     [System.Serializable]
     public class EnemyStats

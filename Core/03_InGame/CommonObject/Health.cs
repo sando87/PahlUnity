@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class Health : MonoBehaviour, IHealth
     {

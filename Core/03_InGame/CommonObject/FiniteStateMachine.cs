@@ -3,7 +3,7 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {

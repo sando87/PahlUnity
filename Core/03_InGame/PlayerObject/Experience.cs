@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class Experience : MonoBehaviour
     {

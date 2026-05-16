@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
-namespace PahlBit
+namespace PahlUnity
 {
     [System.Serializable]
     public class SkillStats

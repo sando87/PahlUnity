@@ -5,7 +5,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SpecEnemy : SpecBase
     {

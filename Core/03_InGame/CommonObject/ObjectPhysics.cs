@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class ObjectPhysics : MonoBehaviour
     {

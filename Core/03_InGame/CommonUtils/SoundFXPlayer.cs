@@ -1,4 +1,4 @@
-using PahlBit;
+using PahlUnity;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,15 +17,15 @@ public class SoundFXPlayer : MonoBehaviour
 
     public void PlaySFX(AudioClip clip)
     {
-        SoundPlayManager.Instance.PlaySFXClip(clip);
+        AudioManager.Instance.PlaySFXClip(clip);
     }
 
     public void PlaySFXLoop(AudioClip clip)
     {
-        SoundPlayManager.Instance.PlaySFXClip(clip, false, transform);
+        AudioManager.Instance.PlaySFXClip(clip, false, transform);
     }
     public void StopSFXLoop(AudioClip clip)
     {
-        SoundPlayManager.Instance.StopSFXClip(clip);
+        AudioManager.Instance.StopSFXClip(clip);
     }
 }

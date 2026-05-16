@@ -4,7 +4,7 @@ using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class PlayerMain : MonoBehaviour
     {

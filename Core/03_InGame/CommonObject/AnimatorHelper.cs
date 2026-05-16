@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class AnimatorHelper : MonoBehaviour
     {

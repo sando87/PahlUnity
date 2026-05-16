@@ -1,7 +1,7 @@
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class Consts
     {
@@ -107,16 +107,5 @@ namespace PahlBit
         public static readonly int ColorFreez = "ColorFreez".GetHashCode();
     }
 
-    public interface IReactableFire
-    {
-        void OnReactFire(ElementFireAffector affector);
-    }
-    public interface IReactableLaser
-    {
-        Vector2 ReflectPos { get; }
-        Vector2 ReflectDir { get; }
-
-        void OnReactLaserReflection(ProjectileBase affectorLaser);
-    }
 
 }

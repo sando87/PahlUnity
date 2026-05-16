@@ -1,42 +1,44 @@
-using PahlBit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ItemObject : MonoBehaviour
+namespace PahlUnity
 {
-    public ItemInfo ItemInfo { get; private set; }
-
-    public static ItemObject TryCreateNewItem(Vector3 position, Quaternion rotation, int playerLevel)
+    public class ItemObject : MonoBehaviour
     {
-        string itemID = ItemInfo.GetRandomItemID(playerLevel);
-        if (itemID.Length <= 0)
-            return null;
+        public ItemInfo ItemInfo { get; private set; }
 
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.InitItem(itemID);
+        public static ItemObject TryCreateNewItem(Vector3 position, Quaternion rotation, int playerLevel)
+        {
+            string itemID = ItemInfo.GetRandomItemID(playerLevel);
+            if (itemID.Length <= 0)
+                return null;
 
-        ItemObject itemObj = Instantiate(itemInfo.ResourceData.AssetData.Prefab, position, rotation);
-        itemObj.ItemInfo = itemInfo;
-        return itemObj;
-    }
-    public static ItemObject CreateNewItem(Vector3 position, Quaternion rotation, ItemInfo item)
-    {
-        ItemObject itemObj = Instantiate(item.ResourceData.AssetData.Prefab, position, rotation);
-        itemObj.ItemInfo = item;
-        return itemObj;
-    }
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.InitItem(itemID);
 
-    // public void OnPickedUpBy(Collider2D col)
-    // {
-    //     BaseObject pickerPlayer = col.GetComponentInParent<BaseObject>();
-    //     ItemInventory inventory = pickerPlayer.GetComponentInChildren<ItemInventory>();
-    //     inventory.AddItem(ItemInfo);
+            ItemObject itemObj = Instantiate(itemInfo.ResourceData.AssetData.Prefab, position, rotation);
+            itemObj.ItemInfo = itemInfo;
+            return itemObj;
+        }
+        public static ItemObject CreateNewItem(Vector3 position, Quaternion rotation, ItemInfo item)
+        {
+            ItemObject itemObj = Instantiate(item.ResourceData.AssetData.Prefab, position, rotation);
+            itemObj.ItemInfo = item;
+            return itemObj;
+        }
 
-    //     OnPickedUp();
-    // }
+        // public void OnPickedUpBy(Collider2D col)
+        // {
+        //     BaseObject pickerPlayer = col.GetComponentInParent<BaseObject>();
+        //     ItemInventory inventory = pickerPlayer.GetComponentInChildren<ItemInventory>();
+        //     inventory.AddItem(ItemInfo);
 
-    public void OnPickedUp()
-    {
-        Destroy(gameObject);
+        //     OnPickedUp();
+        // }
+
+        public void OnPickedUp()
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SkillResourceTable : DatabaseCSV<SkillResourceData> { }
 

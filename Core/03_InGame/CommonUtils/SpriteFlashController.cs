@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SpriteFlashController : MonoBehaviour
     {

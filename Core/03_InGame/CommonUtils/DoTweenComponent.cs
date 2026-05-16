@@ -2,7 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using NaughtyAttributes;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class DoTweenComponent : MonoBehaviour
     {

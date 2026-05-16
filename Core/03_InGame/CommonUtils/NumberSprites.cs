@@ -1,9 +1,7 @@
 using DG.Tweening;
-using PahlBit;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class NumberSprites : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SpriteNumberEffect : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class BaseObject : MonoBehaviour
     {

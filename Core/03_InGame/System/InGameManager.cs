@@ -5,7 +5,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class InGameManager : SingletonMono<InGameManager>
     {

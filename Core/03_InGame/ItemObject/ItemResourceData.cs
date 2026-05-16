@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using RPGCharacterAnims.Actions;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class ItemResourceTable : DatabaseCSV<ItemResourceData> { }
 

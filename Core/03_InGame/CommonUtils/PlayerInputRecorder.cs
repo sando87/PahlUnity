@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class PlayerInputRecorder : MonoBehaviour
     {

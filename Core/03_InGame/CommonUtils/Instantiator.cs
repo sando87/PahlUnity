@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class Instantiator : MonoBehaviour
     {

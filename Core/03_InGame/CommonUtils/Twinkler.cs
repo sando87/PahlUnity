@@ -1,15 +1,17 @@
-using PahlBit;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class Twinkler : MonoBehaviour
+namespace PahlUnity
 {
-    [SerializeField] SpriteFlashController _SFCtrl = null;
-
-    public void StartTwinkle()
+    public class Twinkler : MonoBehaviour
     {
-        _SFCtrl.HitFlash();
-    }
+        [SerializeField] SpriteFlashController _SFCtrl = null;
 
+        public void StartTwinkle()
+        {
+            _SFCtrl.HitFlash();
+        }
+
+    }
 }

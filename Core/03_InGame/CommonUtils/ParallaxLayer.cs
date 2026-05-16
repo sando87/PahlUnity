@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class ParallaxLayer : MonoBehaviour
     {

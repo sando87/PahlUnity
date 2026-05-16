@@ -3,11 +3,10 @@ using System.Linq;
 using DG.Tweening;
 using NaughtyAttributes;
 using NaughtyAttributes.Test;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SpecSkill : SpecBase
     {
@@ -81,133 +80,133 @@ namespace PahlBit
             return damageInfo;
         }
 
-        public void GetDisplayInfo(List<FieldData> fieldDatas)
+        public void GetDisplayInfo(List<ReflectionFieldData> fieldDatas)
         {
             fieldDatas.Clear();
 
-            if (PhyAttack > 0) fieldDatas.Add(new FieldData() { Name = nameof(PhyAttack), Value = PhyAttack.ToInt().ToString() });
-            if (FireAttack > 0) fieldDatas.Add(new FieldData() { Name = nameof(FireAttack), Value = FireAttack.ToInt().ToString() });
-            if (IceAttack > 0) fieldDatas.Add(new FieldData() { Name = nameof(IceAttack), Value = IceAttack.ToInt().ToString() });
-            if (LightningAttack > 0) fieldDatas.Add(new FieldData() { Name = nameof(LightningAttack), Value = LightningAttack.ToInt().ToString() });
-            if (ManaUse > 0) fieldDatas.Add(new FieldData() { Name = nameof(ManaUse), Value = ManaUse.ToInt().ToString() });
-            if (Cooltime > 0) fieldDatas.Add(new FieldData() { Name = nameof(Cooltime), Value = $"{Cooltime:0.#}s" });
-            if (ProjectileCount > 0) fieldDatas.Add(new FieldData() { Name = nameof(ProjectileCount), Value = ProjectileCount.ToInt().ToString() });
-            if (ProjectileSpeed > 0) fieldDatas.Add(new FieldData() { Name = nameof(ProjectileSpeed), Value = $"{ProjectileSpeed:0.#}" });
-            if (AttackRange > 0) fieldDatas.Add(new FieldData() { Name = nameof(AttackRange), Value = $"{AttackRange:0.#}" });
-            if (SplashRange > 0) fieldDatas.Add(new FieldData() { Name = nameof(SplashRange), Value = $"{SplashRange:0.#}" });
-            if (Duration > 0) fieldDatas.Add(new FieldData() { Name = nameof(Duration), Value = $"{Duration:0.#}s" });
-            if (Interval > 0) fieldDatas.Add(new FieldData() { Name = nameof(Interval), Value = $"{Interval:0.#}s" });
-            if (StartDelay > 0) fieldDatas.Add(new FieldData() { Name = nameof(StartDelay), Value = $"{StartDelay:0.#}s" });
+            if (PhyAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyAttack), Value = PhyAttack.ToInt().ToString() });
+            if (FireAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(FireAttack), Value = FireAttack.ToInt().ToString() });
+            if (IceAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(IceAttack), Value = IceAttack.ToInt().ToString() });
+            if (LightningAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(LightningAttack), Value = LightningAttack.ToInt().ToString() });
+            if (ManaUse > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ManaUse), Value = ManaUse.ToInt().ToString() });
+            if (Cooltime > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Cooltime), Value = $"{Cooltime:0.#}s" });
+            if (ProjectileCount > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ProjectileCount), Value = ProjectileCount.ToInt().ToString() });
+            if (ProjectileSpeed > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ProjectileSpeed), Value = $"{ProjectileSpeed:0.#}" });
+            if (AttackRange > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(AttackRange), Value = $"{AttackRange:0.#}" });
+            if (SplashRange > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(SplashRange), Value = $"{SplashRange:0.#}" });
+            if (Duration > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Duration), Value = $"{Duration:0.#}s" });
+            if (Interval > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Interval), Value = $"{Interval:0.#}s" });
+            if (StartDelay > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(StartDelay), Value = $"{StartDelay:0.#}s" });
         }
 
-        public void GetBasicStatInfo(List<FieldData> fieldDatas)
+        public void GetBasicStatInfo(List<ReflectionFieldData> fieldDatas)
         {
             fieldDatas.Clear();
 
             SkillStats nextBaseStats = GetBasicStatByLevel(SaveData.LevelIndex + 1);
 
             if (BaseStats.PhyAttack.PercentValue > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.PhyAttack),
+                    FieldName = nameof(BaseStats.PhyAttack),
                     Value = BaseStats.PhyAttack.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.PhyAttack.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.PhyAttack.ToString() : ""
                 });
 
             if (BaseStats.FireAttack.PercentValue > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.FireAttack),
+                    FieldName = nameof(BaseStats.FireAttack),
                     Value = BaseStats.FireAttack.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.FireAttack.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.FireAttack.ToString() : ""
                 });
 
             if (BaseStats.IceAttack.PercentValue > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.IceAttack),
+                    FieldName = nameof(BaseStats.IceAttack),
                     Value = BaseStats.IceAttack.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.IceAttack.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.IceAttack.ToString() : ""
                 });
 
             if (BaseStats.LightningAttack.PercentValue > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.LightningAttack),
+                    FieldName = nameof(BaseStats.LightningAttack),
                     Value = BaseStats.LightningAttack.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.LightningAttack.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.LightningAttack.ToString() : ""
                 });
 
             if (BaseStats.ManaUse > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.ManaUse),
+                    FieldName = nameof(BaseStats.ManaUse),
                     Value = BaseStats.ManaUse.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.ManaUse.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.ManaUse.ToString() : ""
                 });
 
             if (BaseStats.Cooltime > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.Cooltime),
+                    FieldName = nameof(BaseStats.Cooltime),
                     Value = BaseStats.Cooltime.ToString("0.#") + "s",
-                    Value2 = SaveData.IsLearned ? nextBaseStats.Cooltime.ToString("0.#") + "s" : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.Cooltime.ToString("0.#") + "s" : ""
                 });
 
             if (BaseStats.ProjectileCount > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.ProjectileCount),
+                    FieldName = nameof(BaseStats.ProjectileCount),
                     Value = BaseStats.ProjectileCount.ToString(),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.ProjectileCount.ToString() : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.ProjectileCount.ToString() : ""
                 });
 
             if (BaseStats.ProjectileSpeed > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.ProjectileSpeed),
+                    FieldName = nameof(BaseStats.ProjectileSpeed),
                     Value = BaseStats.ProjectileSpeed.ToString("0.#"),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.ProjectileSpeed.ToString("0.#") : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.ProjectileSpeed.ToString("0.#") : ""
                 });
 
             if (BaseStats.AttackRange > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.AttackRange),
+                    FieldName = nameof(BaseStats.AttackRange),
                     Value = BaseStats.AttackRange.ToString("0.#"),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.AttackRange.ToString("0.#") : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.AttackRange.ToString("0.#") : ""
                 });
 
             if (BaseStats.SplashRange > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.SplashRange),
+                    FieldName = nameof(BaseStats.SplashRange),
                     Value = BaseStats.SplashRange.ToString("0.#"),
-                    Value2 = SaveData.IsLearned ? nextBaseStats.SplashRange.ToString("0.#") : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.SplashRange.ToString("0.#") : ""
                 });
 
             if (BaseStats.Duration > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.Duration),
+                    FieldName = nameof(BaseStats.Duration),
                     Value = BaseStats.Duration.ToString("0.#") + "s",
-                    Value2 = SaveData.IsLearned ? nextBaseStats.Duration.ToString("0.#") + "s" : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.Duration.ToString("0.#") + "s" : ""
                 });
 
             if (BaseStats.Interval > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.Interval),
+                    FieldName = nameof(BaseStats.Interval),
                     Value = BaseStats.Interval.ToString("0.#") + "s",
-                    Value2 = SaveData.IsLearned ? nextBaseStats.Interval.ToString("0.#") + "s" : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.Interval.ToString("0.#") + "s" : ""
                 });
 
             if (BaseStats.StartDelay > 0)
-                fieldDatas.Add(new FieldData()
+                fieldDatas.Add(new ReflectionFieldData()
                 {
-                    Name = nameof(BaseStats.StartDelay),
+                    FieldName = nameof(BaseStats.StartDelay),
                     Value = BaseStats.StartDelay.ToString("0.#") + "s",
-                    Value2 = SaveData.IsLearned ? nextBaseStats.StartDelay.ToString("0.#") + "s" : ""
+                    TypeName = SaveData.IsLearned ? nextBaseStats.StartDelay.ToString("0.#") + "s" : ""
                 });
         }
     }

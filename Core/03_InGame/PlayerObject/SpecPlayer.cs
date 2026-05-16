@@ -5,7 +5,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class SpecPlayer : SpecBase
     {
@@ -58,27 +58,27 @@ namespace PahlBit
         }
 
 
-        public void GetDisplayInfo(List<FieldData> fieldDatas)
+        public void GetDisplayInfo(List<ReflectionFieldData> fieldDatas)
         {
             fieldDatas.Clear();
 
-            fieldDatas.Add(new FieldData() { Name = nameof(MaxHealth), Value = MaxHealth.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(MaxMana), Value = MaxMana.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(BaseAttack), Value = BaseAttack.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(PhyDefence), Value = PhyDefence.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(AttackSpeed), Value = AttackSpeed.ToString("0.#") });
-            fieldDatas.Add(new FieldData() { Name = nameof(MoveSpeed), Value = MoveSpeed.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(MaxShield), Value = MaxShield.ToInt().ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.CooltimeDown), Value = Option.CooltimeDown.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.CriticalRate), Value = Option.CriticalRate.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.CriticalAttack), Value = Option.CriticalAttack.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(HealthRegen), Value = HealthRegen.ToString("0.#") });
-            fieldDatas.Add(new FieldData() { Name = nameof(ManaRegen), Value = ManaRegen.ToString("0.#") });
-            fieldDatas.Add(new FieldData() { Name = nameof(ShieldRegen), Value = ShieldRegen.ToString("0.#") });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.FireResist), Value = Option.FireResist.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.IceResist), Value = Option.IceResist.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.LightningResist), Value = Option.LightningResist.ToString() });
-            fieldDatas.Add(new FieldData() { Name = nameof(Option.PosionResist), Value = Option.PosionResist.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxHealth), Value = MaxHealth.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxMana), Value = MaxMana.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(BaseAttack), Value = BaseAttack.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyDefence), Value = PhyDefence.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(AttackSpeed), Value = AttackSpeed.ToString("0.#") });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MoveSpeed), Value = MoveSpeed.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxShield), Value = MaxShield.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CooltimeDown), Value = Option.CooltimeDown.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CriticalRate), Value = Option.CriticalRate.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CriticalAttack), Value = Option.CriticalAttack.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(HealthRegen), Value = HealthRegen.ToString("0.#") });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ManaRegen), Value = ManaRegen.ToString("0.#") });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ShieldRegen), Value = ShieldRegen.ToString("0.#") });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.FireResist), Value = Option.FireResist.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.IceResist), Value = Option.IceResist.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.LightningResist), Value = Option.LightningResist.ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.PosionResist), Value = Option.PosionResist.ToString() });
         }
 
     }

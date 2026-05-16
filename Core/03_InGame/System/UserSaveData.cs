@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     [System.Serializable]
     public class UserSaveData : SaveableBase

@@ -5,7 +5,7 @@ using System.Threading;
 using UnityEditor.Experimental.GraphView;
 
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class NodeNav
     {

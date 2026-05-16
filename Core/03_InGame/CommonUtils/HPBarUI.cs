@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PahlBit
+namespace PahlUnity
 {
     public class HPBarUI : MonoBehaviour
     {

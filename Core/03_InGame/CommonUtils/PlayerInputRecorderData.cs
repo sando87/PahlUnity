@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace PahlBit
+namespace PahlUnity
 {
     [CreateAssetMenu(fileName = "InputRecordData", menuName = "PahlBit/Input Record Data")]
     public class InputRecordData : ScriptableObject

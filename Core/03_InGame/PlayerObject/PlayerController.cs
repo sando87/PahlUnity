@@ -7,7 +7,7 @@ using NaughtyAttributes;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace PahlBit
+namespace PahlUnity
 {
     /// <summary>
     /// 플레이어 캐릭터의 입력을 받아서 이동, 점프, 상호작용 등을 처리하는 컨트롤러 클래스
