@@ -21,7 +21,7 @@ namespace PahlUnity
 
         protected void Stop()
         {
-            PlayAnim(AnimStateNameHash.Idle);
+            Base.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
             Base.Phy.Velocity = Vector2.zero;
         }
         protected void Turn(float worldDir)
@@ -35,7 +35,7 @@ namespace PahlUnity
         {
             Turn(moveHoriVelocity);
             Base.Phy.VelocityX = moveHoriVelocity;
-            PlayAnim(AnimStateNameHash.Run);
+            Base.AnimHelper.PlayAnim(AnimStateNameHash.Run);
         }
     }
 }

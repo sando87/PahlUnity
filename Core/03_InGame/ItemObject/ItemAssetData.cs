@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    [CreateAssetMenu(fileName = "NewItem", menuName = "PahlBit/Item")]
+    [CreateAssetMenu(fileName = "NewItem", menuName = "PahlUnity/Item")]
     public class ItemAssetData : ScriptableObject
     {
         public Sprite Icon;

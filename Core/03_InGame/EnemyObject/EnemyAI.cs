@@ -255,7 +255,7 @@ namespace PahlUnity
                 Stop();
                 TurnToPlayer();
 
-                AnimEventState animEventState = mBase.AnimHelper.PlayAnim(AnimStateNameHash.Attack);
+                AnimEventState animEventState = mBase.AnimHelper.PlayAnimWithEvent(AnimStateNameHash.Attack);
                 await UniTask.WaitUntil(() => animEventState.IsFired, cancellationToken: ctx);
                 DoFireAttack();
                 await UniTask.WaitUntil(() => animEventState.IsEnd, cancellationToken: ctx);
@@ -306,7 +306,7 @@ namespace PahlUnity
         {
             try
             {
-                AnimEventState animEventState = mBase.AnimHelper.PlayAnim(AnimStateNameHash.Hert);
+                AnimEventState animEventState = mBase.AnimHelper.PlayAnimWithEvent(AnimStateNameHash.Hert);
                 await UniTask.WaitUntil(() => animEventState.IsEnd, cancellationToken: ctx);
                 return EnemyState.Recover;
             }
@@ -322,7 +322,7 @@ namespace PahlUnity
         {
             try
             {
-                AnimEventState animEventState = mBase.AnimHelper.PlayAnim(AnimStateNameHash.Death);
+                AnimEventState animEventState = mBase.AnimHelper.PlayAnimWithEvent(AnimStateNameHash.Death);
                 await UniTask.WaitUntil(() => animEventState.IsEnd, cancellationToken: ctx);
                 return EnemyState.None;
             }
@@ -786,7 +786,7 @@ namespace PahlUnity
 
         async UniTask MoveToEnd(CancellationToken ct, float v)
         {
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Run);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Run);
 
             while (!ct.IsCancellationRequested)
             {
@@ -797,7 +797,7 @@ namespace PahlUnity
             }
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
 
         async UniTask MoveToDestPosition(float velocityX, Vector2 destPos)
@@ -805,7 +805,7 @@ namespace PahlUnity
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Run);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Run);
             Vector2 startPos = mBase.Body.Foot;
             int startDir = startPos.x < destPos.x ? 1 : -1;
             Turn(startDir);
@@ -820,7 +820,7 @@ namespace PahlUnity
             }
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
 
         async UniTask MoveAndFall(float velocityX, Vector2 destPos)
@@ -828,7 +828,7 @@ namespace PahlUnity
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Run);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Run);
             Vector2 startPos = mBase.Body.Foot;
             int startDir = startPos.x < destPos.x ? 1 : -1;
             Turn(startDir);
@@ -847,7 +847,7 @@ namespace PahlUnity
 
             // 착지
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
 
         }
 
@@ -856,32 +856,32 @@ namespace PahlUnity
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Jump);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Jump);
             mBase.Phy.DoJump(jumpForce);
             await UniTask.WaitUntil(() => mBase.Phy.IsGrounded, cancellationToken: mMoveCTS.Token);
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
         async UniTask DropDown()
         {
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Jump);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Jump);
 
             mBase.Body.LockThinPlatformMomentarily();
             await UniTask.WaitUntil(() => !mBase.Body.LockThinPlatform && mBase.Phy.IsGrounded, cancellationToken: mMoveCTS.Token);
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
         async UniTask JumpMoving(float jumpForce, float velocityX, Vector2 destPos)
         {
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Jump);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Jump);
             Vector2 startPos = mBase.Body.Foot;
             int startDir = startPos.x < destPos.x ? 1 : -1;
             Turn(startDir);
@@ -897,7 +897,7 @@ namespace PahlUnity
             }
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
 
         async UniTask JumpAndMove(float jumpForce, float velocityX, Vector2 destPos)
@@ -905,7 +905,7 @@ namespace PahlUnity
             CancelMoveCTS();
             mMoveCTS = new CancellationTokenSource();
 
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Jump);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Jump);
             Vector2 startPos = mBase.Body.Foot;
             int startDir = startPos.x < destPos.x ? 1 : -1;
             Turn(startDir);
@@ -928,7 +928,7 @@ namespace PahlUnity
             }
 
             mBase.Phy.Velocity = Vector2.zero;
-            mBase.AnimHelper.CrossFadeToState(AnimStateNameHash.Idle);
+            mBase.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
         }
 
         bool IsArrivedDestPosition(Vector2 destPos, int startDir)

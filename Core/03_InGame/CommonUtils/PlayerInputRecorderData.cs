@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
-    [CreateAssetMenu(fileName = "InputRecordData", menuName = "PahlBit/Input Record Data")]
+    [CreateAssetMenu(fileName = "InputRecordData", menuName = "PahlUnity/Input Record Data")]
     public class InputRecordData : ScriptableObject
     {
         public List<RecordedInputData> inputs = new List<RecordedInputData>();

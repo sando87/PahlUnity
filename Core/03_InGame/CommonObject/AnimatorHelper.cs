@@ -9,26 +9,66 @@ namespace PahlUnity
 {
     public class AnimatorHelper : MonoBehaviour
     {
-        [SerializeField] AnimatorStateEventSet[] _stateEvents = null;
-
-
-        private Dictionary<AnimStateNameHash, AnimatorStateEventSet> mAnimatorEvents = new Dictionary<AnimStateNameHash, AnimatorStateEventSet>();
-
         Animator mAnimator = null;
+        AnimEventState mAnimEventState = null;
 
         void Awake()
         {
             mAnimator = GetComponent<Animator>();
-
-            InitEvents();
         }
 
-        void InitEvents()
+
+        public void PlayAnim(AnimStateNameHash stateNameHash)
         {
-            foreach (var eventSet in _stateEvents)
+            if (mAnimEventState != null)
             {
-                mAnimatorEvents[eventSet.StateNameHash] = eventSet;
+                mAnimEventState.IsEnd = true;
+                mAnimEventState = null;
             }
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+        }
+        public void PlayAnim(AnimStateNameHash stateNameHash, Action<int> onFire)
+        {
+            if (mAnimEventState != null)
+            {
+                mAnimEventState.IsEnd = true;
+            }
+            mAnimEventState = new AnimEventState(stateNameHash);
+            mAnimEventState.onFire = onFire;
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+        }
+        public AnimEventState PlayAnimWithEvent(AnimStateNameHash stateNameHash)
+        {
+            if (mAnimEventState != null)
+            {
+                mAnimEventState.IsEnd = true;
+            }
+            mAnimEventState = new AnimEventState(stateNameHash);
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+            return mAnimEventState;
+        }
+
+        public async UniTask<bool> PlayAnimWaitFire(AnimStateNameHash stateNameHash)
+        {
+            if (mAnimEventState != null)
+            {
+                mAnimEventState.IsEnd = true;
+            }
+            mAnimEventState = new AnimEventState(stateNameHash);
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+            await UniTask.WaitUntil(() => mAnimEventState.IsFired || mAnimEventState.IsEnd);
+            return mAnimEventState.IsFired;
+        }
+
+        public async UniTask PlayAnimWaitEnd(AnimStateNameHash stateNameHash)
+        {
+            if (mAnimEventState != null)
+            {
+                mAnimEventState.IsEnd = true;
+            }
+            mAnimEventState = new AnimEventState(stateNameHash);
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+            await UniTask.WaitUntil(() => mAnimEventState.IsEnd);
         }
 
         public void SetParamFloat(string paramName, float value)
@@ -78,28 +118,12 @@ namespace PahlUnity
             return mAnimator.GetBool(paramNameHash);
         }
 
-        public void CrossFadeToState(string stateName, int layer = 0)
-        {
-            mAnimator.CrossFade(stateName, 0, layer, 0);
-        }
-        public void CrossFadeToState(int stateHashName, int layer = 0)
-        {
-            mAnimator.CrossFade(stateHashName, 0, layer, 0);
-        }
-
         public int GetCurrentStateNameHash(int layer)
         {
             return mAnimator.GetCurrentAnimatorStateInfo(layer).shortNameHash;
         }
 
 
-        AnimEventState _animEventState = new AnimEventState();
-        public AnimEventState PlayAnim(AnimStateNameHash stateNameHash)
-        {
-            _animEventState.ResetEventState(stateNameHash);
-            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
-            return _animEventState;
-        }
 
         public void Fire()
         {
@@ -129,18 +153,6 @@ namespace PahlUnity
             InvokeEventMiddle(curStateHashName, 2);
         }
 
-        public void FootR()
-        {
-        }
-
-        public void FootL()
-        {
-        }
-
-        public void Land()
-        {
-        }
-
         public void Shoot()
         {
             int curStateHashName = mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
@@ -150,99 +162,22 @@ namespace PahlUnity
 
         public void InvokeEventEnter(AnimStateNameHash stateNameHash)
         {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash].EventEnter.Invoke();
-            }
         }
         public void InvokeEventMiddle(AnimStateNameHash stateNameHash, int index)
         {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
+            if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
             {
-                mAnimatorEvents[stateNameHash].EventMiddle.Invoke(index);
-            }
-
-            if (_animEventState.CurrentAnim == stateNameHash)
-            {
-                _animEventState.IsFired = true;
-                _animEventState.FireIndex = index;
+                mAnimEventState.IsFired = true;
+                mAnimEventState.FireIndex = index;
+                mAnimEventState.onFire?.Invoke(index);
             }
         }
         public void InvokeEventLeave(AnimStateNameHash stateNameHash)
         {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
+            if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
             {
-                mAnimatorEvents[stateNameHash].EventLeave.Invoke();
+                mAnimEventState.IsEnd = true;
             }
-
-            if (_animEventState.CurrentAnim == stateNameHash)
-            {
-                _animEventState.IsEnd = true;
-            }
-        }
-
-
-
-        public void AddEventEnter(AnimStateNameHash stateNameHash, UnityAction action)
-        {
-            if (!mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash] = new AnimatorStateEventSet(stateNameHash);
-            }
-            mAnimatorEvents[stateNameHash].EventEnter.AddListener(action);
-        }
-        public void AddEventMiddle(AnimStateNameHash stateNameHash, UnityAction<int> action)
-        {
-            if (!mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash] = new AnimatorStateEventSet(stateNameHash);
-            }
-            mAnimatorEvents[stateNameHash].EventMiddle.AddListener(action);
-        }
-        public void AddEventLeave(AnimStateNameHash stateNameHash, UnityAction action)
-        {
-            if (!mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash] = new AnimatorStateEventSet(stateNameHash);
-            }
-            mAnimatorEvents[stateNameHash].EventLeave.AddListener(action);
-        }
-        public void RemoveEventEnter(AnimStateNameHash stateNameHash, UnityAction action)
-        {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash].EventEnter.RemoveListener(action);
-            }
-        }
-        public void RemoveEventMiddle(AnimStateNameHash stateNameHash, UnityAction<int> action)
-        {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash].EventMiddle.RemoveListener(action);
-            }
-        }
-        public void RemoveEventLeave(AnimStateNameHash stateNameHash, UnityAction action)
-        {
-            if (mAnimatorEvents.ContainsKey(stateNameHash))
-            {
-                mAnimatorEvents[stateNameHash].EventLeave.RemoveListener(action);
-            }
-        }
-
-    }
-
-    [System.Serializable]
-    public class AnimatorStateEventSet
-    {
-        [AnimatorStateHash]
-        public int StateNameHash = 0;
-        public UnityEvent EventEnter = new UnityEvent();
-        public UnityEvent<int> EventMiddle = new UnityEvent<int>();
-        public UnityEvent EventLeave = new UnityEvent();
-
-        public AnimatorStateEventSet(int stateNameHash)
-        {
-            StateNameHash = stateNameHash;
         }
     }
 
@@ -252,8 +187,9 @@ namespace PahlUnity
         public bool IsFired = false;
         public bool IsEnd = false;
         public int FireIndex = -1;
+        public Action<int> onFire = null;
 
-        public void ResetEventState(AnimStateNameHash animStateNameHash)
+        public AnimEventState(AnimStateNameHash animStateNameHash)
         {
             CurrentAnim = animStateNameHash;
             IsFired = false;
