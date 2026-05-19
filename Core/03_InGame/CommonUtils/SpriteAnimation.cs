@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -13,7 +14,7 @@ namespace PahlUnity
         [SerializeField] bool _StartOnEnable = true;
         [SerializeField] UnityEvent _OnAnimEnd = null;
 
-        public UnityEvent EventEndAnim => _OnAnimEnd;
+        public event UnityAction OnAnimEnd { add => _OnAnimEnd.AddListener(value); remove => _OnAnimEnd.RemoveListener(value); }
 
         int mIndex = 0;
 

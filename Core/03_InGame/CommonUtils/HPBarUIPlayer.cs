@@ -50,16 +50,19 @@ namespace PahlUnity
 
         void SetLifeRate(float _rate)
         {
+            if (_FillAmountLife == null) return;
             float rate = Mathf.Clamp(_rate, 0, 1);
             _FillAmountLife.transform.localScale = new Vector3(rate, 1, 1);
         }
         void SetManaRate(float _rate)
         {
+            if (_FillAmountMana == null) return;
             float rate = Mathf.Clamp(_rate, 0, 1);
             _FillAmountMana.transform.localScale = new Vector3(rate, 1, 1);
         }
         void SetShieldRate(float _rate)
         {
+            if (_FillAmountShield == null) return;
             float rate = Mathf.Clamp(_rate, 0, 1);
             _FillAmountShield.transform.localScale = new Vector3(rate, 1, 1);
         }

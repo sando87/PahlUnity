@@ -208,7 +208,6 @@ namespace PahlUnity
             }
         }
 
-
         public AudioSource PlaySFXClip(AudioClip clip, bool isOverlappable = false, Transform loopObj = null)
         {
             if (clip == null || IsMuteSFX)
@@ -256,32 +255,6 @@ namespace PahlUnity
                 return source;
             }
         }
-
-
-        public void StopSFXKey(string key, float fadeoutSec = 0)
-        {
-            // 이미 재생중인경우 해당클립을 멈추고 다시 재생시킴
-            if (mPlaylist.ContainsKey(key))
-            {
-                PlayingClipInfo info = mPlaylist[key];
-                if (fadeoutSec > 0)
-                {
-                    mPlaylist.Remove(key);
-                    info.source.DOFade(0, fadeoutSec).SetUpdate(true);
-
-                    this.ExDelayedCoroutine(fadeoutSec, () =>
-                    {
-                        ReturnAudioSourceToPool(info.source);
-                    });
-                }
-                else
-                {
-                    ReturnAudioSourceToPool(info.source);
-                    mPlaylist.Remove(key);
-                }
-            }
-        }
-
         public void StopSFXClip(AudioClip clip, float fadeoutSec = 0)
         {
             if (clip == null)

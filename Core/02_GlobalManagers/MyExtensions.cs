@@ -667,5 +667,10 @@ namespace PahlUnity
         {
             return list.Count > 0 ? list[UnityEngine.Random.Range(0, list.Count)] : default;
         }
+
+        public static bool IsPrefab(this GameObject obj)
+        {
+            return obj.scene.rootCount <= 0;
+        }
     }
 }

@@ -5,15 +5,15 @@ namespace PahlUnity
 {
     public class SpriteFlashController : MonoBehaviour
     {
-        SpriteRenderer sr;
-        MaterialPropertyBlock mpb;
+        SpriteRenderer mSR;
+        MaterialPropertyBlock mMPB;
 
         int mIsFlashingState = 0;
 
         void Awake()
         {
-            sr = GetComponent<SpriteRenderer>();
-            mpb = new MaterialPropertyBlock();
+            mSR = GetComponent<SpriteRenderer>();
+            mMPB = new MaterialPropertyBlock();
         }
 
         public void HitFlash()
@@ -29,13 +29,13 @@ namespace PahlUnity
             while (true)
             {
                 mIsFlashingState = 1;
-                sr.GetPropertyBlock(mpb);
-                mpb.SetFloat("_FlashAmount", 1);
-                sr.SetPropertyBlock(mpb);
+                mSR.GetPropertyBlock(mMPB);
+                mMPB.SetFloat("_FlashAmount", 1);
+                mSR.SetPropertyBlock(mMPB);
                 yield return new WaitForSeconds(0.05f);
 
-                mpb.SetFloat("_FlashAmount", 0);
-                sr.SetPropertyBlock(mpb);
+                mMPB.SetFloat("_FlashAmount", 0);
+                mSR.SetPropertyBlock(mMPB);
                 yield return new WaitForSeconds(0.05f);
 
                 if (mIsFlashingState == 1)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace PahlUnity
         [Foldout("Outro")][SerializeField] Sprite[] _SpritesOutro = null;
         [Foldout("Outro")][SerializeField] float _IntervalOutro = 0.1f;
         [Foldout("Outro")][SerializeField] UnityEvent _OnEndOutro = null;
+
+        public event UnityAction OnEndIntro { add => _OnEndIntro.AddListener(value); remove => _OnEndIntro.RemoveListener(value); }
+        public event UnityAction OnEndOutro { add => _OnEndOutro.AddListener(value); remove => _OnEndOutro.RemoveListener(value); }
 
         int mIndex = 0;
 

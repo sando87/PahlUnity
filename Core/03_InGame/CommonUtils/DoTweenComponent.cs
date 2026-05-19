@@ -15,21 +15,21 @@ namespace PahlUnity
         }
 
         [Header("Base")]
-        [SerializeField] private bool _startOnEnable = true;
-        [SerializeField] private TweenType _tweenType;
+        [SerializeField] private bool _StartOnEnable = true;
+        [SerializeField] private TweenType _TweenType;
 
         [Header("Values")]
-        [SerializeField] private Vector3 _endVector;
-        [SerializeField] private float _endFloat;
-        [SerializeField] private float _duration = 0.5f;
+        [SerializeField] private Vector3 _EndVector;
+        [SerializeField] private float _EndFloat;
+        [SerializeField] private float _Duration = 0.5f;
 
         [Header("Options")]
-        [SerializeField] private float _delay = 0f;
-        [SerializeField] private Ease _ease = Ease.OutQuad;
-        [SerializeField] private int _loopCount = 0;
+        [SerializeField] private float _Delay = 0f;
+        [SerializeField] private Ease _Ease = Ease.OutQuad;
+        [SerializeField] private int _LoopCount = 0;
         [ShowIf(nameof(ShowLoopType))]
-        [SerializeField] private LoopType _loopType = LoopType.Restart;
-        bool ShowLoopType() { return _loopCount != 0; }
+        [SerializeField] private LoopType _LoopType = LoopType.Restart;
+        bool ShowLoopType() { return _LoopCount != 0; }
 
         private Tween mTween;
         private Vector3 mStartPosition;
@@ -49,7 +49,7 @@ namespace PahlUnity
 
         void OnEnable()
         {
-            if (_startOnEnable)
+            if (_StartOnEnable)
             {
                 PlayTween();
             }
@@ -59,52 +59,52 @@ namespace PahlUnity
         {
             KillTween();
 
-            switch (_tweenType)
+            switch (_TweenType)
             {
                 case TweenType.Move:
-                    mTween = transform.DOMove(_endVector, _duration).From(mStartPosition);
+                    mTween = transform.DOMove(_EndVector, _Duration).From(mStartPosition);
                     break;
                 case TweenType.MoveX:
-                    mTween = transform.DOMoveX(_endFloat, _duration).From(mStartPosition.x);
+                    mTween = transform.DOMoveX(_EndFloat, _Duration).From(mStartPosition.x);
                     break;
                 case TweenType.MoveY:
-                    mTween = transform.DOMoveY(_endFloat, _duration).From(mStartPosition.y);
+                    mTween = transform.DOMoveY(_EndFloat, _Duration).From(mStartPosition.y);
                     break;
                 case TweenType.MoveZ:
-                    mTween = transform.DOMoveZ(_endFloat, _duration).From(mStartPosition.z);
+                    mTween = transform.DOMoveZ(_EndFloat, _Duration).From(mStartPosition.z);
                     break;
 
                 case TweenType.MoveLocal:
-                    mTween = transform.DOLocalMove(_endVector, _duration).From(mStartPositionLocal);
+                    mTween = transform.DOLocalMove(_EndVector, _Duration).From(mStartPositionLocal);
                     break;
                 case TweenType.MoveLocalX:
-                    mTween = transform.DOLocalMoveX(_endFloat, _duration).From(mStartPositionLocal.x);
+                    mTween = transform.DOLocalMoveX(_EndFloat, _Duration).From(mStartPositionLocal.x);
                     break;
                 case TweenType.MoveLocalY:
-                    mTween = transform.DOLocalMoveY(_endFloat, _duration).From(mStartPositionLocal.y);
+                    mTween = transform.DOLocalMoveY(_EndFloat, _Duration).From(mStartPositionLocal.y);
                     break;
                 case TweenType.MoveLocalZ:
-                    mTween = transform.DOLocalMoveZ(_endFloat, _duration).From(mStartPositionLocal.z);
+                    mTween = transform.DOLocalMoveZ(_EndFloat, _Duration).From(mStartPositionLocal.z);
                     break;
 
                 case TweenType.Rotate:
-                    mTween = transform.DORotate(_endVector, _duration, RotateMode.FastBeyond360).From(mStartRotation);
+                    mTween = transform.DORotate(_EndVector, _Duration, RotateMode.FastBeyond360).From(mStartRotation);
                     break;
                 case TweenType.RotateLocal:
-                    mTween = transform.DOLocalRotate(_endVector, _duration, RotateMode.FastBeyond360).From(mStartRotationLocal);
+                    mTween = transform.DOLocalRotate(_EndVector, _Duration, RotateMode.FastBeyond360).From(mStartRotationLocal);
                     break;
 
                 case TweenType.Scale:
-                    mTween = transform.DOScale(_endVector, _duration).From(mStartScale);
+                    mTween = transform.DOScale(_EndVector, _Duration).From(mStartScale);
                     break;
                 case TweenType.ScaleX:
-                    mTween = transform.DOScaleX(_endFloat, _duration).From(mStartScale.x);
+                    mTween = transform.DOScaleX(_EndFloat, _Duration).From(mStartScale.x);
                     break;
                 case TweenType.ScaleY:
-                    mTween = transform.DOScaleY(_endFloat, _duration).From(mStartScale.y);
+                    mTween = transform.DOScaleY(_EndFloat, _Duration).From(mStartScale.y);
                     break;
                 case TweenType.ScaleZ:
-                    mTween = transform.DOScaleZ(_endFloat, _duration).From(mStartScale.z);
+                    mTween = transform.DOScaleZ(_EndFloat, _Duration).From(mStartScale.z);
                     break;
             }
 
@@ -115,16 +115,16 @@ namespace PahlUnity
         {
             if (mTween == null) return;
 
-            mTween.SetEase(_ease);
+            mTween.SetEase(_Ease);
 
-            if (_delay > 0)
+            if (_Delay > 0)
             {
-                mTween.SetDelay(_delay);
+                mTween.SetDelay(_Delay);
             }
 
-            if (_loopCount != 0)
+            if (_LoopCount != 0)
             {
-                mTween.SetLoops(_loopCount, _loopType);
+                mTween.SetLoops(_LoopCount, _LoopType);
             }
         }
 

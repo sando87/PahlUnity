@@ -9,45 +9,48 @@ namespace PahlUnity
         // 요청한 객체가 부족할때 추가 할당해주는 객체의 개수
         private const int AllocCount = 10;
 
+        // 풀링 객체의 이름을 key로 사용함.
         private Dictionary<string, Transform> mObjectPool = new Dictionary<string, Transform>();
 
-        public GameObject PopForDuration(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent, float duration)
+        public GameObject PopForDuration(GameObject poolingObj, Vector3 position, Quaternion rotation, Transform parent, float duration)
         {
-            GameObject obj = Pop(prefab, position, rotation, parent);
+            GameObject obj = Pop(poolingObj, position, rotation, parent);
             PushBack(obj, duration);
             return obj;
         }
 
-        public GameObject Pop(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
+        // 풀링 대상으로 넣어주는 프리팹은 Asset상태로 존재해도 되고, 씬상에 이미 배치된 객체여도 된다.
+        // 단 해당 객체의 이름을 key로 사용하므로 주의..
+        public GameObject Pop(GameObject poolingObj, Vector3 position, Quaternion rotation, Transform parent)
         {
-            GameObject obj = Pop(prefab);
+            GameObject obj = Pop(poolingObj);
             obj.transform.position = position;
             obj.transform.rotation = rotation;
             obj.transform.SetParent(parent);
             obj.SetActive(true);
 
-            ObjectPoolable poolingObj = obj.GetComponent<ObjectPoolable>();
-            if (poolingObj != null)
+            ObjectPoolable poolingComp = obj.GetComponent<ObjectPoolable>();
+            if (poolingComp != null)
             {
-                poolingObj.PopFromPool();
+                poolingComp.PopFromPool();
             }
 
             return obj;
         }
-        private GameObject Pop(GameObject prefab)
+        private GameObject Pop(GameObject poolingObj)
         {
-            // 본체가 씬상에 이미 생성된 상태일때는 그냥 이름으로 key설정하고
-            // Asset상태로 있는 경우에는 AssetID를 추가하여 key로 설정한다
-            string key = prefab.name;
-            if (prefab.scene.rootCount <= 0)
+            // 프리팹이 Asset상태로 있는 경우에는 AssetID를 추가하여 key로 설정하고,
+            // 씬 상에 이미 생성된 객체를 풀링할때는 해당 객체의 이름을 key로 사용함.
+            string key = poolingObj.name;
+            if (poolingObj.IsPrefab())
             {
-                key += prefab.GetEntityId();
+                key += poolingObj.GetEntityId();
             }
 
             // 요청한 객체가 할당 가능하지 확인하고 불가능 하면 추가로 객체 생성한다.
             if (!IsAllocable(key))
             {
-                if (!AllocObjects(key, prefab))
+                if (!AllocObjects(key, poolingObj))
                     return null;
             }
 
