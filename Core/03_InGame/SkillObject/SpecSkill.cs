@@ -68,18 +68,6 @@ namespace PahlUnity
             return baseStats;
         }
 
-        public DamageInfo CalcCurrentDamages()
-        {
-            DamageInfo damageInfo = new DamageInfo();
-            damageInfo.PhyDamage = PhyAttack;
-            damageInfo.FireDamage = FireAttack;
-            damageInfo.IceDamage = IceAttack;
-            damageInfo.LightningDamage = LightningAttack;
-            damageInfo.IsCritical = MyUtils.IsPercentHit((int)mSpecPlayer.Option.CriticalRate);
-            damageInfo.CriticalAttackUp = mSpecPlayer.Option.CriticalAttack;
-            return damageInfo;
-        }
-
         public void GetDisplayInfo(List<ReflectionFieldData> fieldDatas)
         {
             fieldDatas.Clear();

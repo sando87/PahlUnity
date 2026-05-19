@@ -43,7 +43,7 @@ namespace PahlUnity
 
         public void MoveHorizontally(float moveHoriVelocity)
         {
-            TurnToInput(moveHoriVelocity);
+            mBase.Body.Turn(moveHoriVelocity);
             VelocityX = moveHoriVelocity;
         }
         public void SetMoveSpeedOnly(float moveSpeedX)
@@ -54,27 +54,6 @@ namespace PahlUnity
         public void StopMoving()
         {
             Velocity = Vector2.zero;
-        }
-        public void TurnToWorldDir(int rightDir)
-        {
-            if (rightDir == 0) return;
-
-            Vector3 front = rightDir > 0 ? Vector3.forward : Vector3.back;
-            transform.rotation = Quaternion.LookRotation(front, transform.up);
-        }
-        public void TurnToInput(float moveX)
-        {
-            if (moveX.ExIsAlmostZero()) return;
-
-            int rightDir = moveX > 0 ? 1 : -1;
-            TurnToWorldDir(rightDir);
-        }
-        public void TurnToTarget(Transform target)
-        {
-            if (target == null) return;
-
-            int rightDir = target.position.x > mBase.transform.position.x ? 1 : -1;
-            TurnToWorldDir(rightDir);
         }
 
         public void DoJump(float jumpForce)

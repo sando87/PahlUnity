@@ -6,52 +6,46 @@ using UnityEngine.Events;
 
 namespace PahlUnity
 {
-    public interface IHealth
-    {
-        public int MaxHealth { get; }
-        public int MaxMana { get; }
-        public int MaxShield { get; }
-
-        public int CurrentHP { get; }
-        public int CurrentMana { get; }
-        public int CurrentShield { get; }
-
-        public bool IsDirty { get; set; }
-    }
-
     public class HPBarUIPlayer : MonoBehaviour
     {
         [SerializeField] Transform _FillAmountLife = null;
         [SerializeField] Transform _FillAmountMana = null;
+        [SerializeField] Transform _FillAmountShield = null;
 
-        private IHealth mHealthStatus = null;
+        private Health mHealthStatus = null;
+        private HealthInfo mPreviousState = new HealthInfo();
 
-        public void SetHealthStatus(IHealth health)
+        public void SetHealthStatus(Health health)
         {
             mHealthStatus = health;
+            mPreviousState = new HealthInfo();
         }
 
         void Update()
         {
             transform.rotation = Quaternion.identity;
-            if (mHealthStatus != null)
-            {
-                UpdatePlayerHealth();
-            }
+            UpdatePlayerHealth();
         }
 
         void UpdatePlayerHealth()
         {
-            if (mHealthStatus == null || !mHealthStatus.IsDirty)
+            if (mHealthStatus == null)
                 return;
 
-            float lifeRate = (float)mHealthStatus.CurrentHP / mHealthStatus.MaxHealth;
-            SetLifeRate(lifeRate);
+            HealthInfo curInfo = mHealthStatus.GetCurrentHealthInfo();
+            if (!mPreviousState.IsEquals(curInfo))
+            {
+                float lifeRate = (float)mHealthStatus.CurrentHP / mHealthStatus.MaxHealth;
+                SetLifeRate(lifeRate);
 
-            float manaRate = (float)mHealthStatus.CurrentMana / mHealthStatus.MaxMana;
-            SetManaRate(manaRate);
+                float manaRate = (float)mHealthStatus.CurrentMana / mHealthStatus.MaxMana;
+                SetManaRate(manaRate);
 
-            mHealthStatus.IsDirty = false;
+                float shieldRate = (float)mHealthStatus.CurrentShield / mHealthStatus.MaxShield;
+                SetShieldRate(shieldRate);
+
+                mPreviousState = curInfo;
+            }
         }
 
         void SetLifeRate(float _rate)
@@ -63,6 +57,11 @@ namespace PahlUnity
         {
             float rate = Mathf.Clamp(_rate, 0, 1);
             _FillAmountMana.transform.localScale = new Vector3(rate, 1, 1);
+        }
+        void SetShieldRate(float _rate)
+        {
+            float rate = Mathf.Clamp(_rate, 0, 1);
+            _FillAmountShield.transform.localScale = new Vector3(rate, 1, 1);
         }
     }
 }

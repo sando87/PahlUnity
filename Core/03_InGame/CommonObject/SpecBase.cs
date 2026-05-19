@@ -1,9 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
@@ -13,7 +9,6 @@ namespace PahlUnity
         public virtual float MaxMana { get; }
         public virtual float MaxShield { get; }
         public virtual float BaseAttack { get; }
-
         public virtual float PhyDefence { get; }
 
         SpecOption mTotalOption = new SpecOption();
@@ -25,14 +20,17 @@ namespace PahlUnity
         }
 
         public SpecOption Option => GetTotalOption();
-        
+
         SpecOption GetTotalOption()
         {
             if (IsDirty())
-                UpdateTotalOption();
+            {
+                RefreshTotalOption();
+            }
+
             return mTotalOption;
         }
-        void UpdateTotalOption()
+        void RefreshTotalOption()
         {
             mTotalOption.SetAllZero();
             foreach (SpecOption option in mLinkedOptions)

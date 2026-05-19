@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
@@ -5,8 +6,14 @@ using UnityEngine.Events;
 
 namespace PahlUnity
 {
-    public class Health : MonoBehaviour, IHealth
+    public class Health : MonoBehaviour
     {
+        [SerializeField] UnityEvent<HealthInfo, HealthInfo> _OnChanged;
+        [SerializeField] UnityEvent<HealthInfo, HealthInfo> _OnDied;
+
+        public event Action<HealthInfo, HealthInfo> OnChanged;
+        public event Action<HealthInfo, HealthInfo> OnDied;
+
         public bool IsDead => mCurrentHP.ToInt() <= 0;
 
         public float HpRate => mMaxCurrentHP > 0 ? mCurrentHP / mMaxCurrentHP : 1;
@@ -21,13 +28,6 @@ namespace PahlUnity
         public int CurrentMana => mCurrentMana.ToInt();
         public int CurrentShield => mCurrentShield.ToInt();
 
-        public bool IsDirty { get => mIsDirty; set => mIsDirty = value; }
-
-        // public float CurrentTemputure { get; set; } = 0;
-
-        // public bool IsBurned { get; private set; }
-        // public bool IsFreezed { get; private set; }
-
         protected int mMaxCurrentHP = 10;
         protected int mMaxCurrentMana = 0;
         protected int mMaxCurrentShield = 0;
@@ -38,11 +38,6 @@ namespace PahlUnity
         protected float mCurrentMana = 0;
         [SerializeField, NaughtyAttributes.ReadOnly]
         protected float mCurrentShield = 0;
-
-        protected bool mIsDirty = false;
-
-        public UnityEvent<DamagedResultInfo> OnDamaged = new UnityEvent<DamagedResultInfo>();
-        public UnityEvent OnDied = new UnityEvent();
 
         protected BaseObject mBaseObj = null;
         protected SpecBase mSpec = null;
@@ -56,12 +51,11 @@ namespace PahlUnity
         protected virtual void Start()
         {
             UpdateMaxStats(false);
-
-            // StartCoroutine(CoProcessBurnOrFreez());
         }
 
         public void UpdateMaxStats(bool keepRate)
         {
+            HealthInfo before = GetCurrentHealthInfo();
             if (keepRate)
             {
                 float hpRate = HpRate;
@@ -87,211 +81,148 @@ namespace PahlUnity
                 mCurrentShield = mMaxCurrentShield;
             }
 
-            mIsDirty = true;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthChanged(before, after);
         }
 
-        DamagedResultInfo CalcHitResult(DamageInfo damageInfo)
+        public void GetDamaged(float newHP, float newMana, float newShield)
         {
-            DamagedResultInfo damageRetInfo = new DamagedResultInfo();
-            damageRetInfo.MaxHealth = mMaxCurrentHP;
-            damageRetInfo.BeforeHealth = mCurrentHP.ToInt();
-            damageRetInfo.OriDamage = (damageInfo.PhyDamage + damageInfo.FireDamage + damageInfo.IceDamage + damageInfo.LightningDamage).ToInt();
+            if (IsDead) return;
 
-            // 물리 데미지 계산
-            float phyDamage = damageInfo.IsCritical ? damageInfo.PhyDamage * damageInfo.CriticalAttackUp : damageInfo.PhyDamage;
-            damageRetInfo.TotalDamage = phyDamage.ToInt();
+            HealthInfo before = GetCurrentHealthInfo();
+            mCurrentHP = newHP;
+            mCurrentHP.ExSetMaximum(mMaxCurrentHP);
+            mCurrentMana = newMana;
+            mCurrentMana.ExSetMaximum(mMaxCurrentMana);
+            mCurrentShield = newShield;
+            mCurrentShield.ExSetMaximum(mMaxCurrentShield);
+            HealthInfo after = GetCurrentHealthInfo();
 
-            // 파이어 데미지 계산
-            float fireDamage = damageInfo.FireDamage * (Percent.One - mSpec.Option.FireResist);
-            fireDamage.ExSetMinimum(0);
-            damageRetInfo.TotalDamage += fireDamage.ToInt();
-
-            // 아이스 데미지 계산
-            float iceDamage = damageInfo.IceDamage * (Percent.One - mSpec.Option.IceResist);
-            iceDamage.ExSetMinimum(0);
-            damageRetInfo.TotalDamage += iceDamage.ToInt();
-
-            // 라이트닝 데미지 계산
-            float lightningDamage = damageInfo.LightningDamage * (Percent.One - mSpec.Option.LightningResist);
-            lightningDamage.ExSetMinimum(0);
-            damageRetInfo.TotalDamage += lightningDamage.ToInt();
-
-            return damageRetInfo;
+            if (IsDead)
+            {
+                InvokeHealthDied(before, after);
+            }
+            else
+            {
+                InvokeHealthChanged(before, after);
+            }
         }
-
-        public void GetDamaged(DamageInfo damage)
+        public void GetDamaged(float damage)
         {
             if (IsDead || damage <= 0) return;
 
-            DamagedResultInfo damageRetInfo = CalcHitResult(damage);
+            HealthInfo before = GetCurrentHealthInfo();
+            mCurrentHP -= damage;
+            mCurrentHP.ExSetClamp(0, mMaxCurrentHP);
+            HealthInfo after = GetCurrentHealthInfo();
 
-            // float fireTemputure = (damage.FireDamage / mMaxCurrentHP) * 100f;
-            // float iceTemputure = (damage.IceDamage / mMaxCurrentHP) * 100f;
-            // CurrentTemputure += (fireTemputure - iceTemputure);
-
-            int remainDamage = damageRetInfo.TotalDamage;
-
-            if (mCurrentShield > 0)
+            if (IsDead)
             {
-                int usedShield = Mathf.Min(mCurrentShield.ToInt(), remainDamage);
-                mCurrentShield -= usedShield;
-                remainDamage -= usedShield;
-                damageRetInfo.ValidDamage += usedShield;
+                InvokeHealthDied(before, after);
             }
-
-            if (remainDamage > 0)
+            else
             {
-                remainDamage -= mSpec.PhyDefence.ToInt();
-                remainDamage.ExSetMinimum(0);
-                damageRetInfo.ValidDamage += remainDamage;
-
-                mCurrentHP -= remainDamage;
-                mCurrentHP.ExSetMinimum(0);
-
-                damageRetInfo.AfterHealth = mCurrentHP.ToInt();
-                mIsDirty = true;
-                OnDamaged.Invoke(damageRetInfo);
-
-                if (IsDead)
-                {
-                    // RemoveSlowEffect();
-                    OnDied.Invoke();
-                }
+                InvokeHealthChanged(before, after);
             }
         }
         public void GetDied()
         {
             if (IsDead) return;
 
-            // RemoveSlowEffect();
+            HealthInfo before = GetCurrentHealthInfo();
             mCurrentHP = 0;
-            mIsDirty = true;
-            OnDied.Invoke();
+            mCurrentShield = 0;
+            mCurrentMana = 0;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthDied(before, after);
         }
         public void Heal(float amount)
         {
             if (IsDead || amount <= 0) return;
+            HealthInfo before = GetCurrentHealthInfo();
             mCurrentHP += amount;
             mCurrentHP.ExSetMaximum(mMaxCurrentHP);
-            mIsDirty = true;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthChanged(before, after);
         }
         public void UseMana(float amount)
         {
+            HealthInfo before = GetCurrentHealthInfo();
             mCurrentMana -= amount;
             mCurrentMana.ExSetMinimum(0);
-            mIsDirty = true;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthChanged(before, after);
         }
         public void RestoreMana(float amount)
         {
             if (IsDead || amount <= 0) return;
+            HealthInfo before = GetCurrentHealthInfo();
             mCurrentMana += amount;
             mCurrentMana.ExSetMaximum(mMaxCurrentMana);
-            mIsDirty = true;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthChanged(before, after);
         }
         public void RestoreShield(float amount)
         {
             if (IsDead || amount <= 0) return;
+            HealthInfo before = GetCurrentHealthInfo();
             mCurrentShield += amount;
             mCurrentShield.ExSetMaximum(mMaxCurrentShield);
-            mIsDirty = true;
+            HealthInfo after = GetCurrentHealthInfo();
+            InvokeHealthChanged(before, after);
         }
 
+        void InvokeHealthChanged(HealthInfo before, HealthInfo after)
+        {
+            _OnChanged.Invoke(before, after);
+            OnChanged?.Invoke(before, after);
+        }
 
-        // IEnumerator CoProcessBurnOrFreez()
-        // {
-        //     while (true)
-        //     {
-        //         yield return new WaitUntil(() => CurrentTemputure < -10 || 10 < CurrentTemputure);
+        void InvokeHealthDied(HealthInfo before, HealthInfo after)
+        {
+            _OnDied.Invoke(before, after);
+            OnDied?.Invoke(before, after);
+        }
 
-        //         if (CurrentTemputure > 10)
-        //         {
-        //             while (CurrentTemputure > 0)
-        //             {
-        //                 ApplyBurnEffect();
-        //                 yield return newWaitForSeconds.Cache(1);
-        //                 CurrentTemputure -= 4;
-        //             }
-        //             RemoveBurnEffect();
-        //         }
-        //         else if (CurrentTemputure < -10)
-        //         {
-        //             while (CurrentTemputure < 0)
-        //             {
-        //                 ApplySlowEffect();
-        //                 yield return newWaitForSeconds.Cache(1);
-        //                 CurrentTemputure += 4;
-        //             }
-        //             RemoveSlowEffect();
-        //         }
-        //     }
-        // }
+        public HealthInfo GetCurrentHealthInfo()
+        {
+            return new HealthInfo(
+                mMaxCurrentHP,
+                mMaxCurrentMana,
+                mMaxCurrentShield,
+                mCurrentHP.ToInt(),
+                mCurrentMana.ToInt(),
+                mCurrentShield.ToInt());
+        }
+    }
 
-        // void ApplyBurnEffect()
-        // {
-        //     if (IsDead)
-        //         return;
+    public struct HealthInfo
+    {
+        public int MaxHealth;
+        public int MaxMana;
+        public int MaxShield;
+        public int CurrentHP;
+        public int CurrentMana;
+        public int CurrentShield;
 
-        //     // 데미지 감소 처리
-        //     float curTemp = CurrentTemputure;
-        //     curTemp.ExSetMaximum(20);
-        //     float tempRate = curTemp / 20f;
-        //     float damage = tempRate * 10f;
+        public HealthInfo(int maxHealth, int maxMana, int maxShield, int currentHP, int currentMana, int currentShield)
+        {
+            MaxHealth = maxHealth;
+            MaxMana = maxMana;
+            MaxShield = maxShield;
+            CurrentHP = currentHP;
+            CurrentMana = currentMana;
+            CurrentShield = currentShield;
+        }
 
-        //     // 온도에 따른 이펙트 크기 감소 처리
-        //     mBaseObj.Renderer.SetColor(StringHashes.ColorBurn, new Color(0.5f, 0.25f, 0));
-        //     mBaseObj.Renderer.SetBurnRate(tempRate);
-
-        //     DamagedResultInfo damagedResultInfo = new DamagedResultInfo();
-        //     damagedResultInfo.MaxHealth = mMaxCurrentHP;
-        //     damagedResultInfo.BeforeHealth = mCurrentHP;
-
-        //     mCurrentHP -= damage;
-        //     mCurrentHP.ExSetMinimum(0);
-
-        //     damagedResultInfo.OriDamage = damage;
-        //     damagedResultInfo.TotalDamage = damage;
-        //     damagedResultInfo.ValidDamage = damage.ToInt();
-        //     damagedResultInfo.AfterHealth = mCurrentHP;
-
-        //     OnDamaged.Invoke(damagedResultInfo);
-
-        //     IsBurned = true;
-
-        //     if (IsDead)
-        //     {
-        //         RemoveBurnEffect();
-        //         OnDied.Invoke();
-        //     }
-        // }
-        // void RemoveBurnEffect()
-        // {
-        //     IsBurned = false;
-        //     mBaseObj.Renderer.UnSetColor(StringHashes.ColorBurn);
-        //     mBaseObj.Renderer.SetBurnRate(0);
-        // }
-
-        // void ApplySlowEffect()
-        // {
-        //     if (IsDead)
-        //         return;
-
-        //     // 이속 감소 처리
-        //     int buffID = mBaseObj.GetInstanceID();
-        //     float moveSpeedUp = CurrentTemputure * 4;
-        //     mBaseObj.Buffs.SetMoveSpeedBuff(buffID, new PercentUp(moveSpeedUp));
-
-        //     mBaseObj.Renderer.SetColor(StringHashes.ColorFreez, Color.blue);
-
-        //     IsFreezed = true;
-        // }
-        // void RemoveSlowEffect()
-        // {
-        //     int buffID = mBaseObj.GetInstanceID();
-        //     mBaseObj.Buffs.RemoveBuff(buffID);
-
-        //     mBaseObj.Renderer.UnSetColor(StringHashes.ColorFreez);
-
-        //     IsFreezed = false;
-        // }
+        public bool IsEquals(HealthInfo other)
+        {
+            return MaxHealth == other.MaxHealth &&
+                MaxMana == other.MaxMana &&
+                MaxShield == other.MaxShield &&
+                CurrentHP == other.CurrentHP &&
+                CurrentMana == other.CurrentMana &&
+                CurrentShield == other.CurrentShield;
+        }
     }
 }

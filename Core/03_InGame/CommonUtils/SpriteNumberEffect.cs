@@ -15,11 +15,12 @@ namespace PahlUnity
             mBaseObject = this.ExGetBase();
         }
 
-        public void ShowNumberEffect(DamagedResultInfo damageInfo)
+        public void ShowNumberEffect(HealthInfo before, HealthInfo after)
         {
             Vector2 startPos = mBaseObject.Body.Head + new Vector2(0, 0.5f);
             NumberSprites effect = Instantiate(NumberPrefab, startPos, Quaternion.identity);
-            effect.SetNumber((int)damageInfo.ValidDamage);
+            int deltaHP = after.CurrentHP - before.CurrentHP;
+            effect.SetNumber(deltaHP);
             effect.transform.DOMoveY(startPos.y + 0.5f, 0.5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => effect.FadeOut());
 

@@ -9,6 +9,7 @@ namespace PahlUnity
     public class RenderSprite : RenderBase
     {
         public override Color Color { get => mSpriteRenderer.color; set => mSpriteRenderer.color = value; }
+        public override float Opacity { get => mSpriteRenderer.color.a; set => mSpriteRenderer.ExSetAlpha(value); }
 
         SpriteRenderer mSpriteRenderer;
 

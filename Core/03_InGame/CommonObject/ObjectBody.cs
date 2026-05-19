@@ -42,5 +42,31 @@ namespace PahlUnity
             LockThinPlatform = true;
             this.ExDelayedCoroutine(duration, () => LockThinPlatform = false);
         }
+
+        public void Turn(int worldDir)
+        {
+            if (worldDir == 0) return;
+
+            Vector3 front = worldDir > 0 ? Vector3.forward : Vector3.back;
+            transform.rotation = Quaternion.LookRotation(front, transform.up);
+        }
+        public void Turn(float worldDir)
+        {
+            if (worldDir.ExIsAlmostZero()) return;
+
+            Turn(worldDir > 0 ? 1 : -1);
+        }
+        public void Turn(Transform target)
+        {
+            if (target == null) return;
+
+            int worldDir = target.position.x > transform.position.x ? 1 : -1;
+            Turn(worldDir);
+        }
+        public void Turn(Vector2 targetPos)
+        {
+            int worldDir = targetPos.x > transform.position.x ? 1 : -1;
+            Turn(worldDir);
+        }
     }
 }

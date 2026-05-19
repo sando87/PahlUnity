@@ -8,7 +8,7 @@ namespace PahlUnity
 {
     struct ColorEntry
     {
-        public int Token;
+        public string Token;
         public Color Color;
         public Coroutine Coroutine;
     }
@@ -28,7 +28,7 @@ namespace PahlUnity
         {
             return mColorList.Count > 0 ? mColorList[^1].Color : Color.white;
         }
-        public void SetColor(int tokenID, Color color)
+        public void SetColor(string tokenID, Color color)
         {
             RemoveColor(tokenID);
             ColorEntry entry = new ColorEntry();
@@ -37,7 +37,7 @@ namespace PahlUnity
             mColorList.Add(entry);
             ApplyColor();
         }
-        public void SetColor(int tokenID, Color color, float duration)
+        public void SetColor(string tokenID, Color color, float duration)
         {
             RemoveColor(tokenID);
             ColorEntry entry = new ColorEntry();
@@ -51,7 +51,7 @@ namespace PahlUnity
         public void SetColor(Color color, float duration)
         {
             ColorEntry entry = new ColorEntry();
-            entry.Token = 0;
+            entry.Token = "";
             entry.Color = color;
             entry.Coroutine = this.ExDelayedCoroutine(duration, () =>
             {
@@ -61,12 +61,12 @@ namespace PahlUnity
             mColorList.Add(entry);
             ApplyColor();
         }
-        public void UnSetColor(int tokenID)
+        public void UnSetColor(string tokenID)
         {
             RemoveColor(tokenID);
             ApplyColor();
         }
-        void RemoveColor(int tokenID)
+        void RemoveColor(string tokenID)
         {
             for (int i = mColorList.Count - 1; i >= 0; --i)
             {
@@ -107,14 +107,6 @@ namespace PahlUnity
             foreach (RenderBase renderObj in mRenderList)
             {
                 renderObj.Opacity = opacity;
-            }
-        }
-
-        public void SetBurnRate(float burnRate)
-        {
-            foreach (RenderBase renderObj in mRenderList)
-            {
-                renderObj.BurnRate = burnRate;
             }
         }
     }

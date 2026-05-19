@@ -7,8 +7,6 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        public FiniteStateBase CurrentStateForDebug = null;
-
         private Dictionary<int, StateMachineLayer> mLayers = new Dictionary<int, StateMachineLayer>();
 
         void Awake()
@@ -30,10 +28,10 @@ namespace PahlUnity
 
                 mLayers[state.Layer].AllStates.Add(state);
 
-                // if (state is PlayerStateIdle || state is PlayerStateUpperIdle)
-                // {
-                //     mLayers[state.Layer].IdleState = state;
-                // }
+                if (state.StateType == FiniteStateType.Idle)
+                {
+                    mLayers[state.Layer].IdleState = state;
+                }
             }
         }
 
@@ -44,11 +42,6 @@ namespace PahlUnity
                 int layer = layerSet.Key;
                 mLayers[layer].CurrentState = mLayers[layer].IdleState;
                 mLayers[layer].CurrentState.EnterState(null);
-
-                if (layer == 0)
-                {
-                    CurrentStateForDebug = mLayers[layer].CurrentState;
-                }
             }
         }
 
@@ -94,11 +87,6 @@ namespace PahlUnity
             currentLayer.CurrentState = newState;
             currentLayer.CurrentState.IsJustEntered = true;
             currentLayer.CurrentState.EnterState(param);
-
-            if (newState.Layer == 0)
-            {
-                CurrentStateForDebug = newState;
-            }
         }
 
         public bool TryChangeState<T>(object param = null, bool ignorePriority = false) where T : FiniteStateBase

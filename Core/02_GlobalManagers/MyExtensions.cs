@@ -71,6 +71,10 @@ namespace PahlUnity
         {
             return Mathf.Abs(val) < 0.01f;
         }
+        public static void ExSetClamp(this ref float val, float minValue, float maxValue)
+        {
+            val = Mathf.Clamp(val, minValue, maxValue);
+        }
 
 
         public static Vector3 ExRotateVector(this Vector3 vec, Vector3 axis, float degree)

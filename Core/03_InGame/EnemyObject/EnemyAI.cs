@@ -64,8 +64,8 @@ namespace PahlUnity
         {
             mSpec = mBase.EnemyObj.Spec;
 
-            mBase.Health.OnDamaged.AddListener(ChangeDamagedState);
-            mBase.Health.OnDied.AddListener(ChangeDeathState);
+            mBase.Health.OnChanged += ChangeDamagedState;
+            mBase.Health.OnDied += ChangeDeathState;
 
             mBase.Interactor.OnInteractSignal.AddListener(OnSignaledTarget);
         }
@@ -253,7 +253,12 @@ namespace PahlUnity
             try
             {
                 Stop();
-                TurnToPlayer();
+
+                if (PlayerTarget != null)
+                {
+                    int curDir = mBase.Body.Center.x < PlayerTarget.Body.Center.x ? 1 : -1;
+                    Turn(curDir);
+                }
 
                 AnimEventState animEventState = mBase.AnimHelper.PlayAnimWithEvent(AnimStateNameHash.Attack);
                 await UniTask.WaitUntil(() => animEventState.IsFired, cancellationToken: ctx);
@@ -288,12 +293,13 @@ namespace PahlUnity
             {
             }
         }
-        void ChangeDamagedState(DamagedResultInfo retInfo)
+        void ChangeDamagedState(HealthInfo before, HealthInfo after)
         {
             // 받은 데미지가 전체 체력의 10%미만이면 피격모션 없고,
             // 10%~60% 사이이면 피격모션 일정 확률로 발생(추가로 HitChance 스펙계수 곱해짐)
             // 60% 이상이면 기본적으로 피격모션 발생하나 HitChance스펙계수가 추가로 곱해짐
-            float damageRate = retInfo.DeltaHealth / (float)retInfo.MaxHealth;
+            int deltaHP = after.CurrentHP - before.CurrentHP;
+            float damageRate = deltaHP / (float)after.MaxHealth;
             float hitRate = (damageRate - 0.1f) * 2f;
             int hitPercent = (int)(Mathf.Clamp(hitRate, 0, 1) * 100);
             hitPercent = (hitPercent * mSpec.HitChance).ToInt();
@@ -314,7 +320,7 @@ namespace PahlUnity
             {
             }
         }
-        void ChangeDeathState()
+        void ChangeDeathState(HealthInfo before, HealthInfo after)
         {
             ChangeState(EnemyState.Death);
         }
@@ -758,23 +764,7 @@ namespace PahlUnity
         }
         protected void Turn(float worldDir)
         {
-            if (worldDir == 0) return;
-
-            Vector3 front = worldDir > 0 ? Vector3.forward : Vector3.back;
-            transform.rotation = Quaternion.LookRotation(front, transform.up);
-        }
-        protected void TurnTo(Vector2 targetPos)
-        {
-            int curDir = mBase.Body.Center.x < targetPos.x ? 1 : -1;
-            Turn(curDir);
-        }
-        protected void TurnToPlayer()
-        {
-            if (PlayerTarget != null)
-            {
-                int curDir = mBase.Body.Center.x < PlayerTarget.Body.Center.x ? 1 : -1;
-                Turn(curDir);
-            }
+            mBase.Body.Turn(worldDir);
         }
         protected void StartMoving(float velocity)
         {

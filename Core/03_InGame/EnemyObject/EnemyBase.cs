@@ -31,10 +31,10 @@ namespace PahlUnity
 
         protected virtual void Start()
         {
-            mBase.Health.OnDied.AddListener(OnDeath);
+            mBase.Health.OnDied += OnDeath;
         }
 
-        public virtual void OnDeath()
+        public virtual void OnDeath(HealthInfo before, HealthInfo after)
         {
             mBase.Body.LockBody = true;
 

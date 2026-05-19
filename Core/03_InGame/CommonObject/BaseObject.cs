@@ -37,33 +37,5 @@ namespace PahlUnity
         {
             Destroy(gameObject, delay);
         }
-
-        public void Turn(int worldDir)
-        {
-            if (worldDir == 0) return;
-
-            Vector3 front = worldDir > 0 ? Vector3.forward : Vector3.back;
-            transform.rotation = Quaternion.LookRotation(front, transform.up);
-        }
-        public void TurnToFloatX(float moveX)
-        {
-            if (moveX.ExIsAlmostZero()) return;
-
-            int worldDir = moveX > 0 ? 1 : -1;
-            Turn(worldDir);
-        }
-        public void TurnToTarget(Transform target)
-        {
-            if (target == null) return;
-
-            int worldDir = target.position.x > transform.position.x ? 1 : -1;
-            Turn(worldDir);
-        }
-        public void TurnToPosition(Vector2 targetPos)
-        {
-            int worldDir = targetPos.x > transform.position.x ? 1 : -1;
-            Turn(worldDir);
-        }
-
     }
 }

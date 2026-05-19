@@ -14,12 +14,13 @@ namespace PahlUnity
             gameObject.SetActive(false);
         }
 
-        public void OnDamaged(DamagedResultInfo resultInfo)
+        public void OnDamaged(HealthInfo before, HealthInfo after)
         {
             gameObject.SetActive(true);
             this.ExDelayedCoroutine(5, () => gameObject.SetActive(false));
 
-            SetHealthBarRate(resultInfo.CurrentHealthRate);
+            float rate = after.CurrentHP / (float)after.MaxHealth;
+            SetHealthBarRate(rate);
         }
 
         public void OnDied()
