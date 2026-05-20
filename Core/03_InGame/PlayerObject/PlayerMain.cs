@@ -24,10 +24,12 @@ namespace PahlUnity
 
         public Experience Exp { get; private set; }
         public ItemInventory Inven { get; private set; }
+        public Equipment Equip { get; private set; }
         public SkillController SkillCtrl { get; private set; }
         public SpecPlayer Spec { get; private set; }
 
         BaseObject mBaseObj = null;
+        UserSaveData mUserSaveData = null;
 
         private void Awake()
         {
@@ -38,12 +40,19 @@ namespace PahlUnity
 
             Inven = GetComponentInChildren<ItemInventory>();
             Inven.LoadItemsFromData(CharacterID);
-            Inven.EventEquipItem.AddListener(OnChangeEquipState);
-            Inven.EventUnEquipItem.AddListener(OnChangeEquipState);
+
+            // UserSaveData mUserSaveData = SaveFileManager<UserSaveData>.Load();
+            CharacterSaveData mCharacterSaveData = mUserSaveData.Characters[CharacterID];
+            ItemSaveData[] mSavedAllItems = mCharacterSaveData.Items.Values.ToArray();
+
+            Equip = GetComponentInChildren<Equipment>();
+            Equip.LoadItemsFromData(mSavedAllItems);
+            Equip.OnEquipItem += (item) => OnChangeEquipState();
+            Equip.OnUnEquipItem += (item) => OnChangeEquipState();
 
             Spec = GetComponentInChildren<SpecPlayer>();
             Spec.Init(CharacterID, _ResourceID);
-            Spec.LinkOption(Inven.TotalItemOption);
+            Spec.LinkOption(Equip.TotalItemOption);
             Spec.LinkOption(mBaseObj.Buffs.TotalBuffOption);
 
             SkillCtrl = GetComponentInChildren<SkillController>();
@@ -70,7 +79,8 @@ namespace PahlUnity
                 Inven.AddItem(itemInfo);
                 Inven.RepairItem(itemInfo.InstanceID);
                 Inven.SetEquipableItem(itemInfo.InstanceID);
-                Inven.EquipItem(itemInfo.InstanceID);
+
+                Equip.EquipItem(itemInfo);
 
                 SkillCtrl.LearnNewSkill("Skill05");
                 SkillCtrl.EquipSkill("Skill05", 0);

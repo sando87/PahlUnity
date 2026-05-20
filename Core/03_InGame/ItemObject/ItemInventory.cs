@@ -10,14 +10,11 @@ namespace PahlUnity
 {
     public class ItemInventory : MonoBehaviour
     {
-        private Dictionary<string, ItemInfo> mInvenItems = new Dictionary<string, ItemInfo>();
-        private Dictionary<string, ItemInfo> mEquipItems = new Dictionary<string, ItemInfo>();
-        private Dictionary<string, ItemSaveData> mSaveData = null;
         private UserSaveData mUserSaveData = null;
         private CharacterSaveData mCharacterSaveData = null;
+        private Dictionary<string, ItemSaveData> mSaveData = null;
 
-        public SpecOption TotalItemOption
-        { get; private set; } = new SpecOption();
+        private Dictionary<string, ItemInfo> mInvenItems = new Dictionary<string, ItemInfo>();
 
         public int CurrentGold { get { return mUserSaveData.Gold; } set { mUserSaveData.Gold = value; GameSystem.RequestSave(); } }
         public int CurrentLifePotionCount
@@ -42,31 +39,7 @@ namespace PahlUnity
         private ItemInfo _SelectInvenItem = null;
         void SelectInvenItem() { _SelectInvenItem = mSelectedInvenItem; _SelectInvenItem._Option = mSelectedInvenItem.Option; }
 
-        [ShowIf(nameof(ShowEquipItems))]
-        [Dropdown(nameof(ListEquipItems))]
-        [OnValueChanged(nameof(SelectEquipItem))]
-        public ItemInfo mSelectEquipItem = null;
-        public ItemInfo[] ListEquipItems() { return mEquipItems.Values.ToArray(); }
-
-        [SerializeField]
-        [ShowIf(nameof(ShowEquipItems))]
-        private ItemInfo _SelectEquipItem = null;
-        void SelectEquipItem() { _SelectEquipItem = mSelectEquipItem; _SelectEquipItem._Option = mSelectEquipItem.Option; }
-
-
         bool ShowInvenItems() { return Application.isPlaying && mSaveData != null && mInvenItems.Count > 0; }
-        bool ShowEquipItems() { return Application.isPlaying && mSaveData != null && mEquipItems.Count > 0; }
-
-        [Button]
-        [ShowIf(nameof(ShowInvenItems))]
-        void _EquipItem() { EquipItem(mSelectedInvenItem.InstanceID); }
-
-        [Button]
-        [ShowIf(nameof(ShowEquipItems))]
-        void _UnEquipItem() { UnEquipItem(mSelectEquipItem.InstanceID); }
-
-        public UnityEvent EventEquipItem = new UnityEvent();
-        public UnityEvent EventUnEquipItem = new UnityEvent();
 
         public void LoadItemsFromData(int characterID)
         {
@@ -79,12 +52,7 @@ namespace PahlUnity
                 ItemInfo item = new ItemInfo();
                 item.LoadItem(itemSaveData);
 
-                if (item.IsEquipped)
-                {
-                    mEquipItems[itemSaveData.InstanceID] = item;
-                    TotalItemOption.Add(item.Option);
-                }
-                else
+                if (!item.IsEquipped)
                 {
                     mInvenItems[itemSaveData.InstanceID] = item;
                 }
@@ -110,16 +78,12 @@ namespace PahlUnity
             mSaveData.Remove(itemInstID);
             if (mInvenItems.ContainsKey(itemInstID))
                 mInvenItems.Remove(itemInstID);
-            if (mEquipItems.ContainsKey(itemInstID))
-                mEquipItems.Remove(itemInstID);
             GameSystem.DoSave_UserSaveData();
         }
         public ItemInfo GetItem(string itemInstID)
         {
             if (mInvenItems.ContainsKey(itemInstID))
                 return mInvenItems[itemInstID];
-            else if (mEquipItems.ContainsKey(itemInstID))
-                return mEquipItems[itemInstID];
             else
                 return null;
         }
@@ -150,36 +114,5 @@ namespace PahlUnity
             GetItem(itemInstID).PositionIndex = newPositionIndex;
             GameSystem.DoSave_UserSaveData();
         }
-
-        public void EquipItem(string itemInstID)
-        {
-            ItemInfo item = GetItem(itemInstID);
-            if (item.IsEquipped)
-                return;
-
-            item.IsEquipped = true;
-            mInvenItems.Remove(itemInstID);
-            mEquipItems.Add(itemInstID, item);
-            GameSystem.DoSave_UserSaveData();
-
-            TotalItemOption.Add(item.Option);
-            EventEquipItem?.Invoke();
-        }
-
-        public void UnEquipItem(string itemInstID)
-        {
-            ItemInfo item = GetItem(itemInstID);
-            if (!item.IsEquipped)
-                return;
-
-            item.IsEquipped = false;
-            mEquipItems.Remove(itemInstID);
-            mInvenItems.Add(itemInstID, item);
-            GameSystem.DoSave_UserSaveData();
-
-            TotalItemOption.Subtract(item.Option);
-            EventUnEquipItem?.Invoke();
-        }
-
     }
 }
