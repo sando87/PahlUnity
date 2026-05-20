@@ -721,7 +721,7 @@ namespace PahlUnity
             }
 
             List<BaseObject> rets = TemporaryList<BaseObject>.GetTempList();
-            UtilitiesPhy2D.OverlapCircleAll(mBase.Body.Center, range, 1 << LayerID.Player, InteractMask.Unit, rets);
+            InGameUtilsPhy2D.OverlapCircleAll(mBase.Body.Center, range, 1 << LayerID.Player, InteractMask.Unit, rets);
             float minDistSqr = float.PositiveInfinity;
             BaseObject closestPlayer = null;
             foreach (BaseObject player in rets)
@@ -973,7 +973,7 @@ namespace PahlUnity
             {
                 arEnemies.Clear();
                 BaseObject enemy = retEnemies[i];
-                UtilitiesPhy2D.OverlapCircleAll(enemy.Body.Center, 5, 1 << LayerID.Enemy, InteractMask.Unit, arEnemies);
+                InGameUtilsPhy2D.OverlapCircleAll(enemy.Body.Center, 5, 1 << LayerID.Enemy, InteractMask.Unit, arEnemies);
                 foreach (BaseObject arEnemy in arEnemies)
                 {
                     if (arEnemy == enemy)

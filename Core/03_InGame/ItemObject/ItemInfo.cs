@@ -74,34 +74,41 @@ namespace PahlUnity
             int point = SaveData.LevelIndex;
             System.Random ran = new System.Random(SaveData.RandomSeed);
 
-            Option.HealthUp = (PercentUp)ResourceData._HealthUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.HealthRegen = (float)ResourceData._HealthRegen.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.ManaUp = (PercentUp)ResourceData._ManaUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.ManaRegen = (float)ResourceData._ManaRegen.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.BaseAttackAdd = (float)ResourceData._BaseAttackAdd.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.PhyAttack = (Percent)ResourceData._PhyAttack.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.FireAttack = (Percent)ResourceData._FireAttack.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.IceAttack = (Percent)ResourceData._IceAttack.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.LightningAttack = (Percent)ResourceData._LightningAttack.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.DefenceUp = (PercentUp)ResourceData._DefenceUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.MoveSpeedUp = (PercentUp)ResourceData._MoveSpeedUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.AttackSpeedUp = (PercentUp)ResourceData._AttackSpeedUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.CooltimeDown = (PercentUp)ResourceData._CooltimeDown.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.ShieldAdd = (float)ResourceData._ShieldAdd.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.ShieldRegen = (float)ResourceData._ShieldRegen.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.CriticalRate = (PercentUp)ResourceData._CriticalRate.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.CriticalAttack = (PercentUp)ResourceData._CriticalAttack.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.ProjectileCountUp = (float)ResourceData._ProjectileCountUp.GetFloatInRange(ran.ExNextFloatNormalized());
-            Option.ProjectileSpeedUp = (PercentUp)ResourceData._ProjectileSpeedUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.AttackRangeUp = (PercentUp)ResourceData._AttackRangeUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.SplashRangeUp = (PercentUp)ResourceData._SplashRangeUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.DurationUp = (PercentUp)ResourceData._DurationUp.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.FireResist = (Percent)ResourceData._FireResist.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.IceResist = (Percent)ResourceData._IceResist.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.LightningResist = (Percent)ResourceData._LightningResist.GetIntInRange(ran.ExNextFloatNormalized());
-            Option.PosionResist = (Percent)ResourceData._PosionResist.GetIntInRange(ran.ExNextFloatNormalized());
+            Option.HealthUp = (PercentUp)ResourceData._HealthUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.HealthRegen = (float)ResourceData._HealthRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ManaUp = (PercentUp)ResourceData._ManaUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ManaRegen = (float)ResourceData._ManaRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.BaseAttackAdd = (float)ResourceData._BaseAttackAdd.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.PhyAttack = (Percent)ResourceData._PhyAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.FireAttack = (Percent)ResourceData._FireAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.IceAttack = (Percent)ResourceData._IceAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.LightningAttack = (Percent)ResourceData._LightningAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.DefenceUp = (PercentUp)ResourceData._DefenceUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.MoveSpeedUp = (PercentUp)ResourceData._MoveSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.AttackSpeedUp = (PercentUp)ResourceData._AttackSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.CooltimeDown = (PercentUp)ResourceData._CooltimeDown.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ShieldAdd = (float)ResourceData._ShieldAdd.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ShieldRegen = (float)ResourceData._ShieldRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.CriticalRate = (PercentUp)ResourceData._CriticalRate.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.CriticalAttack = (PercentUp)ResourceData._CriticalAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ProjectileCountUp = (float)ResourceData._ProjectileCountUp.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ProjectileSpeedUp = (PercentUp)ResourceData._ProjectileSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.AttackRangeUp = (PercentUp)ResourceData._AttackRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.SplashRangeUp = (PercentUp)ResourceData._SplashRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.DurationUp = (PercentUp)ResourceData._DurationUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.FireResist = (Percent)ResourceData._FireResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.IceResist = (Percent)ResourceData._IceResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.LightningResist = (Percent)ResourceData._LightningResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.PosionResist = (Percent)ResourceData._PosionResist.GetIntInRange(GetNextFloatNormalized(ran));
 
             UpdateDisplayInfo();
+        }
+
+        float GetNextFloatNormalized(System.Random random)
+        {
+            // Next(int) 는 0 ~ int.MaxValue-1
+            int value = random.Next(int.MaxValue);      // 0 ~ 2,147,483,646
+            return (float)value / (int.MaxValue - 1); // 0 ~ 1 포함
         }
 
         public void UpdateDisplayInfo()

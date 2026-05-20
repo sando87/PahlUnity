@@ -109,19 +109,4 @@ namespace PahlUnity
         }
 
     }
-
-    [System.Flags]
-    public enum InteractMask : uint
-    {
-        Nothing = 0,
-        Unit = 1 << 0,
-        Skill = 1 << 1,
-        Terrain = 1 << 2,
-        Projectile = 1 << 3,
-        Props = 1 << 4,
-        Item = 1 << 5,
-        DetectSignal = 1 << 6,
-        TriggerSignal = 1 << 7,
-        Everything = 0xffffffff
-    }
 }
