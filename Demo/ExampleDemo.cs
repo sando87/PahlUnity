@@ -20,14 +20,30 @@ namespace PahlUnity
 
 		IEnumerator InitializeGameSystem()
 		{
-			LOG.trace();
 			// ManagerA.SetActive(true);
-			(ManagerA as IInitializer).Initialize();
+			// (ManagerA as IInitializer).Initialize();
 			yield return null;
 			// ManagerB.SetActive(false);
 			yield return null;
 			// ManagerC.SetActive(false);
-			LOG.trace();
+
+			LoadTableData();
+
+
+		}
+
+		async void LoadTableData()
+		{
+			LoaderGoogleSheet googleSheetLoader = new LoaderGoogleSheet("1pRpEq-zAwYvoB5N_D5H--NKltHOscvOcBu8uOAA3ph8");
+
+			string sheetData = await googleSheetLoader.LoadAsync("ItemResourceData");
+			LOG.trace(sheetData);
+			ItemResourceData[] itemResourceDatas = CSVParser<ItemResourceData>.Parse(sheetData);
+			LOG.trace(itemResourceDatas.Length);
+			TableDataContainer<ItemResourceData>.Instance.InitDataList(itemResourceDatas);
+
+			ItemResourceData item = TableDataContainer<ItemResourceData>.Instance.GetInfo("Item01");
+			LOG.trace(item.Desc);
 		}
 	}
 }

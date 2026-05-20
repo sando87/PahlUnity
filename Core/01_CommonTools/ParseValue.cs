@@ -32,6 +32,9 @@ namespace PahlUnity
         // 입력 string 예시: "3~5@InOutQuad+0.2P+0.3L"
         public static ParseValue Parse(string str)
         {
+            if (String.IsNullOrEmpty(str))
+                return default;
+
             float min = 0f, max = 0f, stepByPoint = 0f, stepByLevel = 0f;
             Ease ease = Ease.Linear;
 
