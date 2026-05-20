@@ -70,36 +70,37 @@ namespace PahlUnity
         }
         public void UpdateOption()
         {
+            SpecOptionData optionRawData = TableDataContainer<SpecOptionData>.Instance.GetInfo(ResourceData.OptionID);
+
             Option = new SpecOption();
-            int point = SaveData.LevelIndex;
             System.Random ran = new System.Random(SaveData.RandomSeed);
 
-            Option.HealthUp = (PercentUp)ResourceData._HealthUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.HealthRegen = (float)ResourceData._HealthRegen.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.ManaUp = (PercentUp)ResourceData._ManaUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.ManaRegen = (float)ResourceData._ManaRegen.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.BaseAttackAdd = (float)ResourceData._BaseAttackAdd.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.PhyAttack = (Percent)ResourceData._PhyAttack.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.FireAttack = (Percent)ResourceData._FireAttack.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.IceAttack = (Percent)ResourceData._IceAttack.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.LightningAttack = (Percent)ResourceData._LightningAttack.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.DefenceUp = (PercentUp)ResourceData._DefenceUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.MoveSpeedUp = (PercentUp)ResourceData._MoveSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.AttackSpeedUp = (PercentUp)ResourceData._AttackSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.CooltimeDown = (PercentUp)ResourceData._CooltimeDown.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.ShieldAdd = (float)ResourceData._ShieldAdd.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.ShieldRegen = (float)ResourceData._ShieldRegen.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.CriticalRate = (PercentUp)ResourceData._CriticalRate.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.CriticalAttack = (PercentUp)ResourceData._CriticalAttack.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.ProjectileCountUp = (float)ResourceData._ProjectileCountUp.GetFloatInRange(GetNextFloatNormalized(ran));
-            Option.ProjectileSpeedUp = (PercentUp)ResourceData._ProjectileSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.AttackRangeUp = (PercentUp)ResourceData._AttackRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.SplashRangeUp = (PercentUp)ResourceData._SplashRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.DurationUp = (PercentUp)ResourceData._DurationUp.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.FireResist = (Percent)ResourceData._FireResist.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.IceResist = (Percent)ResourceData._IceResist.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.LightningResist = (Percent)ResourceData._LightningResist.GetIntInRange(GetNextFloatNormalized(ran));
-            Option.PosionResist = (Percent)ResourceData._PosionResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.HealthUp = (PercentUp)optionRawData._HealthUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.HealthRegen = (float)optionRawData._HealthRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ManaUp = (PercentUp)optionRawData._ManaUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ManaRegen = (float)optionRawData._ManaRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.BaseAttackAdd = (float)optionRawData._BaseAttackAdd.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.PhyAttack = (Percent)optionRawData._PhyAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.FireAttack = (Percent)optionRawData._FireAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.IceAttack = (Percent)optionRawData._IceAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.LightningAttack = (Percent)optionRawData._LightningAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.DefenceUp = (PercentUp)optionRawData._DefenceUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.MoveSpeedUp = (PercentUp)optionRawData._MoveSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.AttackSpeedUp = (PercentUp)optionRawData._AttackSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.CooltimeDown = (PercentUp)optionRawData._CooltimeDown.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ShieldAdd = (float)optionRawData._ShieldAdd.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ShieldRegen = (float)optionRawData._ShieldRegen.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.CriticalRate = (PercentUp)optionRawData._CriticalRate.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.CriticalAttack = (PercentUp)optionRawData._CriticalAttack.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.ProjectileCountUp = (float)optionRawData._ProjectileCountUp.GetFloatInRange(GetNextFloatNormalized(ran));
+            Option.ProjectileSpeedUp = (PercentUp)optionRawData._ProjectileSpeedUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.AttackRangeUp = (PercentUp)optionRawData._AttackRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.SplashRangeUp = (PercentUp)optionRawData._SplashRangeUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.DurationUp = (PercentUp)optionRawData._DurationUp.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.FireResist = (Percent)optionRawData._FireResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.IceResist = (Percent)optionRawData._IceResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.LightningResist = (Percent)optionRawData._LightningResist.GetIntInRange(GetNextFloatNormalized(ran));
+            Option.PosionResist = (Percent)optionRawData._PosionResist.GetIntInRange(GetNextFloatNormalized(ran));
 
             UpdateDisplayInfo();
         }

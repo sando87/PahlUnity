@@ -480,9 +480,9 @@ namespace PahlUnity
             }
             else
             {
-                LOG.trace("플랫폼 라우팅 초기화 경고 : 예상치 못한 지형 케이스 발생");
-                LOG.trace(myRect);
-                LOG.trace(targetRect);
+                LOG.log("플랫폼 라우팅 초기화 경고 : 예상치 못한 지형 케이스 발생");
+                LOG.log(myRect);
+                LOG.log(targetRect);
             }
             return transitions.Count > 0;
         }

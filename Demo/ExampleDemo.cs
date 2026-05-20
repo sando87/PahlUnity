@@ -27,23 +27,20 @@ namespace PahlUnity
 			yield return null;
 			// ManagerC.SetActive(false);
 
-			LoadTableData();
-
-
+			LoadTableData<ItemResourceData>();
+			LoadTableData<CharResourceData>();
+			LoadTableData<SkillResourceData>();
+			LoadTableData<EnemyResourceData>();
+			LoadTableData<SpecOptionData>();
 		}
 
-		async void LoadTableData()
+		async void LoadTableData<T>() where T : ITableRecord, new()
 		{
 			LoaderGoogleSheet googleSheetLoader = new LoaderGoogleSheet("1pRpEq-zAwYvoB5N_D5H--NKltHOscvOcBu8uOAA3ph8");
-
-			string sheetData = await googleSheetLoader.LoadAsync("ItemResourceData");
-			LOG.trace(sheetData);
-			ItemResourceData[] itemResourceDatas = CSVParser<ItemResourceData>.Parse(sheetData);
-			LOG.trace(itemResourceDatas.Length);
-			TableDataContainer<ItemResourceData>.Instance.InitDataList(itemResourceDatas);
-
-			ItemResourceData item = TableDataContainer<ItemResourceData>.Instance.GetInfo("Item01");
-			LOG.trace(item.Desc);
+			string sheetname = typeof(T).Name;
+			string sheetData = await googleSheetLoader.LoadAsync(sheetname);
+			T[] resourceDatas = CSVParser<T>.Parse(sheetData);
+			TableDataContainer<T>.Instance.InitDataList(resourceDatas);
 		}
 	}
 }
