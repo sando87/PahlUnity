@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
-    public class ItemInventory : MonoBehaviour
+    public class Inventory : MonoBehaviour
     {
         private UserSaveData mUserSaveData = null;
         private CharacterSaveData mCharacterSaveData = null;

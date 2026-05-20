@@ -22,8 +22,8 @@ namespace PahlUnity
 
         public List<ItemObject> ItemsAround { get; private set; } = new List<ItemObject>();
 
-        public Experience Exp { get; private set; }
-        public ItemInventory Inven { get; private set; }
+        public PlayerGrowth Exp { get; private set; }
+        public Inventory Inven { get; private set; }
         public Equipment Equip { get; private set; }
         public SkillController SkillCtrl { get; private set; }
         public SpecPlayer Spec { get; private set; }
@@ -35,10 +35,10 @@ namespace PahlUnity
         {
             mBaseObj = GetComponentInParent<BaseObject>();
 
-            Exp = GetComponentInChildren<Experience>();
+            Exp = GetComponentInChildren<PlayerGrowth>();
             Exp.Init(CharacterID);
 
-            Inven = GetComponentInChildren<ItemInventory>();
+            Inven = GetComponentInChildren<Inventory>();
             Inven.LoadItemsFromData(CharacterID);
 
             // UserSaveData mUserSaveData = SaveFileManager<UserSaveData>.Load();

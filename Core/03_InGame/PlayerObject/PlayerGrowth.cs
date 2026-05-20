@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace PahlUnity
 {
-    public class Experience : MonoBehaviour
+    public class PlayerGrowth : MonoBehaviour
     {
         private float mFromExp = 0;
         private float mToExp = 0;
