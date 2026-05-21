@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class InGameManager : SingletonMono<InGameManager>
     {

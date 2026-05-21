@@ -94,18 +94,18 @@ namespace PahlUnity
             }
 
             Spec.UpdateBasicStat();
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public virtual void OnLearnedSkill()
         {
             mSkillSaveData.IsLearned = true;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public virtual void OnEquipedSkill(int slotIndex)
         {
             mSkillSaveData.IsEquipped = true;
             mSkillSaveData.PositionIndex = slotIndex;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public virtual void OnPressedInput()
         {
@@ -120,7 +120,7 @@ namespace PahlUnity
         {
             mSkillSaveData.IsEquipped = false;
             mSkillSaveData.PositionIndex = -1;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         protected void ApplySkillStatsToProjectile(ProjectileBase proj)

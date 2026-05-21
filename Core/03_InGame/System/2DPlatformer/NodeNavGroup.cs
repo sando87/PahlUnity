@@ -520,7 +520,7 @@ namespace PahlUnity
             if (transition.TransitionType != NodeTransitionType.MovingJump)
                 return;
 
-            float moveSpeed = 7;
+            // float moveSpeed = 7;
             // 나중에 시작위치에서 도착위치까지의 최소 이동속도, 점프레벨 계산 후 jumpcast미리 해봐서 가능여부 미리 해두는 방식으로 변경 예정..
             // 지금은 일단 JumpCast는 모두 무시하고 전부 가능하다고 판단(임시)
             for (int jumpLevel = 1; jumpLevel <= 4; jumpLevel++)

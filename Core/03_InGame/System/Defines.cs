@@ -111,5 +111,8 @@ namespace PahlUnity
         public readonly bool ImmediateSave;
         public SaveUserPlayData(bool immediateSave) => ImmediateSave = immediateSave;
     }
+    public struct SaveUserSettingData : IEventParam
+    {
+    }
 
 }

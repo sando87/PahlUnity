@@ -18,17 +18,17 @@ namespace PahlUnity
         public int CurrentGold
         {
             get { return mCharacterSaveData.Gold; }
-            set { mCharacterSaveData.Gold = value; GameSystem.RequestSave(); }
+            set { mCharacterSaveData.Gold = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
         }
         public int CurrentLifePotionCount
         {
             get { return mCharacterSaveData.LifePotionCount; }
-            set { mCharacterSaveData.LifePotionCount = value; GameSystem.RequestSave(); }
+            set { mCharacterSaveData.LifePotionCount = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
         }
         public int CurrentManaPotionCount
         {
             get { return mCharacterSaveData.ManaPotionCount; }
-            set { mCharacterSaveData.ManaPotionCount = value; GameSystem.RequestSave(); }
+            set { mCharacterSaveData.ManaPotionCount = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
         }
 
         [ShowIf(nameof(ShowInvenItems))]
@@ -72,7 +72,7 @@ namespace PahlUnity
                 mInvenItems[item.InstanceID] = item;
                 mSaveData[item.InstanceID] = item.SaveData;
             }
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public void RemoveItem(string itemInstID)
         {
@@ -80,7 +80,7 @@ namespace PahlUnity
             mSaveData.Remove(itemInstID);
             if (mInvenItems.ContainsKey(itemInstID))
                 mInvenItems.Remove(itemInstID);
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public ItemInfo GetItem(string itemInstID)
         {
@@ -93,28 +93,28 @@ namespace PahlUnity
         public void SubItem(string itemInstID, int count)
         {
             GetItem(itemInstID).Count -= count;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public void UpgradeItem(string itemInstID)
         {
             GetItem(itemInstID).Level++;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public void RepairItem(string itemInstID)
         {
             GetItem(itemInstID).IsRepaired = true;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public void SetEquipableItem(string itemInstID)
         {
             GetItem(itemInstID).IsEquipable = true;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         public void MoveItem(string itemInstID, int newPositionIndex)
         {
             GetItem(itemInstID).PositionIndex = newPositionIndex;
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
     }
 }

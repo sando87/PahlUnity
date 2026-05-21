@@ -115,7 +115,7 @@ namespace PahlUnity
             SkillBase skill = mAllSkills[skillResID];
             skill.gameObject.SetActive(true);
             skill.OnLearnedSkill();
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
         public void LevelupSkill(string skillResID)
         {
@@ -123,7 +123,7 @@ namespace PahlUnity
             mPlayerStateData.RemainSkillPoint.ExSetMinimum(0);
             SkillBase skill = mAllSkills[skillResID];
             skill.OnLevelupSkill();
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         public void EquipSkill(string skillResID, int slotIndex)

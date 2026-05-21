@@ -12,15 +12,16 @@ namespace PahlUnity
     public class PlatformerPathfinder : MonoBehaviour
     {
         [SerializeField][Layer] int _ThinGroundLayer = 0;
-        [SerializeField] Tilemap GroundTilemap;
-        [SerializeField] Tilemap ThinPlatformTilemap;
+        [SerializeField] Tilemap _GroundTilemap;
+        [SerializeField] Tilemap _ThinPlatformTilemap;
+        [SerializeField] PlayerDepthManager _PlayerDepthManager;
 
         Dictionary<Vector2Int, NodeNav> mGroundNodes = new Dictionary<Vector2Int, NodeNav>();
         List<NodeNavGroup> mNodeGroups = new List<NodeNavGroup>();
 
         void Awake()
         {
-            Init(GroundTilemap, ThinPlatformTilemap);
+            Init(_GroundTilemap, _ThinPlatformTilemap);
         }
 
         public void Init(Tilemap tilemap, Tilemap thinTilemap)
@@ -265,7 +266,7 @@ namespace PahlUnity
             foreach (var node in nodeGroup.GroundNodes)
             {
                 Vector2Int nodeUpPos = node.Position + new Vector2Int(0, 1);
-                PlayerDepthInfo depthInfo = InGameManager.Instance.Engine.DepthManager.GetPlayerDepthInfoAtPos(nodeUpPos);
+                PlayerDepthInfo depthInfo = _PlayerDepthManager.GetPlayerDepthInfoAtPos(nodeUpPos);
                 if (depthInfo == null)
                     continue;
 

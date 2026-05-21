@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class InGameEngine : MonoBehaviour
     {

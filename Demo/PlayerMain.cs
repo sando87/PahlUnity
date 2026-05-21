@@ -8,7 +8,7 @@ namespace PahlUnity.Demo
 {
     public class PlayerMain : MonoBehaviour
     {
-        [SerializeField] int _CharacterID = 1;
+        // [SerializeField] int _CharacterID = 1;
         private int mCharacterID = -1;
         public int CharacterID => GetCharacterData();
 
@@ -83,7 +83,7 @@ namespace PahlUnity.Demo
 
                 SkillCtrl.LearnNewSkill("Skill05");
                 SkillCtrl.EquipSkill("Skill05", 0);
-                GameSystem.DoSave_UserSaveData();
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
             }
 
             OnChangeEquipState();

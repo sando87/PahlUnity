@@ -56,8 +56,8 @@ namespace PahlUnity
 
             mItemDropTime = Time.time;
 
-            int playerLevel = InGameManager.Instance.Engine.Player.GetComponentInChildren<PlayerGrowth>().CurrentLevel;
-            ItemObject.TryCreateNewItem(mBase.Body.Center, Quaternion.identity, playerLevel);
+            // int playerLevel = InGameManager.Instance.Engine.Player.GetComponentInChildren<PlayerGrowth>().CurrentLevel;
+            // ItemObject.TryCreateNewItem(mBase.Body.Center, Quaternion.identity, playerLevel);
         }
         void DropGold()
         {

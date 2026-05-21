@@ -66,7 +66,7 @@ namespace PahlUnity
 
             item.IsEquipped = true;
             mEquipItems.Add(item.InstanceID, item);
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
 
             TotalItemOption.Add(item.Option);
             _OnEquipItem?.Invoke(item);
@@ -79,7 +79,7 @@ namespace PahlUnity
 
             item.IsEquipped = false;
             mEquipItems.Remove(item.InstanceID);
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
 
             TotalItemOption.Subtract(item.Option);
             _OnUnEquipItem?.Invoke(item);

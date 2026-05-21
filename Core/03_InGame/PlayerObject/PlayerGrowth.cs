@@ -71,7 +71,7 @@ namespace PahlUnity
         {
             CurrentExp += exp;
             mCharacterSaveData.CurrentExp = CurrentExp;
-            GameSystem.RequestSave();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false));
 
             while (CurrentExp.ToInt() >= mToExp.ToInt())
             {
@@ -89,7 +89,7 @@ namespace PahlUnity
 
             OnLevelUp?.Invoke();
 
-            GameSystem.DoSave_UserSaveData();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         public void AddAttackPoint()
@@ -99,7 +99,7 @@ namespace PahlUnity
                 mCharacterSaveData.AttackPoint += 1;
                 mCharacterSaveData.RemainPoint -= 1;
                 OnStatPointChanged?.Invoke();
-                GameSystem.DoSave_UserSaveData();
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
             }
         }
         public void AddDefensePoint()
@@ -109,7 +109,7 @@ namespace PahlUnity
                 mCharacterSaveData.DefensePoint += 1;
                 mCharacterSaveData.RemainPoint -= 1;
                 OnStatPointChanged?.Invoke();
-                GameSystem.DoSave_UserSaveData();
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
             }
         }
         public void AddHealthPoint()
@@ -119,7 +119,7 @@ namespace PahlUnity
                 mCharacterSaveData.HealthPoint += 1;
                 mCharacterSaveData.RemainPoint -= 1;
                 OnStatPointChanged?.Invoke();
-                GameSystem.DoSave_UserSaveData();
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
             }
         }
         public void AddManaPoint()
@@ -129,7 +129,7 @@ namespace PahlUnity
                 mCharacterSaveData.ManaPoint += 1;
                 mCharacterSaveData.RemainPoint -= 1;
                 OnStatPointChanged?.Invoke();
-                GameSystem.DoSave_UserSaveData();
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
             }
         }
 
