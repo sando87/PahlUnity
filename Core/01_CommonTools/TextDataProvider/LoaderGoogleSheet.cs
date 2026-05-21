@@ -40,5 +40,10 @@ namespace PahlUnity
         {
             throw new NotImplementedException();
         }
+
+        public bool IsExist(string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

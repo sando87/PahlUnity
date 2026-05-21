@@ -34,6 +34,11 @@ namespace PahlUnity
 {
     public class WriterGoogleForm : ITextDataProvider
     {
+        public bool IsExist(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public UniTask<string> LoadAsync(string googleFormURL)
         {
             throw new NotImplementedException();

@@ -17,6 +17,11 @@ namespace PahlUnity
 {
     public class PlayerPrefsIO : ITextDataProvider
     {
+        public bool IsExist(string key)
+        {
+            return PlayerPrefs.HasKey(key);
+        }
+
         // =========================================================
         // LOAD
         // =========================================================

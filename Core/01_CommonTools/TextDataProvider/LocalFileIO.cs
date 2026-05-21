@@ -2,28 +2,35 @@
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 using UnityEngine;
 
 /// <summary>
 /// Local File IO
 /// 
 /// How to use
-/// LocalFileIO fileIO = new LocalFileIO("Save/player.json");
-/// await fileIO.SaveAsync("{ \"gold\": 100 }");
-/// string json = await fileIO.LoadAsync();
+/// string fullPath = "Save/player.json";
+/// LocalFileIO fileIO = new LocalFileIO();
+/// await fileIO.SaveAsync(fullPath, "{ \"gold\": 100 }");
+/// string json = await fileIO.LoadAsync(fullPath);
 /// 
 /// </summary>
 namespace PahlUnity
 {
     public class LocalFileIO : ITextDataProvider
     {
+        public bool IsExist(string fullPath)
+        {
+            return File.Exists(fullPath);
+        }
+
         // =========================================================
         // LOAD
         // =========================================================
 
         public async UniTask<string> LoadAsync(string fullPath)
         {
-            if (!File.Exists(fullPath))
+            if (!IsExist(fullPath))
             {
                 throw new FileNotFoundException($"File not found : {fullPath}");
             }

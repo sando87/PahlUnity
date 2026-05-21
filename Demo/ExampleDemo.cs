@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using UnityEngine;
 
 namespace PahlUnity
@@ -26,6 +27,10 @@ namespace PahlUnity
 			// ManagerB.SetActive(false);
 			yield return null;
 			// ManagerC.SetActive(false);
+
+			string filename = typeof(SaveDataBase).Name + ".json";
+			string fullPath = Path.Combine(Application.persistentDataPath, filename);
+			(SaveManager<SaveDataBase>.Instance as IInitializer).Initialize((new LocalFileIO(), fullPath));
 
 			LoadTableData<ItemResourceData>();
 			LoadTableData<CharResourceData>();

@@ -22,7 +22,7 @@ namespace PahlUnity
 
         Dictionary<LanguageType, LocaleSet> mLangTable = new Dictionary<LanguageType, LocaleSet>();
 
-        InitializingState IInitializer.Initialize()
+        InitializingState IInitializer.Initialize(object param)
         {
             string languageText = _LanguageTableAsset.text;
             LocaleInfoRaw[] infos = CSVParser<LocaleInfoRaw>.Parse(languageText);
