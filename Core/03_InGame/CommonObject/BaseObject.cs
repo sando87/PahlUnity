@@ -18,7 +18,6 @@ namespace PahlUnity
         public InteractableCollider Interactor => GetComponentInChildren<InteractableCollider>();
         public EventManager EventBus => GetComponentInChildren<EventManager>();
 
-        public PlayerMain PlayerObj => GetComponentInChildren<PlayerMain>();
         public EnemyBase EnemyObj => GetComponentInChildren<EnemyBase>();
 
         void Awake()

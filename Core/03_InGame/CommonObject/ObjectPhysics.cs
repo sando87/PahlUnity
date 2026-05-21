@@ -6,6 +6,8 @@ namespace PahlUnity
 {
     public class ObjectPhysics : MonoBehaviour
     {
+        [SerializeField] private LayerMask _LayersForGroundCheck;
+
         public float VelocityX { get { return mRB2D.linearVelocity.x; } set { mRB2D.linearVelocity = new Vector2(value, mRB2D.linearVelocity.y); } }
         public float VelocityY { get { return mRB2D.linearVelocity.y; } set { mRB2D.linearVelocity = new Vector2(mRB2D.linearVelocity.x, value); } }
         public Vector2 Velocity { get { return mRB2D.linearVelocity; } set { mRB2D.linearVelocity = value; } }
@@ -71,7 +73,7 @@ namespace PahlUnity
 
         private void UpdateGroundState()
         {
-            int layerMask = MyLayerMask.Ground;
+            int layerMask = _LayersForGroundCheck.value;
             Vector2 footPos = mBase.Body.Foot;
 
             bool isOverlapped = Physics2D.OverlapCircle(footPos + new Vector2(0, 0.1f), 0.05f, layerMask);

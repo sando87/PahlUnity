@@ -16,11 +16,11 @@ namespace PahlUnity
             Engine = FindAnyObjectByType<InGameEngine>();
         }
 
-        public void StartScene(SceneType destScene, int destWarpID)
+        public void StartScene(string destScene, int destWarpID)
         {
             StartCoroutine(CoStartScene(destScene, destWarpID));
         }
-        IEnumerator CoStartScene(SceneType destScene, int destWarpID)
+        IEnumerator CoStartScene(string destScene, int destWarpID)
         {
             DestWarpID = destWarpID;
             // SceneSwtichManager.Instance.LoadSceneImmediately((int)destScene);

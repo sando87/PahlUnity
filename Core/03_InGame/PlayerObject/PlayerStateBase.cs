@@ -10,7 +10,6 @@ namespace PahlUnity
     public class PlayerStateBase : FiniteStateBase
     {
         public InputPlayer PlayerInput { get => GetComponentInParent<InputPlayer>(); }
-        public PlayerMain PlayerMain { get => GetComponentInParent<PlayerMain>(); }
 
         public override void EnterState(object param)
         {

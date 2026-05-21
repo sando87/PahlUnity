@@ -24,6 +24,7 @@ namespace PahlUnity
         void OnInputExit(InputManager inputManager) { }
         void OnInputUpdate(InputManager inputManager);
     }
+
     public class InputManager : SingletonMono<InputManager>
     {
         // =========================
@@ -92,6 +93,7 @@ namespace PahlUnity
 
         private InputActionMap _playerMap;
         private InputActionMap _uiMap;
+        private Dictionary<InputActionName, InputAction> mActionMap = new();
 
         private IInputHandler mHandlerInput = null;
 
@@ -133,6 +135,8 @@ namespace PahlUnity
             _playerMap = inputActions.FindActionMap(playerActionMapName, true);
             _uiMap = inputActions.FindActionMap(uiActionMapName, true);
 
+            InitActionMap();
+
             InputSystem.onDeviceChange += OnDeviceChange;
 
             // 전체 입력 감지 방식 1
@@ -156,6 +160,17 @@ namespace PahlUnity
             // PlayerInput.onActionTriggered += (context) => OnAnyButtonPress(context.control);
 
             EnableAllMaps();
+        }
+        public void InitActionMap()
+        {
+            foreach (InputActionMap map in inputActions.actionMaps)
+            {
+                foreach (InputAction action in map.actions)
+                {
+                    InputActionName inputType = new(action.name);
+                    mActionMap[inputType] = action;
+                }
+            }
         }
 
         // =========================
@@ -360,21 +375,20 @@ namespace PahlUnity
             return Touchscreen.current != null;
         }
 
-        public bool JustPressed(string actionName) => GetInputAction(actionName).triggered;
-        public bool IsPressing(string actionName) => GetInputAction(actionName).IsPressed();
-        public bool JustReleased(string actionName) => GetInputAction(actionName).WasReleasedThisFrame();
+        public bool JustPressed(InputActionName inputType) => GetInputAction(inputType).triggered;
+        public bool IsPressing(InputActionName inputType) => GetInputAction(inputType).IsPressed();
+        public bool JustReleased(InputActionName inputType) => GetInputAction(inputType).WasReleasedThisFrame();
 
-        public TValue GetInputValue<TValue>(string actionName) where TValue : struct
+        public TValue GetInputValue<TValue>(InputActionName inputType) where TValue : struct
         {
-            InputAction action = GetInputAction(actionName);
+            InputAction action = GetInputAction(inputType);
             return action.ReadValue<TValue>();
         }
 
-        private InputAction GetInputAction(string actionName)
+        private InputAction GetInputAction(InputActionName inputType)
         {
-            var action = inputActions.FindAction(actionName);
-            LOG.errorif(action == null);
-            return action;
+            LOG.errorif(!mActionMap.ContainsKey(inputType));
+            return mActionMap[inputType];
         }
 
 
@@ -396,5 +410,32 @@ namespace PahlUnity
                 mHandlerInput.OnInputEnter(this);
             }
         }
+    }
+
+    public readonly partial struct InputActionName
+    {
+        public readonly int mVal;
+        public InputActionName(string value) => mVal = value.GetHashCode();
+        public InputActionName(int value) => mVal = value;
+
+        public static implicit operator int(InputActionName info) => info.mVal;
+        public static implicit operator InputActionName(int val) => new InputActionName(val);
+        public static implicit operator InputActionName(string val) => new InputActionName(val);
+
+        public override bool Equals(object obj) => obj is InputActionName other && mVal == other.mVal;
+        public override int GetHashCode() => mVal;
+
+        public static bool operator ==(InputActionName a, InputActionName b) => a.mVal == b.mVal;
+        public static bool operator !=(InputActionName a, InputActionName b) => a.mVal != b.mVal;
+
+        public static readonly InputActionName UIMove = new("UIMove");
+        public static readonly InputActionName UIBack = new("UIBack");
+        public static readonly InputActionName Move = new("Move");
+
+        // Example
+        // public static readonly InputActionName Jump = new("Jump");
+        // public static readonly InputActionName Dash = new("Dash");
+        // public static readonly InputActionName SkillA = new("SkillA");
+        // public static readonly InputActionName SkillB = new("SkillB");
     }
 }

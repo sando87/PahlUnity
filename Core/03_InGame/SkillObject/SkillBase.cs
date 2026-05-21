@@ -124,21 +124,6 @@ namespace PahlUnity
             GameSystem.DoSave_UserSaveData();
         }
 
-        public PlayerUnitInputType GetCurrentInputType()
-        {
-            if (!IsLearned || !IsEquipped)
-                return PlayerUnitInputType.None;
-
-            switch (PositionIndex)
-            {
-                case 0: return PlayerUnitInputType.SkillSlotA;
-                case 1: return PlayerUnitInputType.SkillSlotB;
-                case 2: return PlayerUnitInputType.SkillSlotC;
-                case 3: return PlayerUnitInputType.SkillSlotD;
-            }
-            return PlayerUnitInputType.None;
-        }
-
         protected void ApplySkillStatsToProjectile(ProjectileBase proj)
         {
             proj.Stats.MoveSpeed = Spec.ProjectileSpeed;

@@ -11,6 +11,7 @@ namespace PahlUnity
 {
     public class PlatformerPathfinder : MonoBehaviour
     {
+        [SerializeField][Layer] int _ThinGroundLayer = 0;
         [SerializeField] Tilemap GroundTilemap;
         [SerializeField] Tilemap ThinPlatformTilemap;
 
@@ -100,7 +101,7 @@ namespace PahlUnity
         bool IsThinTile(Tilemap tilemap, Vector2Int position)
         {
             Vector3Int pos = new Vector3Int(position.x, position.y, 0);
-            return tilemap.gameObject.layer == LayerID.ThinPlatform && tilemap.HasTile(pos);
+            return tilemap.gameObject.layer == _ThinGroundLayer && tilemap.HasTile(pos);
         }
 
         void LinkGroups(NodeNavGroup newGroup)

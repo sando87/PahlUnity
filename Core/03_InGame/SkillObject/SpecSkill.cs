@@ -10,18 +10,18 @@ namespace PahlUnity
 {
     public class SpecSkill : SpecBase
     {
-        public float PhyAttack => mSpecPlayer.BaseAttack * (BaseStats.PhyAttack + mSpecPlayer.Option.PhyAttack);
-        public float FireAttack => mSpecPlayer.BaseAttack * (BaseStats.FireAttack + mSpecPlayer.Option.FireAttack);
-        public float IceAttack => mSpecPlayer.BaseAttack * (BaseStats.IceAttack + mSpecPlayer.Option.IceAttack);
-        public float LightningAttack => mSpecPlayer.BaseAttack * (BaseStats.LightningAttack + mSpecPlayer.Option.LightningAttack);
+        public float PhyAttack => mSpecBase.BaseAttack * (BaseStats.PhyAttack + mSpecBase.Option.PhyAttack);
+        public float FireAttack => mSpecBase.BaseAttack * (BaseStats.FireAttack + mSpecBase.Option.FireAttack);
+        public float IceAttack => mSpecBase.BaseAttack * (BaseStats.IceAttack + mSpecBase.Option.IceAttack);
+        public float LightningAttack => mSpecBase.BaseAttack * (BaseStats.LightningAttack + mSpecBase.Option.LightningAttack);
 
         public float ManaUse => BaseStats.ManaUse;
-        public float Cooltime => BaseStats.Cooltime * mSpecPlayer.Option.CooltimeDown;
-        public float ProjectileCount => BaseStats.ProjectileCount + mSpecPlayer.Option.ProjectileCountUp;
-        public float ProjectileSpeed => BaseStats.ProjectileSpeed * mSpecPlayer.Option.ProjectileSpeedUp;
-        public float AttackRange => BaseStats.AttackRange * mSpecPlayer.Option.AttackRangeUp;
-        public float SplashRange => BaseStats.SplashRange * mSpecPlayer.Option.SplashRangeUp;
-        public float Duration => BaseStats.Duration * mSpecPlayer.Option.DurationUp;
+        public float Cooltime => BaseStats.Cooltime * mSpecBase.Option.CooltimeDown;
+        public float ProjectileCount => BaseStats.ProjectileCount + mSpecBase.Option.ProjectileCountUp;
+        public float ProjectileSpeed => BaseStats.ProjectileSpeed * mSpecBase.Option.ProjectileSpeedUp;
+        public float AttackRange => BaseStats.AttackRange * mSpecBase.Option.AttackRangeUp;
+        public float SplashRange => BaseStats.SplashRange * mSpecBase.Option.SplashRangeUp;
+        public float Duration => BaseStats.Duration * mSpecBase.Option.DurationUp;
         public float Interval => BaseStats.Interval;
         public float StartDelay => BaseStats.StartDelay;
 
@@ -29,7 +29,7 @@ namespace PahlUnity
         public SkillResourceData ResourceData { get; private set; } = null;
         public SkillStats BaseStats { get; private set; } = null;
 
-        private SpecPlayer mSpecPlayer = null;
+        private SpecBase mSpecBase = null;
 
         public void Init(int characterID, string resourceID)
         {
@@ -37,7 +37,7 @@ namespace PahlUnity
             // UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
             // SaveData = userSaveData.Characters[characterID].Skills[resourceID];
 
-            mSpecPlayer = this.ExGetBase().PlayerObj.Spec;
+            mSpecBase = this.ExGetBase().Spec;
 
             BaseStats = GetBasicStatByLevel(SaveData == null ? 0 : SaveData.LevelIndex);
         }

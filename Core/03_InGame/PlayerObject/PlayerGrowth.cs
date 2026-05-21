@@ -6,6 +6,9 @@ namespace PahlUnity
 {
     public class PlayerGrowth : MonoBehaviour
     {
+        private const int PointByLevelup = 5;
+        private const int SkillPointByLevelup = 1;
+
         private float mFromExp = 0;
         private float mToExp = 0;
         private CharSaveData mCharacterSaveData = null;
@@ -75,8 +78,8 @@ namespace PahlUnity
         private void LevelUp()
         {
             CurrentLevel += 1;
-            mCharacterSaveData.RemainPoint += Consts.PointByLevelup;
-            mCharacterSaveData.RemainSkillPoint += Consts.SkillPointByLevelup;
+            mCharacterSaveData.RemainPoint += PointByLevelup;
+            mCharacterSaveData.RemainSkillPoint += SkillPointByLevelup;
             mFromExp = mToExp;
             mToExp = GameSystem.GetAccExpForNextLevel(CurrentLevel);
 

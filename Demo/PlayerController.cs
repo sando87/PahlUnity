@@ -92,7 +92,7 @@ namespace PahlUnity
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.Jump)
+            if (mPlayerInput.JustPressed(InputActionName.Jump)
             && mPlayerInput.MoveY >= 0)
             {
                 if (IsGrounded)
@@ -114,7 +114,7 @@ namespace PahlUnity
                     }
                 }
             }
-            else if (mPlayerInput.JustReleased(PlayerUnitInputType.Jump))
+            else if (mPlayerInput.JustReleased(InputActionName.Jump))
             {
                 mBaseObj.Phy.StopJump();
             }
@@ -124,7 +124,7 @@ namespace PahlUnity
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.Jump)
+            if (mPlayerInput.JustPressed(InputActionName.Jump)
             && mPlayerInput.MoveY < 0
             && IsGrounded)
             {
@@ -138,7 +138,7 @@ namespace PahlUnity
             if (LockDash)
                 return;
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.Dash))
+            if (mPlayerInput.JustPressed(InputActionName.Dash))
             {
                 mSkillCtrl.ReleaseAllSkillSlot();
                 // mFSM.TryChangeState<PlayerStateDash>();
@@ -152,24 +152,24 @@ namespace PahlUnity
                 return;
             }
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.SkillSlotA))
+            if (mPlayerInput.JustPressed(InputActionName.SkillSlotA))
                 mSkillCtrl.JustPressedSkillSlot(0);
-            else if (mPlayerInput.JustReleased(PlayerUnitInputType.SkillSlotA))
+            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotA))
                 mSkillCtrl.JustReleasedSkillSlot(0);
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.SkillSlotB))
+            if (mPlayerInput.JustPressed(InputActionName.SkillSlotB))
                 mSkillCtrl.JustPressedSkillSlot(1);
-            else if (mPlayerInput.JustReleased(PlayerUnitInputType.SkillSlotB))
+            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotB))
                 mSkillCtrl.JustReleasedSkillSlot(1);
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.SkillSlotC))
+            if (mPlayerInput.JustPressed(InputActionName.SkillSlotC))
                 mSkillCtrl.JustPressedSkillSlot(2);
-            else if (mPlayerInput.JustReleased(PlayerUnitInputType.SkillSlotC))
+            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotC))
                 mSkillCtrl.JustReleasedSkillSlot(2);
 
-            if (mPlayerInput.JustPressed(PlayerUnitInputType.SkillSlotD))
+            if (mPlayerInput.JustPressed(InputActionName.SkillSlotD))
                 mSkillCtrl.JustPressedSkillSlot(3);
-            else if (mPlayerInput.JustReleased(PlayerUnitInputType.SkillSlotD))
+            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotD))
                 mSkillCtrl.JustReleasedSkillSlot(3);
         }
 

@@ -21,14 +21,14 @@ namespace PahlUnity
 
         protected void Stop()
         {
-            Base.AnimHelper.PlayAnim(AnimStateNameHash.Idle);
+            Base.AnimHelper.PlayAnim(AnimStateHash.Idle);
             Base.Phy.Velocity = Vector2.zero;
         }
         protected void Move(float moveHoriVelocity)
         {
             Base.Body.Turn(moveHoriVelocity);
             Base.Phy.VelocityX = moveHoriVelocity;
-            Base.AnimHelper.PlayAnim(AnimStateNameHash.Run);
+            Base.AnimHelper.PlayAnim(AnimStateHash.Run);
         }
     }
 }

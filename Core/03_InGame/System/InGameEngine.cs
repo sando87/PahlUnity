@@ -143,11 +143,11 @@ namespace PahlUnity
             // }
         }
 
-        public void DoWarpStation(SceneType destScene, int destWarpID)
-        {
-            // _InputManager.ClearHandlerInput();
-            // InGameManager.Instance.StartScene(destScene, destWarpID);
-        }
+        // public void DoWarpStation(SceneType destScene, int destWarpID)
+        // {
+        //     _InputManager.ClearHandlerInput();
+        //     InGameManager.Instance.StartScene(destScene, destWarpID);
+        // }
 
         Vector2 FindRespawnPosition(int destWarpID)
         {

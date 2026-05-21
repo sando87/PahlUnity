@@ -59,7 +59,7 @@ namespace PahlUnity.Demo
                 if (ic == null)
                     continue;
 
-                ic.InvokeInteractSignal(mBaseObj, InteractMask.TriggerSignal);
+                ic.InvokeInteractSignal(mBaseObj, InteractMaskDemo.TriggerSignal);
             }
         }
     }

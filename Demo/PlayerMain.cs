@@ -4,7 +4,7 @@ using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class PlayerMain : MonoBehaviour
     {
@@ -134,25 +134,25 @@ namespace PahlUnity
 
         void Update()
         {
-            if (mBaseObj.Input.JustPressed(PlayerUnitInputType.PotionA))
-            {
-                if (Inven.CurrentLifePotionCount > 0)
-                {
-                    Inven.CurrentLifePotionCount--;
-                    int healHP = (int)(mBaseObj.Health.MaxHealth * 0.7f);
-                    mBaseObj.Health.Heal(healHP);
-                }
-            }
+            // if (mBaseObj.Input.JustPressed(InputActionName.PotionA))
+            // {
+            //     if (Inven.CurrentLifePotionCount > 0)
+            //     {
+            //         Inven.CurrentLifePotionCount--;
+            //         int healHP = (int)(mBaseObj.Health.MaxHealth * 0.7f);
+            //         mBaseObj.Health.Heal(healHP);
+            //     }
+            // }
 
-            if (mBaseObj.Input.JustPressed(PlayerUnitInputType.PotionB))
-            {
-                if (Inven.CurrentManaPotionCount > 0)
-                {
-                    Inven.CurrentManaPotionCount--;
-                    int healMana = (int)(mBaseObj.Health.MaxMana * 0.7f);
-                    mBaseObj.Health.RestoreMana(healMana);
-                }
-            }
+            // if (mBaseObj.Input.JustPressed(InputActionName.PotionB))
+            // {
+            //     if (Inven.CurrentManaPotionCount > 0)
+            //     {
+            //         Inven.CurrentManaPotionCount--;
+            //         int healMana = (int)(mBaseObj.Health.MaxMana * 0.7f);
+            //         mBaseObj.Health.RestoreMana(healMana);
+            //     }
+            // }
 
             // if (mWrapStationAround != null && mBaseObj.Input.JustPressed(PlayerUnitInputType.Move))
             // {
@@ -189,10 +189,10 @@ namespace PahlUnity
         }
         public void OnChangeEquipState()
         {
-            float attackSpeed = mBaseObj.PlayerObj.Spec.Option.AttackSpeedUp.Multiplier;
+            float attackSpeed = Spec.Option.AttackSpeedUp.Multiplier;
             mBaseObj.AnimHelper.SetParamFloat(AnimatorParams.AttackSpeed, attackSpeed);
 
-            float moveSpeed = mBaseObj.PlayerObj.Spec.Option.MoveSpeedUp.Multiplier;
+            float moveSpeed = Spec.Option.MoveSpeedUp.Multiplier;
             mBaseObj.AnimHelper.SetParamFloat(AnimatorParams.MoveSpeed, moveSpeed);
 
             mBaseObj.Health.UpdateMaxStats(true);

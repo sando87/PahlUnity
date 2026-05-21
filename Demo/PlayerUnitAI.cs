@@ -18,46 +18,46 @@ namespace PahlUnity
         [Button("Jump")]
         void Jump()
         {
-            VirtualInput.Tap(PlayerUnitInputType.Jump);
+            VirtualInput.Tap(InputActionName.Jump);
         }
 
         [Button("Move Right")]
         void MoveRight()
         {
-            VirtualInput.SetValue(PlayerUnitInputType.Move, new Vector2(1, 0));
+            VirtualInput.SetValue(InputActionName.Move, new Vector2(1, 0));
         }
 
         [Button("Move Left")]
         void MoveLeft()
         {
-            VirtualInput.SetValue(PlayerUnitInputType.Move, new Vector2(-1, 0));
+            VirtualInput.SetValue(InputActionName.Move, new Vector2(-1, 0));
         }
 
         [Button("Move Stop")]
         void MoveStop()
         {
-            VirtualInput.SetValue(PlayerUnitInputType.Move, new Vector2(0, 0));
+            VirtualInput.SetValue(InputActionName.Move, new Vector2(0, 0));
         }
 
         [Button("AttackA")]
         void AttackA()
         {
-            VirtualInput.Tap(PlayerUnitInputType.SkillSlotA);
+            VirtualInput.Tap(InputActionName.SkillSlotA);
         }
         [Button("AttackB")]
         void AttackB()
         {
-            VirtualInput.Tap(PlayerUnitInputType.SkillSlotB);
+            VirtualInput.Tap(InputActionName.SkillSlotB);
         }
         [Button("AttackStartC")]
         void AttackStartC()
         {
-            VirtualInput.Press(PlayerUnitInputType.SkillSlotC);
+            VirtualInput.Press(InputActionName.SkillSlotC);
         }
         [Button("AttackStopC")]
         void AttackStopC()
         {
-            VirtualInput.Release(PlayerUnitInputType.SkillSlotC);
+            VirtualInput.Release(InputActionName.SkillSlotC);
         }
     }
 
