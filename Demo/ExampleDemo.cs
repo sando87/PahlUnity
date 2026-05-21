@@ -33,7 +33,16 @@ namespace PahlUnity.Demo
 			string filename = typeof(PlayerSaveData).Name + ".json";
 			string fullPath = Path.Combine(Application.persistentDataPath, filename);
 			InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
-			LOG.trace(state);
+			if (state == InitializingState.InitializedSuccess)
+			{
+				EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
+				{
+					if (eventType.ImmediateSave)
+						SaveManager<PlayerSaveData>.Instance.SaveImmediate();
+					else
+						SaveManager<PlayerSaveData>.Instance.RequestSave();
+				});
+			}
 
 			await LoadTableData<ItemResourceData>();
 			await LoadTableData<CharResourceData>();

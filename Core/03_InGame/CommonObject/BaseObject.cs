@@ -16,7 +16,7 @@ namespace PahlUnity
         public BuffController Buffs => GetComponentInChildren<BuffController>();
         public SpecBase Spec => GetComponentInChildren<SpecBase>();
         public InteractableCollider Interactor => GetComponentInChildren<InteractableCollider>();
-        public EventManager EventBus => GetComponentInChildren<EventManager>();
+        public EventBus Events => GetComponentInChildren<EventBus>();
 
         public EnemyBase EnemyObj => GetComponentInChildren<EnemyBase>();
 

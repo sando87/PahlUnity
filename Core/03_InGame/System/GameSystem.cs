@@ -8,14 +8,14 @@ namespace PahlUnity
     {
         static public void DoSave_UserSaveData()
         {
-            SaveManager<SaveDataBase>.Instance.SaveImmediate();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         // 바로 세이브 하지 않고 일정 시간 동안 다시 RequestSave() 호출이 없으면 그때 세이브 하는 방식
         // 골드나 경험치 같이 자주 변경되는 데이터를 위한 세이브 방식
         static public void RequestSave()
         {
-            SaveManager<SaveDataBase>.Instance.RequestSave();
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false));
         }
 
         // static public int GetAttackableLayerMask(int layer)
