@@ -1,8 +1,9 @@
 using System.Collections;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
 	public class ExampleDemo : SingletonMono<ExampleDemo>
 	{
@@ -16,30 +17,32 @@ namespace PahlUnity
 
 		void Start()
 		{
-			StartCoroutine(InitializeGameSystem());
+			InitializeGameSystem().Forget();
 		}
 
-		IEnumerator InitializeGameSystem()
+		async UniTask InitializeGameSystem()
 		{
 			// ManagerA.SetActive(true);
 			// (ManagerA as IInitializer).Initialize();
-			yield return null;
+			// yield return null;
 			// ManagerB.SetActive(false);
-			yield return null;
+			// yield return null;
 			// ManagerC.SetActive(false);
 
-			string filename = typeof(SaveDataBase).Name + ".json";
+			IInitializer playerSaveDataManager = SaveManager<PlayerSaveData>.Instance as IInitializer;
+			string filename = typeof(PlayerSaveData).Name + ".json";
 			string fullPath = Path.Combine(Application.persistentDataPath, filename);
-			(SaveManager<SaveDataBase>.Instance as IInitializer).Initialize((new LocalFileIO(), fullPath));
+			InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
+			LOG.trace(state);
 
-			LoadTableData<ItemResourceData>();
-			LoadTableData<CharResourceData>();
-			LoadTableData<SkillResourceData>();
-			LoadTableData<EnemyResourceData>();
-			LoadTableData<SpecOptionData>();
+			await LoadTableData<ItemResourceData>();
+			await LoadTableData<CharResourceData>();
+			await LoadTableData<SkillResourceData>();
+			await LoadTableData<EnemyResourceData>();
+			await LoadTableData<SpecOptionData>();
 		}
 
-		async void LoadTableData<T>() where T : ITableRecord, new()
+		async UniTask LoadTableData<T>() where T : ITableRecord, new()
 		{
 			LoaderGoogleSheet googleSheetLoader = new LoaderGoogleSheet("1pRpEq-zAwYvoB5N_D5H--NKltHOscvOcBu8uOAA3ph8");
 			string sheetname = typeof(T).Name;

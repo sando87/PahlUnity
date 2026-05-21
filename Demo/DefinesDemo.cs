@@ -12,5 +12,11 @@ namespace PahlUnity.Demo
         public const InteractMask NPC = (InteractMask)(1 << 18);
     }
 
+    [System.Serializable]
+    public class PlayerSaveData : SaveDataBase
+    {
+        public int PlayerGold;
+    }
+
 
 }

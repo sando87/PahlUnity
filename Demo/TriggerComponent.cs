@@ -4,7 +4,7 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class TriggerComponent : MonoBehaviour
     {
