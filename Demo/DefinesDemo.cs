@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
@@ -76,7 +77,7 @@ namespace PahlUnity
         [System.Serializable]
         public class PlayerSaveData : SaveDataBase
         {
-            public int PlayerGold;
+            public Dictionary<int, CharacterSaveData> Characters = new Dictionary<int, CharacterSaveData>();
         }
     }
 }

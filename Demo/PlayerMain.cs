@@ -29,21 +29,22 @@ namespace PahlUnity.Demo
         public SpecPlayer Spec { get; private set; }
 
         BaseObject mBaseObj = null;
-        UserSaveData mUserSaveData = null;
+        CharacterSaveData mCharSaveData = null;
 
         private void Awake()
         {
             mBaseObj = GetComponentInParent<BaseObject>();
 
+            PlayerSaveData allCharacterSaveData = SaveManager<PlayerSaveData>.Instance.SaveData;
+            mCharSaveData = allCharacterSaveData.Characters[CharacterID];
+
             Exp = GetComponentInChildren<PlayerGrowth>();
-            Exp.Init(CharacterID);
+            Exp.Init(mCharSaveData.Stats);
 
             Inven = GetComponentInChildren<Inventory>();
-            Inven.LoadItemsFromData(CharacterID);
+            Inven.LoadItemsFromData(mCharSaveData);
 
-            // UserSaveData mUserSaveData = SaveFileManager<UserSaveData>.Load();
-            CharacterSaveData mCharacterSaveData = mUserSaveData.Characters[CharacterID];
-            ItemSaveData[] mSavedAllItems = mCharacterSaveData.Items.Values.ToArray();
+            ItemSaveData[] mSavedAllItems = mCharSaveData.Items.Values.ToArray();
 
             Equip = GetComponentInChildren<Equipment>();
             Equip.LoadItemsFromData(mSavedAllItems);
@@ -51,12 +52,12 @@ namespace PahlUnity.Demo
             Equip.OnUnEquipItem += (item) => OnChangeEquipState();
 
             Spec = GetComponentInChildren<SpecPlayer>();
-            Spec.Init(CharacterID, _ResourceID);
+            Spec.Init(mCharSaveData.Stats, _ResourceID);
             Spec.LinkOption(Equip.TotalItemOption);
             Spec.LinkOption(mBaseObj.Buffs.TotalBuffOption);
 
             SkillCtrl = GetComponentInChildren<SkillController>();
-            SkillCtrl.InitSkills(CharacterID);
+            SkillCtrl.InitSkills(mCharSaveData);
         }
 
         void Start()
@@ -65,14 +66,12 @@ namespace PahlUnity.Demo
             mBaseObj.Interactor.OnInteractLeave.AddListener(OnColliderLeave);
 
             // 캐릭터별 처음 생성시 주어지는 초기 시작 아이템 및 스킬 부여
-            UserSaveData saveData = null; // SaveFileManager<UserSaveData>.Load();
-            CharacterSaveData playerData = saveData.Characters[CharacterID];
-            if (playerData.IsFirstPlay)
+            if (mCharSaveData.IsFirstPlay)
             {
-                playerData.IsFirstPlay = false;
+                mCharSaveData.IsFirstPlay = false;
 
-                playerData.LifePotionCount = 3;
-                playerData.ManaPotionCount = 3;
+                mCharSaveData.LifePotionCount = 3;
+                mCharSaveData.ManaPotionCount = 3;
 
                 ItemInfo itemInfo = new ItemInfo();
                 itemInfo.InitItem("Item10");

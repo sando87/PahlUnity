@@ -52,19 +52,18 @@ namespace PahlUnity
             mInput = mBaseObj.Input;
         }
 
-        public void InitSkillInfo(int characterID)
+        public void InitSkillInfo(CharacterSaveData charSaveData)
         {
-            // UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
-            // var saveDataAllSkills = saveData.Characters[characterID].Skills;
-            // if (!saveDataAllSkills.ContainsKey(_ResourceID))
-            // {
-            //     saveDataAllSkills[_ResourceID] = new SkillSaveData(_ResourceID);
-            // }
+            var saveDataAllSkills = charSaveData.Skills;
+            if (!saveDataAllSkills.ContainsKey(_ResourceID))
+            {
+                saveDataAllSkills[_ResourceID] = new SkillSaveData(_ResourceID);
+            }
 
-            // mSkillSaveData = saveDataAllSkills[_ResourceID];
+            mSkillSaveData = saveDataAllSkills[_ResourceID];
 
             Spec = GetComponentInChildren<SpecSkill>();
-            Spec.Init(characterID, _ResourceID);
+            Spec.Init(charSaveData, _ResourceID);
         }
 
         public virtual bool IsCastable()

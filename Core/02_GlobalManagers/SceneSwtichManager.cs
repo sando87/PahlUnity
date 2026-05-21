@@ -21,8 +21,6 @@ namespace PahlUnity
     {
         [SceneSelector] string _LoadingSceneName = String.Empty;
 
-        public bool IsLoaded { get; set; }
-
         public async UniTask ChangeSceneAsync(string nextScene)
         {
             // 다음씬 로딩

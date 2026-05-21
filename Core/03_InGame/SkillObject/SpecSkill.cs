@@ -31,11 +31,10 @@ namespace PahlUnity
 
         private SpecBase mSpecBase = null;
 
-        public void Init(int characterID, string resourceID)
+        public void Init(CharacterSaveData charSaveData, string resourceID)
         {
-            // ResourceData = SkillResourceTable.Instance.GetInfo(resourceID);
-            // UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
-            // SaveData = userSaveData.Characters[characterID].Skills[resourceID];
+            ResourceData = TableDataContainer<SkillResourceData>.Instance.GetInfo(resourceID);
+            SaveData = charSaveData.Skills[resourceID];
 
             mSpecBase = this.ExGetBase().Spec;
 

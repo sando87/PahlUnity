@@ -41,9 +41,6 @@ namespace PahlUnity
 
         public void LoadItemsFromData(ItemSaveData[] savedAllItemInfo)
         {
-            // UserSaveData mUserSaveData = SaveFileManager<UserSaveData>.Load();
-            // CharacterSaveData mCharacterSaveData = mUserSaveData.Characters[characterID];
-            // var mSaveData = mCharacterSaveData.Items;
             foreach (ItemSaveData savedItemInfo in savedAllItemInfo)
             {
                 ItemInfo item = new ItemInfo();

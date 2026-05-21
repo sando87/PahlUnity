@@ -23,22 +23,21 @@ namespace PahlUnity
         SkillBase mCurrentInputSkill = null;
 
         public int RemainSkillPoint => mPlayerStateData.RemainSkillPoint;
-        public int CurrentLevel => GameSystem.GetLevelFromAccExp(mPlayerStateData.CurrentExp);
+        public int CurrentLevel => PlayerGrowth.GetLevelFromAccExp(mPlayerStateData.CurrentExp);
 
         void Awake()
         {
             mBaseObj = GetComponentInParent<BaseObject>();
         }
 
-        public void InitSkills(int characterID)
+        public void InitSkills(CharacterSaveData charSaveData)
         {
-            // UserSaveData saveData = SaveFileManager<UserSaveData>.Load();
-            // mPlayerStateData = saveData.Characters[characterID].Stats;
+            mPlayerStateData = charSaveData.Stats;
 
             SkillBase[] allSkills = GetComponentsInChildren<SkillBase>();
             foreach (SkillBase skillObj in allSkills)
             {
-                skillObj.InitSkillInfo(characterID);
+                skillObj.InitSkillInfo(charSaveData);
                 mAllSkills[skillObj.ResourceID] = skillObj;
 
                 if (!skillObj.IsLearned)

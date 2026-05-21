@@ -10,13 +10,16 @@ namespace PahlUnity
 {
     public class Inventory : MonoBehaviour
     {
-        private UserSaveData mUserSaveData = null;
         private CharacterSaveData mCharacterSaveData = null;
         private Dictionary<string, ItemSaveData> mSaveData = null;
 
         private Dictionary<string, ItemInfo> mInvenItems = new Dictionary<string, ItemInfo>();
 
-        public int CurrentGold { get { return mUserSaveData.Gold; } set { mUserSaveData.Gold = value; GameSystem.RequestSave(); } }
+        public int CurrentGold
+        {
+            get { return mCharacterSaveData.Gold; }
+            set { mCharacterSaveData.Gold = value; GameSystem.RequestSave(); }
+        }
         public int CurrentLifePotionCount
         {
             get { return mCharacterSaveData.LifePotionCount; }
@@ -39,14 +42,13 @@ namespace PahlUnity
         private ItemInfo _SelectInvenItem = null;
         void SelectInvenItem() { _SelectInvenItem = mSelectedInvenItem; _SelectInvenItem._Option = mSelectedInvenItem.Option; }
 
-        bool ShowInvenItems() { return Application.isPlaying && mSaveData != null && mInvenItems.Count > 0; }
+        bool ShowInvenItems() { return Application.isPlaying && mInvenItems.Count > 0; }
 
-        public void LoadItemsFromData(int characterID)
+        public void LoadItemsFromData(CharacterSaveData characterSaveData)
         {
-            // mUserSaveData = SaveFileManager<UserSaveData>.Load();
-            mCharacterSaveData = mUserSaveData.Characters[characterID];
-            mSaveData = mCharacterSaveData.Items;
-            foreach (var pair in mSaveData)
+            mCharacterSaveData = characterSaveData;
+            mSaveData = characterSaveData.Items;
+            foreach (var pair in mCharacterSaveData.Items)
             {
                 ItemSaveData itemSaveData = pair.Value;
                 ItemInfo item = new ItemInfo();

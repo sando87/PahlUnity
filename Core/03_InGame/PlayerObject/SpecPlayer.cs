@@ -29,20 +29,19 @@ namespace PahlUnity
 
         BaseObject mBaseObj = null;
 
-        public void Init(int characterID, string resourceID)
+        public void Init(CharSaveData saveData, string resourceID)
         {
             mBaseObj = this.ExGetBase();
 
             ResourceData = TableDataContainer<CharResourceData>.Instance.GetInfo(resourceID);
-            // UserSaveData userSaveData = SaveFileManager<UserSaveData>.Load();
-            // SaveData = userSaveData.Characters[characterID].Stats;
+            SaveData = saveData;
 
             UpdateBasicStat();
         }
 
         public void UpdateBasicStat()
         {
-            int currentLevel = GameSystem.GetLevelFromAccExp(SaveData.CurrentExp);
+            int currentLevel = PlayerGrowth.GetLevelFromAccExp(SaveData.CurrentExp);
             int currentLevelIndex = currentLevel - 1;
 
             BaseStats = new CharStats();
