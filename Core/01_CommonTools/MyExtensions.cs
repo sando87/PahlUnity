@@ -654,15 +654,6 @@ namespace PahlUnity
             me.position += offset;
         }
 
-        public static int ToInt(this float val)
-        {
-            return (int)(val + 0.0001f);
-        }
-        public static bool IsEquals(this float val, float targetVal)
-        {
-            return Mathf.Abs(val - targetVal) < 0.0001f;
-        }
-
         public static T ExGetRandom<T>(this List<T> list)
         {
             return list.Count > 0 ? list[UnityEngine.Random.Range(0, list.Count)] : default;

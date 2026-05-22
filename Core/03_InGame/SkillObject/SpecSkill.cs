@@ -71,13 +71,13 @@ namespace PahlUnity
         {
             fieldDatas.Clear();
 
-            if (PhyAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyAttack), Value = PhyAttack.ToInt().ToString() });
-            if (FireAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(FireAttack), Value = FireAttack.ToInt().ToString() });
-            if (IceAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(IceAttack), Value = IceAttack.ToInt().ToString() });
-            if (LightningAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(LightningAttack), Value = LightningAttack.ToInt().ToString() });
-            if (ManaUse > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ManaUse), Value = ManaUse.ToInt().ToString() });
+            if (PhyAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyAttack), Value = $"{PhyAttack:0.#}s" });
+            if (FireAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(FireAttack), Value = $"{FireAttack:0.#}s" });
+            if (IceAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(IceAttack), Value = $"{IceAttack:0.#}s" });
+            if (LightningAttack > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(LightningAttack), Value = $"{LightningAttack:0.#}s" });
+            if (ManaUse > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ManaUse), Value = $"{ManaUse:0.#}s" });
             if (Cooltime > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Cooltime), Value = $"{Cooltime:0.#}s" });
-            if (ProjectileCount > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ProjectileCount), Value = ProjectileCount.ToInt().ToString() });
+            if (ProjectileCount > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ProjectileCount), Value = $"{ProjectileCount:0.#}" });
             if (ProjectileSpeed > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(ProjectileSpeed), Value = $"{ProjectileSpeed:0.#}" });
             if (AttackRange > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(AttackRange), Value = $"{AttackRange:0.#}" });
             if (SplashRange > 0) fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(SplashRange), Value = $"{SplashRange:0.#}" });

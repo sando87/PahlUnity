@@ -73,7 +73,7 @@ namespace PahlUnity
             mCharacterSaveData.CurrentExp = CurrentExp;
             EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false));
 
-            while (CurrentExp.ToInt() >= mToExp.ToInt())
+            while (CurrentExp.ExFloorToInt() >= mToExp.ExFloorToInt())
             {
                 LevelUp();
             }

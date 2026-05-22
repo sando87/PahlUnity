@@ -61,13 +61,13 @@ namespace PahlUnity
         {
             fieldDatas.Clear();
 
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxHealth), Value = MaxHealth.ToInt().ToString() });
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxMana), Value = MaxMana.ToInt().ToString() });
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(BaseAttack), Value = BaseAttack.ToInt().ToString() });
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyDefence), Value = PhyDefence.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxHealth), Value = MaxHealth.ExFloorToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxMana), Value = MaxMana.ExFloorToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxShield), Value = MaxShield.ExFloorToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(BaseAttack), Value = BaseAttack.ToString("0.#") });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(PhyDefence), Value = PhyDefence.ToString("0.#") });
             fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(AttackSpeed), Value = AttackSpeed.ToString("0.#") });
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MoveSpeed), Value = MoveSpeed.ToInt().ToString() });
-            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MaxShield), Value = MaxShield.ToInt().ToString() });
+            fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(MoveSpeed), Value = MoveSpeed.ToString("0.#") });
             fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CooltimeDown), Value = Option.CooltimeDown.ToString() });
             fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CriticalRate), Value = Option.CriticalRate.ToString() });
             fieldDatas.Add(new ReflectionFieldData() { FieldName = nameof(Option.CriticalAttack), Value = Option.CriticalAttack.ToString() });

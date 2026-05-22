@@ -14,7 +14,7 @@ namespace PahlUnity
         public event Action<HealthInfo, HealthInfo> OnChanged;
         public event Action<HealthInfo, HealthInfo> OnDied;
 
-        public bool IsDead => mCurrentHP.ToInt() <= 0;
+        public bool IsDead => mCurrentHP.ExFloorToInt() <= 0;
 
         public float HpRate => mMaxCurrentHP > 0 ? mCurrentHP / mMaxCurrentHP : 1;
         public float ManaRate => mMaxCurrentMana > 0 ? mCurrentMana / mMaxCurrentMana : 1;
@@ -24,9 +24,9 @@ namespace PahlUnity
         public int MaxMana => mMaxCurrentMana;
         public int MaxShield => mMaxCurrentShield;
 
-        public int CurrentHP => mCurrentHP.ToInt();
-        public int CurrentMana => mCurrentMana.ToInt();
-        public int CurrentShield => mCurrentShield.ToInt();
+        public float CurrentHP => mCurrentHP;
+        public float CurrentMana => mCurrentMana;
+        public float CurrentShield => mCurrentShield;
 
         protected int mMaxCurrentHP = 10;
         protected int mMaxCurrentMana = 0;
@@ -62,9 +62,9 @@ namespace PahlUnity
                 float manaRate = ManaRate;
                 float shieldRate = ShieldRate;
 
-                mMaxCurrentHP = mSpec.MaxHealth.ToInt();
-                mMaxCurrentMana = mSpec.MaxMana.ToInt();
-                mMaxCurrentShield = mSpec.MaxShield.ToInt();
+                mMaxCurrentHP = mSpec.MaxHealth.ExFloorToInt();
+                mMaxCurrentMana = mSpec.MaxMana.ExFloorToInt();
+                mMaxCurrentShield = mSpec.MaxShield.ExFloorToInt();
 
                 mCurrentHP = mMaxCurrentHP * hpRate;
                 mCurrentMana = mMaxCurrentMana * manaRate;
@@ -72,9 +72,9 @@ namespace PahlUnity
             }
             else
             {
-                mMaxCurrentHP = mSpec.MaxHealth.ToInt();
-                mMaxCurrentMana = mSpec.MaxMana.ToInt();
-                mMaxCurrentShield = mSpec.MaxShield.ToInt();
+                mMaxCurrentHP = mSpec.MaxHealth.ExFloorToInt();
+                mMaxCurrentMana = mSpec.MaxMana.ExFloorToInt();
+                mMaxCurrentShield = mSpec.MaxShield.ExFloorToInt();
 
                 mCurrentHP = mMaxCurrentHP;
                 mCurrentMana = mMaxCurrentMana;
@@ -190,9 +190,9 @@ namespace PahlUnity
                 mMaxCurrentHP,
                 mMaxCurrentMana,
                 mMaxCurrentShield,
-                mCurrentHP.ToInt(),
-                mCurrentMana.ToInt(),
-                mCurrentShield.ToInt());
+                mCurrentHP,
+                mCurrentMana,
+                mCurrentShield);
         }
     }
 
@@ -201,11 +201,11 @@ namespace PahlUnity
         public int MaxHealth;
         public int MaxMana;
         public int MaxShield;
-        public int CurrentHP;
-        public int CurrentMana;
-        public int CurrentShield;
+        public float CurrentHP;
+        public float CurrentMana;
+        public float CurrentShield;
 
-        public HealthInfo(int maxHealth, int maxMana, int maxShield, int currentHP, int currentMana, int currentShield)
+        public HealthInfo(int maxHealth, int maxMana, int maxShield, float currentHP, float currentMana, float currentShield)
         {
             MaxHealth = maxHealth;
             MaxMana = maxMana;
@@ -220,9 +220,9 @@ namespace PahlUnity
             return MaxHealth == other.MaxHealth &&
                 MaxMana == other.MaxMana &&
                 MaxShield == other.MaxShield &&
-                CurrentHP == other.CurrentHP &&
-                CurrentMana == other.CurrentMana &&
-                CurrentShield == other.CurrentShield;
+                CurrentHP.ExIsEquals(other.CurrentHP) &&
+                CurrentMana.ExIsEquals(other.CurrentMana) &&
+                CurrentShield.ExIsEquals(other.CurrentShield);
         }
     }
 }

@@ -31,5 +31,14 @@ namespace PahlUnity
             }
             return null;
         }
+
+        public static int ExFloorToInt(this float val)
+        {
+            return (int)(val + 0.001f);
+        }
+        public static bool ExIsEquals(this float val, float targetVal)
+        {
+            return Mathf.Abs(val - targetVal) < 0.001f;
+        }
     }
 }

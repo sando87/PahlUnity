@@ -298,12 +298,12 @@ namespace PahlUnity.Demo
             // 받은 데미지가 전체 체력의 10%미만이면 피격모션 없고,
             // 10%~60% 사이이면 피격모션 일정 확률로 발생(추가로 HitChance 스펙계수 곱해짐)
             // 60% 이상이면 기본적으로 피격모션 발생하나 HitChance스펙계수가 추가로 곱해짐
-            int deltaHP = after.CurrentHP - before.CurrentHP;
+            float deltaHP = after.CurrentHP - before.CurrentHP;
             float damageRate = deltaHP / (float)after.MaxHealth;
             float hitRate = (damageRate - 0.1f) * 2f;
-            int hitPercent = (int)(Mathf.Clamp(hitRate, 0, 1) * 100);
-            hitPercent = (hitPercent * mSpec.HitChance).ToInt();
-            if (MyUtils.IsPercentHit(hitPercent))
+            float hitPercent = Mathf.Clamp(hitRate, 0, 1) * 100;
+            hitPercent = hitPercent * mSpec.HitChance;
+            if (MyUtils.IsPercentHit((int)hitPercent))
             {
                 ChangeState(EnemyState.Damaged);
             }

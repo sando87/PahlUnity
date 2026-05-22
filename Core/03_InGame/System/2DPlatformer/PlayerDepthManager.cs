@@ -161,7 +161,7 @@ namespace PahlUnity
                 Vector3 screenPos = mainCam.WorldToScreenPoint(centerPos);
                 if (screenPos.z > 0)
                 {
-                    UnityEditor.Handles.Label(centerPos, info.GetWeight().ToInt().ToString());
+                    UnityEditor.Handles.Label(centerPos, info.GetWeight().ExFloorToInt().ToString());
                 }
             }
         }
