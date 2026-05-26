@@ -16,6 +16,7 @@ namespace PahlUnity
 
         public void LinkOption(SpecOption specOption)
         {
+            specOption.IsDirty = true;
             mLinkedOptions.Add(specOption);
         }
 

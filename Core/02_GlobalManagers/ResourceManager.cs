@@ -10,14 +10,9 @@ namespace PahlUnity
 {
     public class ResourceManager : SingletonMono<ResourceManager>
     {
-        private readonly IResourceProvider provider;
+        public IResourceProvider provider { get; private set; } = null;
 
         private readonly Dictionary<string, ResourceHandle> cache = new();
-
-        public ResourceManager(IResourceProvider provider)
-        {
-            this.provider = provider;
-        }
 
         public async UniTask<T> LoadAsync<T>(string key) where T : Object
         {

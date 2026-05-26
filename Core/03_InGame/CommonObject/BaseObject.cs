@@ -12,13 +12,10 @@ namespace PahlUnity
         public ObjectPhysics Phy { get => GetComponentInChildren<ObjectPhysics>(); }
         public InputPlayer Input { get => GetComponentInChildren<InputPlayer>(); }
         public Health Health { get => GetComponentInChildren<Health>(); }
-        public PlayerController Ctrl { get => GetComponentInChildren<PlayerController>(); }
         public BuffController Buffs => GetComponentInChildren<BuffController>();
         public SpecBase Spec => GetComponentInChildren<SpecBase>();
         public InteractableCollider Interactor => GetComponentInChildren<InteractableCollider>();
         public EventBus Events => GetComponentInChildren<EventBus>();
-
-        public EnemyBase EnemyObj => GetComponentInChildren<EnemyBase>();
 
         void Awake()
         {

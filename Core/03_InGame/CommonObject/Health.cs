@@ -85,7 +85,7 @@ namespace PahlUnity
             InvokeHealthChanged(before, after);
         }
 
-        public void GetDamaged(float newHP, float newMana, float newShield)
+        public void SetNewHealth(float newHP, float newMana, float newShield)
         {
             if (IsDead) return;
 
