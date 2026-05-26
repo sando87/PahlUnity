@@ -62,7 +62,7 @@ namespace PahlUnity.Demo
 
         protected virtual void Start()
         {
-            mSpec = mBase.EnemyObj.Spec;
+            mSpec = mBase.GetComponentInChildren<EnemyBase>().Spec;
 
             mBase.Health.OnChanged += ChangeDamagedState;
             mBase.Health.OnDied += ChangeDeathState;
