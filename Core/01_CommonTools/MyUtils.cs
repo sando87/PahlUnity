@@ -502,11 +502,7 @@ namespace PahlUnity
         }
         public static long GUIDToLong(string guid)
         {
-            long halfA = guid.Substring(0, guid.Length / 2).GetHashCode();
-            long halfB = guid.Substring(guid.Length / 2, guid.Length / 2).GetHashCode();
-            long newID = halfA | (halfB << 32);
-            newID &= ~((long)1 << 63);
-            return newID;
+            return StableHash.ToInt64(guid);
         }
 
 

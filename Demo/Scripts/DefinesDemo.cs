@@ -73,11 +73,5 @@ namespace PahlUnity
             public const InteractMask DetectSignal = (InteractMask)(1 << 6);
             public const InteractMask TriggerSignal = (InteractMask)(1 << 7);
         }
-
-        [System.Serializable]
-        public class PlayerSaveData : SaveDataBase
-        {
-            public Dictionary<string, CharacterSaveData> Characters = new Dictionary<string, CharacterSaveData>();
-        }
     }
 }

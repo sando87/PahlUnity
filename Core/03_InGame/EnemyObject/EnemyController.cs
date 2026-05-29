@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PahlUnity.Demo
+namespace PahlUnity
 {
     public class EnemyController : MonoBehaviour
     {

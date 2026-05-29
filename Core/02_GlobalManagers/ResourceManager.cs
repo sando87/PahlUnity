@@ -10,14 +10,21 @@ namespace PahlUnity
 {
     public class ResourceManager : SingletonMono<ResourceManager>
     {
-        public IResourceProvider provider { get; private set; } = null;
+        public IResourceProvider Provider { get; private set; } = null;
 
-        private readonly Dictionary<string, ResourceHandle> cache = new();
+        private readonly Dictionary<string, ResourceHandle> mCache = new();
+
+        public void Initialize(IResourceProvider provider)
+        {
+            Provider = provider;
+        }
 
         public async UniTask<T> LoadAsync<T>(string key) where T : Object
         {
+            LOG.errorif(Provider == null);
+
             // 캐시 확인
-            if (cache.TryGetValue(key, out var handle))
+            if (mCache.TryGetValue(key, out var handle))
             {
                 handle.RefCount++;
 
@@ -25,7 +32,7 @@ namespace PahlUnity
             }
 
             // 실제 로딩
-            T asset = await provider.LoadAsync<T>(key);
+            T asset = await Provider.LoadAsync<T>(key);
 
             if (asset == null)
             {
@@ -33,7 +40,7 @@ namespace PahlUnity
                 return null;
             }
 
-            cache[key] = new ResourceHandle
+            mCache[key] = new ResourceHandle
             {
                 Asset = asset,
                 RefCount = 1,
@@ -44,7 +51,7 @@ namespace PahlUnity
 
         public void Release(string key)
         {
-            if (!cache.TryGetValue(key, out var handle))
+            if (!mCache.TryGetValue(key, out var handle))
                 return;
 
             handle.RefCount--;
@@ -52,7 +59,7 @@ namespace PahlUnity
             if (handle.RefCount > 0)
                 return;
 
-            cache.Remove(key);
+            mCache.Remove(key);
 
             Resources.UnloadUnusedAssets();
         }

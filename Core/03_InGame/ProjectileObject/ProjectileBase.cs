@@ -16,7 +16,7 @@ namespace PahlUnity
         protected ObjectPhysics mPhy = null;
         protected ObjectBody mBody = null;
         protected InteractableCollider mInteractCollider = null;
-        protected Dictionary<Collider2D, float> mHitColliders = new Dictionary<Collider2D, float>();
+        protected List<HitColliderInfo> mHitColliders = new List<HitColliderInfo>();
         protected Vector2 mStartPos = Vector2.zero;
 
         public UnityEvent OnStart;
@@ -52,12 +52,12 @@ namespace PahlUnity
         {
             mInteractCollider.OnInteractEnter.AddListener((col) =>
             {
-                mHitColliders[col] = Time.time;
+                mHitColliders.Add(new HitColliderInfo { Collider = col, HitTime = Time.time });
                 OnHit?.Invoke(col);
             });
             mInteractCollider.OnInteractLeave.AddListener((col) =>
             {
-                mHitColliders.Remove(col);
+                mHitColliders.RemoveAll(info => info.Collider == col);
             });
         }
 
@@ -156,32 +156,23 @@ namespace PahlUnity
         void HitEventEveryInterval()
         {
             // 현재 Hit된 콜라이더들을 interval마다 OnHit콜백 호출해줌
-            List<Collider2D> tmpList = TemporaryList<Collider2D>.GetTempList();
-            tmpList.AddRange(mHitColliders.Keys);
-
             double interval = Stats.Interval;
-            foreach (Collider2D col in tmpList)
+            foreach (HitColliderInfo info in mHitColliders)
             {
-                float lastHitTime = mHitColliders[col];
+                float lastHitTime = info.HitTime;
                 if (Time.time - lastHitTime >= interval)
                 {
-                    mHitColliders[col] = Time.time;
-                    OnHit?.Invoke(col);
+                    info.HitTime = Time.time;
+                    OnHit?.Invoke(info.Collider);
                 }
             }
-            tmpList.Clear();
         }
 
-        // public readonly struct HitColInfo
-        // {
-        //     public HitColInfo(float hitTime, Collider2D collider)
-        //     {
-        //         HitTime = hitTime;
-        //         Collider = collider;
-        //     }
-        //     public float HitTime { get; }
-        //     public Collider2D Collider { get; }
-        // }
+        public class HitColliderInfo
+        {
+            public float HitTime;
+            public Collider2D Collider;
+        }
 
     }
 }

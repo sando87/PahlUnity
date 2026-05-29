@@ -4,7 +4,7 @@ using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace PahlUnity.Demo
+namespace PahlUnity
 {
     public class PlayerBase : MonoBehaviour
     {
@@ -120,11 +120,11 @@ namespace PahlUnity.Demo
         }
         public void OnChangeEquipState()
         {
-            float attackSpeed = Spec.Option.AttackSpeedUp.Multiplier;
-            mAnim.SetParamFloat(AnimatorParams.AttackSpeed, attackSpeed);
+            // float attackSpeed = Spec.Option.AttackSpeedUp.Multiplier;
+            // mAnim.SetParamFloat(AnimatorParams.AttackSpeed, attackSpeed);
 
-            float moveSpeed = Spec.Option.MoveSpeedUp.Multiplier;
-            mAnim.SetParamFloat(AnimatorParams.MoveSpeed, moveSpeed);
+            // float moveSpeed = Spec.Option.MoveSpeedUp.Multiplier;
+            // mAnim.SetParamFloat(AnimatorParams.MoveSpeed, moveSpeed);
 
             mHealth.SetMaxStats(mSpec.MaxHealth, mSpec.MaxMana, mSpec.MaxShield, true);
         }

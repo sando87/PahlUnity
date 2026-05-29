@@ -59,7 +59,8 @@ namespace PahlUnity
 
         private async UniTask SaveAsync()
         {
-            if (mInitState != InitializingState.InitializedSuccess)
+            if (mInitState != InitializingState.InitializedSuccess &&
+                mInitState != InitializingState.Initializing)
                 return;
 
             try

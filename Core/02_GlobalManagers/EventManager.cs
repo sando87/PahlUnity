@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
+    [RequireComponent(typeof(EventBus))]
     public class EventManager : SingletonMono<EventManager>
     {
         public EventBus GlobalEvents { get; private set; } = null;
@@ -14,6 +15,10 @@ namespace PahlUnity
             base.Awake();
 
             GlobalEvents = GetComponent<EventBus>();
+            if (GlobalEvents == null)
+            {
+                GlobalEvents = gameObject.AddComponent<EventBus>();
+            }
         }
     }
 }

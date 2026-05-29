@@ -124,6 +124,7 @@ namespace PahlUnity
             // _anyButtonPressDisposable = null;
 
             InputSystem.onDeviceChange -= OnDeviceChange;
+            InputSystem.onEvent -= OnDetectInput;
         }
 
         // =========================
@@ -146,14 +147,7 @@ namespace PahlUnity
             // _playerMap.actionTriggered += (context) => OnAnyButtonPress(context.control);
 
             // 전체 입력 감지 방식 3
-            InputSystem.onEvent += (eventPtr, device) =>
-            {
-                if (!eventPtr.IsA<StateEvent>() &&
-                    !eventPtr.IsA<DeltaStateEvent>())
-                    return;
-
-                DetectInputDevice(device);
-            };
+            InputSystem.onEvent += OnDetectInput;
 
             // 전체 입력 감지 방식 4
             // 유니티에서 제공하는 PlayerInput 사용(멀티 플레이 대응 가능)
@@ -216,6 +210,15 @@ namespace PahlUnity
                     OnDeviceDisconnected?.Invoke(device);
                     break;
             }
+        }
+
+        private void OnDetectInput(InputEventPtr eventPtr, InputDevice device)
+        {
+            if (!eventPtr.IsA<StateEvent>() &&
+                !eventPtr.IsA<DeltaStateEvent>())
+                return;
+
+            DetectInputDevice(device);
         }
 
         // =========================
@@ -415,7 +418,7 @@ namespace PahlUnity
     public readonly partial struct InputActionName
     {
         public readonly int mVal;
-        public InputActionName(string value) => mVal = value.GetHashCode();
+        public InputActionName(string value) => mVal = StableHash.ToInt32(value);
         public InputActionName(int value) => mVal = value;
 
         public static implicit operator int(InputActionName info) => info.mVal;

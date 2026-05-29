@@ -45,7 +45,7 @@ namespace PahlUnity
         public bool IsRepaired;
         public bool IsEquipable;
 
-        public int RandomSeed { get => InstanceID.GetHashCode(); }
+        public int RandomSeed { get => StableHash.ToInt32(InstanceID); }
         public int LevelIndex { get => Level - 1; }
     }
 
@@ -68,5 +68,11 @@ namespace PahlUnity
             this.Level = 1;
             this.SubStep = 0;
         }
+    }
+
+    [System.Serializable]
+    public class PlayerSaveData : SaveDataBase
+    {
+        public Dictionary<string, CharacterSaveData> Characters = new Dictionary<string, CharacterSaveData>();
     }
 }

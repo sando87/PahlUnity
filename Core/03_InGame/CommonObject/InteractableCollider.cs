@@ -22,12 +22,6 @@ namespace PahlUnity
             mCollider = GetComponent<Collider2D>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         void OnCollisionEnter2D(Collision2D collision)
         {
             if (IsInteractable(collision.collider))

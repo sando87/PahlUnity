@@ -17,7 +17,7 @@ using UnityEngine.UI;
 
 namespace PahlUnity
 {
-    public class SceneSwtichManager : SingletonMono<SceneSwtichManager>
+    public class SceneSwitchManager : SingletonMono<SceneSwitchManager>
     {
         [SceneSelector] string _LoadingSceneName = String.Empty;
 
@@ -39,14 +39,9 @@ namespace PahlUnity
             // 이전씬 제거
             string curSceneName = GetCurrentScene();
             await SceneManager.UnloadSceneAsync(curSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
-            await UniTask.Yield();
 
             // 메모리 정리
             await Resources.UnloadUnusedAssets();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
 
             // 다음씬 로딩
             await SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Additive);
