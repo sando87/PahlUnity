@@ -434,6 +434,8 @@ namespace PahlUnity
         public static readonly InputActionName UIMove = new("UIMove");
         public static readonly InputActionName UIBack = new("UIBack");
         public static readonly InputActionName Move = new("Move");
+        public static readonly InputActionName Jump = new("Jump");
+        public static readonly InputActionName Dash = new("Dash");
 
         // Example
         // public static readonly InputActionName Jump = new("Jump");

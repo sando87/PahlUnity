@@ -146,25 +146,25 @@ namespace PahlUnity
                 return;
             }
 
-            if (mPlayerInput.JustPressed(InputActionName.SkillSlotA))
-                mSkillCtrl.JustPressedSkillSlot(0);
-            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotA))
-                mSkillCtrl.JustReleasedSkillSlot(0);
+            // if (mPlayerInput.JustPressed(InputActionName.SkillSlotA))
+            //     mSkillCtrl.JustPressedSkillSlot(0);
+            // else if (mPlayerInput.JustReleased(InputActionName.SkillSlotA))
+            //     mSkillCtrl.JustReleasedSkillSlot(0);
 
-            if (mPlayerInput.JustPressed(InputActionName.SkillSlotB))
-                mSkillCtrl.JustPressedSkillSlot(1);
-            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotB))
-                mSkillCtrl.JustReleasedSkillSlot(1);
+            // if (mPlayerInput.JustPressed(InputActionName.SkillSlotB))
+            //     mSkillCtrl.JustPressedSkillSlot(1);
+            // else if (mPlayerInput.JustReleased(InputActionName.SkillSlotB))
+            //     mSkillCtrl.JustReleasedSkillSlot(1);
 
-            if (mPlayerInput.JustPressed(InputActionName.SkillSlotC))
-                mSkillCtrl.JustPressedSkillSlot(2);
-            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotC))
-                mSkillCtrl.JustReleasedSkillSlot(2);
+            // if (mPlayerInput.JustPressed(InputActionName.SkillSlotC))
+            //     mSkillCtrl.JustPressedSkillSlot(2);
+            // else if (mPlayerInput.JustReleased(InputActionName.SkillSlotC))
+            //     mSkillCtrl.JustReleasedSkillSlot(2);
 
-            if (mPlayerInput.JustPressed(InputActionName.SkillSlotD))
-                mSkillCtrl.JustPressedSkillSlot(3);
-            else if (mPlayerInput.JustReleased(InputActionName.SkillSlotD))
-                mSkillCtrl.JustReleasedSkillSlot(3);
+            // if (mPlayerInput.JustPressed(InputActionName.SkillSlotD))
+            //     mSkillCtrl.JustPressedSkillSlot(3);
+            // else if (mPlayerInput.JustReleased(InputActionName.SkillSlotD))
+            //     mSkillCtrl.JustReleasedSkillSlot(3);
         }
 
         [Button("Simulate Jump Points")]

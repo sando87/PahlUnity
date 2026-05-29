@@ -17,9 +17,6 @@ namespace PahlUnity
 
     public readonly partial struct InputActionName
     {
-        public static readonly InputActionName Jump = new("Jump");
-        public static readonly InputActionName Dash = new("Dash");
-
         public static readonly InputActionName SkillSlotA = new("SkillSlotA");
         public static readonly InputActionName SkillSlotB = new("SkillSlotB");
         public static readonly InputActionName SkillSlotC = new("SkillSlotC");
