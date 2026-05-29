@@ -13,6 +13,8 @@ namespace PahlUnity
         public ProjectileInfo Stats { get; set; }
 
         protected BaseObject mBaseObj = null;
+        protected ObjectPhysics mPhy = null;
+        protected ObjectBody mBody = null;
         protected InteractableCollider mInteractCollider = null;
         protected Dictionary<Collider2D, float> mHitColliders = new Dictionary<Collider2D, float>();
         protected Vector2 mStartPos = Vector2.zero;
@@ -40,6 +42,8 @@ namespace PahlUnity
         protected virtual void Awake()
         {
             mBaseObj = this.ExGetBase();
+            mPhy = mBaseObj.ExGetCompInBase<ObjectPhysics>();
+            mBody = mBaseObj.ExGetCompInBase<ObjectBody>();
             mInteractCollider = GetComponentInChildren<InteractableCollider>();
             InitColliderEvents();
         }
@@ -96,7 +100,7 @@ namespace PahlUnity
                 EndAfterDistance();
 
             if (Stats.AimToVelocity)
-                transform.right = mBaseObj.Phy.Velocity.normalized;
+                transform.right = mPhy.Velocity.normalized;
             else if (Stats.RotateSpeed != 0)
                 transform.Rotate(0, 0, Stats.RotateSpeed * Time.deltaTime);
         }
@@ -107,15 +111,15 @@ namespace PahlUnity
             {
                 Vector2 dir = Quaternion.AngleAxis(Stats.FireAngle, transform.forward) * transform.right;
                 Vector2 vel = dir * Stats.MoveSpeed;
-                mBaseObj.Phy.VelocityX = vel.x;
-                mBaseObj.Phy.VelocityY = vel.y;
+                mPhy.VelocityX = vel.x;
+                mPhy.VelocityY = vel.y;
             }
             else
             {
                 Vector2 dir = transform.right;
                 Vector2 vel = dir * Stats.MoveSpeed;
-                mBaseObj.Phy.VelocityX = vel.x;
-                mBaseObj.Phy.VelocityY = vel.y;
+                mPhy.VelocityX = vel.x;
+                mPhy.VelocityY = vel.y;
             }
         }
         void EndAfterDistance()
@@ -134,9 +138,9 @@ namespace PahlUnity
         public virtual void DoEndProjectile()
         {
             StopAllCoroutines();
-            mBaseObj.Phy.Velocity = Vector2.zero;
-            mBaseObj.Phy.LockGravity = true;
-            mBaseObj.Body.LockBody = true;
+            mPhy.Velocity = Vector2.zero;
+            mPhy.LockGravity = true;
+            mBody.LockBody = true;
 
             OnEnd?.Invoke();
             mInteractCollider.LockInteract = true;

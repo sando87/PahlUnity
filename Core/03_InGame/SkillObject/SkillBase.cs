@@ -33,23 +33,23 @@ namespace PahlUnity
         public int MaxSubStep => Spec.ResourceData._UpgradeStep[mSkillSaveData.LevelIndex];
         public bool IsCooltime => Spec.Cooltime == 0 ? false : Time.time - mCooltime < Spec.Cooltime;
         public float CooltimeRate => IsCooltime ? (1f - ((Time.time - mCooltime) / Spec.Cooltime)) : 0f;
-        public bool IsEnoughMana => Spec.ManaUse <= mBaseObj.Health.CurrentMana;
+        public bool IsEnoughMana => Spec.ManaUse <= mHealth.CurrentMana;
         public int EnforceCost => 0; // IsLearned ? (20 + (mSkillSaveData.LevelIndex * 15) + ((CurrentSubStep + 1) * 5)) : 20;
 
         protected BaseObject mBaseObj = null;
-        protected InputPlayer mInput = null;
+        protected Health mHealth = null;
 
         private SkillSaveData mSkillSaveData = null;
         private float mCooltime = 0;
 
         public SpecSkill Spec { get; private set; } = null;
         protected void StartCooltime() { mCooltime = Time.time; }
-        protected void UseMana() { mBaseObj.Health.UseMana(Spec.ManaUse); }
+        protected void UseMana() { mHealth.UseMana(Spec.ManaUse); }
 
         void Awake()
         {
             mBaseObj = this.ExGetBase();
-            mInput = mBaseObj.Input;
+            mHealth = mBaseObj.ExGetCompInBase<Health>();
         }
 
         public void InitSkillInfo(CharacterSaveData charSaveData)

@@ -40,20 +40,13 @@ namespace PahlUnity
         protected float mCurrentShield = 0;
 
         protected BaseObject mBaseObj = null;
-        protected SpecBase mSpec = null;
 
         protected virtual void Awake()
         {
             mBaseObj = this.ExGetBase();
-            mSpec = mBaseObj.Spec;
         }
 
-        protected virtual void Start()
-        {
-            UpdateMaxStats(false);
-        }
-
-        public void UpdateMaxStats(bool keepRate)
+        public void SetMaxStats(float maxHP, float maxMana, float maxShield, bool keepRate)
         {
             HealthInfo before = GetCurrentHealthInfo();
             if (keepRate)
@@ -62,9 +55,9 @@ namespace PahlUnity
                 float manaRate = ManaRate;
                 float shieldRate = ShieldRate;
 
-                mMaxCurrentHP = mSpec.MaxHealth.ExFloorToInt();
-                mMaxCurrentMana = mSpec.MaxMana.ExFloorToInt();
-                mMaxCurrentShield = mSpec.MaxShield.ExFloorToInt();
+                mMaxCurrentHP = maxHP.ExFloorToInt();
+                mMaxCurrentMana = maxMana.ExFloorToInt();
+                mMaxCurrentShield = maxShield.ExFloorToInt();
 
                 mCurrentHP = mMaxCurrentHP * hpRate;
                 mCurrentMana = mMaxCurrentMana * manaRate;
@@ -72,9 +65,9 @@ namespace PahlUnity
             }
             else
             {
-                mMaxCurrentHP = mSpec.MaxHealth.ExFloorToInt();
-                mMaxCurrentMana = mSpec.MaxMana.ExFloorToInt();
-                mMaxCurrentShield = mSpec.MaxShield.ExFloorToInt();
+                mMaxCurrentHP = maxHP.ExFloorToInt();
+                mMaxCurrentMana = maxMana.ExFloorToInt();
+                mMaxCurrentShield = maxShield.ExFloorToInt();
 
                 mCurrentHP = mMaxCurrentHP;
                 mCurrentMana = mMaxCurrentMana;

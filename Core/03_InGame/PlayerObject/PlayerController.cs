@@ -16,8 +16,9 @@ namespace PahlUnity
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] float _JumpForce = 25f;
+        [SerializeField] private LayerMask _LayersForGroundCheck;
 
-        public bool IsGrounded { get => mBaseObj.Phy.IsGrounded; }
+        public bool IsGrounded { get => GetGroundState(); }
 
         public bool LockMove { get; set; } = false;
         public bool LockJump { get; set; } = false;
@@ -30,27 +31,20 @@ namespace PahlUnity
         }
 
         BaseObject mBaseObj = null;
-        SpecPlayer mSpec = null;
+        ObjectPhysics mPhy = null;
+        ObjectBody mBody = null;
         InputPlayer mPlayerInput = null;
-        FiniteStateMachine mFSM = null;
         SkillController mSkillCtrl = null;
 
-        // PlayerStateIdle mFsmIdle = null;
-        // PlayerStateWalk mFsmWalk = null;
-        // PlayerStateFloating mFsmFloat = null;
         bool mIsSecondJump = false;
 
         private void Awake()
         {
             mBaseObj = GetComponentInParent<BaseObject>();
-            mSpec = mBaseObj.GetComponentInChildren<SpecPlayer>();
-            mPlayerInput = mBaseObj.GetComponentInChildren<InputPlayer>();
-            mSkillCtrl = mBaseObj.GetComponentInChildren<SkillController>();
-
-            mFSM = mBaseObj.StateMachine;
-            // mFsmIdle = mFSM.FindState<PlayerStateIdle>();
-            // mFsmWalk = mFSM.FindState<PlayerStateWalk>();
-            // mFsmFloat = mFSM.FindState<PlayerStateFloating>();
+            mPhy = mBaseObj.GetComp<ObjectPhysics>();
+            mBody = mBaseObj.GetComp<ObjectBody>();
+            mPlayerInput = mBaseObj.GetComp<InputPlayer>();
+            mSkillCtrl = mBaseObj.GetComp<SkillController>();
         }
         void Start()
         {
@@ -100,7 +94,7 @@ namespace PahlUnity
                     mSkillCtrl.ReleaseAllSkillSlot();
                     mIsSecondJump = false;
                     // SimulateJumpPoints();
-                    mBaseObj.Phy.DoJump(_JumpForce);
+                    mPhy.DoJump(_JumpForce);
                     // mFSM.ForceChangeState(mFsmFloat);
                 }
                 else
@@ -109,14 +103,14 @@ namespace PahlUnity
                     {
                         mSkillCtrl.ReleaseAllSkillSlot();
                         mIsSecondJump = true;
-                        mBaseObj.Phy.DoJump(_JumpForce);
+                        mPhy.DoJump(_JumpForce);
                         // mFSM.ForceChangeState(mFsmFloat);
                     }
                 }
             }
             else if (mPlayerInput.JustReleased(InputActionName.Jump))
             {
-                mBaseObj.Phy.StopJump();
+                mPhy.StopJump();
             }
         }
         void DropDown()
@@ -129,8 +123,8 @@ namespace PahlUnity
             && IsGrounded)
             {
                 mSkillCtrl.ReleaseAllSkillSlot();
-                mBaseObj.Body.LockThinPlatform = true;
-                this.ExDelayedCoroutine(0.2f, () => mBaseObj.Body.LockThinPlatform = false);
+                mBody.LockThinPlatform = true;
+                this.ExDelayedCoroutine(0.2f, () => mBody.LockThinPlatform = false);
             }
         }
         void Dash()
@@ -177,6 +171,22 @@ namespace PahlUnity
         public void SimulateJumpPoints()
         {
             // JumpSimulationTable.DrawSimulationPoints(mBaseObj.transform.position, _JumpForce);
+        }
+
+        private bool GetGroundState()
+        {
+            int layerMask = _LayersForGroundCheck.value;
+            Vector2 footPos = mBody.Foot;
+
+            bool isOverlapped = Physics2D.OverlapCircle(footPos + new Vector2(0, 0.1f), 0.05f, layerMask);
+
+            Vector2 bodySize = mBody.Size;
+            Rect box = new Rect();
+            box.size = new Vector2(bodySize.x, 0.1f);
+            box.center = footPos + new Vector2(0, 0.05f);
+            bool isCasted = Physics2D.BoxCast(box.center, box.size, 0, Vector2.down, 0.1f, layerMask);
+
+            return !isOverlapped && isCasted;
         }
 
     }

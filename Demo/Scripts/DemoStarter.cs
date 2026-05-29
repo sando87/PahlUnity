@@ -5,11 +5,13 @@ using UnityEngine;
 
 namespace PahlUnity.Demo
 {
-	public class ExampleDemo : SingletonMono<ExampleDemo>
+	public class DemoStarter : SingletonMono<DemoStarter>
 	{
 		[SerializeField] LocalizationManager _ManagerA = null;
 		[SerializeField] GameObject _ManagerB = null;
 		[SerializeField] GameObject _ManagerC = null;
+
+		[SerializeField] ItemDatabase _ItemDB = null;
 
 		public LocalizationManager ManagerA => _ManagerA;
 		public GameObject ManagerB => _ManagerB;
@@ -22,12 +24,10 @@ namespace PahlUnity.Demo
 
 		async UniTask InitializeGameSystem()
 		{
-			// ManagerA.SetActive(true);
-			// (ManagerA as IInitializer).Initialize();
-			// yield return null;
-			// ManagerB.SetActive(false);
-			// yield return null;
-			// ManagerC.SetActive(false);
+			ManagerA.gameObject.SetActive(true);
+			(ManagerA as IInitializer).Initialize(null);
+			ManagerB.SetActive(false);
+			ManagerC.SetActive(false);
 
 			IInitializer playerSaveDataManager = SaveManager<PlayerSaveData>.Instance as IInitializer;
 			string filename = typeof(PlayerSaveData).Name + ".json";
@@ -44,11 +44,13 @@ namespace PahlUnity.Demo
 				});
 			}
 
-			await LoadTableData<ItemResourceData>();
-			await LoadTableData<CharResourceData>();
-			await LoadTableData<SkillResourceData>();
-			await LoadTableData<EnemyResourceData>();
-			await LoadTableData<SpecOptionData>();
+			InitItemDatabase();
+
+			// await LoadTableData<ItemResourceData>();
+			// await LoadTableData<CharResourceData>();
+			// await LoadTableData<SkillResourceData>();
+			// await LoadTableData<EnemyResourceData>();
+			// await LoadTableData<SpecOptionData>();
 		}
 
 		async UniTask LoadTableData<T>() where T : ITableRecord, new()
@@ -58,6 +60,13 @@ namespace PahlUnity.Demo
 			string sheetData = await googleSheetLoader.LoadAsync(sheetname);
 			T[] resourceDatas = CSVParser<T>.Parse(sheetData);
 			TableDataContainer<T>.Instance.InitDataList(resourceDatas);
+		}
+
+
+		void InitItemDatabase()
+		{
+			LOG.errorif(_ItemDB == null);
+			TableDataContainer<ItemResourceData>.Instance.InitDataList(_ItemDB.ItemList.ToArray());
 		}
 	}
 }

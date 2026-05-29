@@ -10,18 +10,18 @@ namespace PahlUnity
 {
     public class SpecSkill : SpecBase
     {
-        public float PhyAttack => mSpecBase.BaseAttack * (BaseStats.PhyAttack + mSpecBase.Option.PhyAttack);
-        public float FireAttack => mSpecBase.BaseAttack * (BaseStats.FireAttack + mSpecBase.Option.FireAttack);
-        public float IceAttack => mSpecBase.BaseAttack * (BaseStats.IceAttack + mSpecBase.Option.IceAttack);
-        public float LightningAttack => mSpecBase.BaseAttack * (BaseStats.LightningAttack + mSpecBase.Option.LightningAttack);
+        public float PhyAttack => BaseAttack * (BaseStats.PhyAttack + Option.PhyAttack);
+        public float FireAttack => BaseAttack * (BaseStats.FireAttack + Option.FireAttack);
+        public float IceAttack => BaseAttack * (BaseStats.IceAttack + Option.IceAttack);
+        public float LightningAttack => BaseAttack * (BaseStats.LightningAttack + Option.LightningAttack);
 
         public float ManaUse => BaseStats.ManaUse;
-        public float Cooltime => BaseStats.Cooltime * mSpecBase.Option.CooltimeDown;
-        public float ProjectileCount => BaseStats.ProjectileCount + mSpecBase.Option.ProjectileCountUp;
-        public float ProjectileSpeed => BaseStats.ProjectileSpeed * mSpecBase.Option.ProjectileSpeedUp;
-        public float AttackRange => BaseStats.AttackRange * mSpecBase.Option.AttackRangeUp;
-        public float SplashRange => BaseStats.SplashRange * mSpecBase.Option.SplashRangeUp;
-        public float Duration => BaseStats.Duration * mSpecBase.Option.DurationUp;
+        public float Cooltime => BaseStats.Cooltime * Option.CooltimeDown;
+        public float ProjectileCount => BaseStats.ProjectileCount + Option.ProjectileCountUp;
+        public float ProjectileSpeed => BaseStats.ProjectileSpeed * Option.ProjectileSpeedUp;
+        public float AttackRange => BaseStats.AttackRange * Option.AttackRangeUp;
+        public float SplashRange => BaseStats.SplashRange * Option.SplashRangeUp;
+        public float Duration => BaseStats.Duration * Option.DurationUp;
         public float Interval => BaseStats.Interval;
         public float StartDelay => BaseStats.StartDelay;
 
@@ -29,14 +29,10 @@ namespace PahlUnity
         public SkillResourceData ResourceData { get; private set; } = null;
         public SkillStats BaseStats { get; private set; } = null;
 
-        private SpecBase mSpecBase = null;
-
         public void Init(CharacterSaveData charSaveData, string resourceID)
         {
             ResourceData = TableDataContainer<SkillResourceData>.Instance.GetInfo(resourceID);
             SaveData = charSaveData.Skills[resourceID];
-
-            mSpecBase = this.ExGetBase().Spec;
 
             BaseStats = GetBasicStatByLevel(SaveData == null ? 0 : SaveData.LevelIndex);
         }

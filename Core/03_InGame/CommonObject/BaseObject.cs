@@ -5,18 +5,6 @@ namespace PahlUnity
 {
     public class BaseObject : MonoBehaviour
     {
-        public RenderController Renderer => GetComponentInChildren<RenderController>();
-        public FiniteStateMachine StateMachine { get => GetComponentInChildren<FiniteStateMachine>(); }
-        public AnimatorHelper AnimHelper { get => GetComponentInChildren<AnimatorHelper>(); }
-        public ObjectBody Body { get => GetComponentInChildren<ObjectBody>(); }
-        public ObjectPhysics Phy { get => GetComponentInChildren<ObjectPhysics>(); }
-        public InputPlayer Input { get => GetComponentInChildren<InputPlayer>(); }
-        public Health Health { get => GetComponentInChildren<Health>(); }
-        public BuffController Buffs => GetComponentInChildren<BuffController>();
-        public SpecBase Spec => GetComponentInChildren<SpecBase>();
-        public InteractableCollider Interactor => GetComponentInChildren<InteractableCollider>();
-        public EventBus Events => GetComponentInChildren<EventBus>();
-
         void Awake()
         {
         }
@@ -24,6 +12,20 @@ namespace PahlUnity
         void Start()
         {
 
+        }
+
+        public T GetComp<T>() where T : MonoBehaviour
+        {
+            return GetComponentInChildren<T>();
+        }
+        public bool HasComp<T>() where T : MonoBehaviour
+        {
+            return GetComponentInChildren<T>() != null;
+        }
+        public bool TryGetComp<T>(out T component) where T : MonoBehaviour
+        {
+            component = GetComponentInChildren<T>();
+            return component != null;
         }
 
         public void DestroyObj()

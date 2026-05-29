@@ -31,7 +31,7 @@ namespace PahlUnity
         public int Priority { get { return _Priority; } }
         public FiniteStateType StateType { get { return _StateType; } }
 
-        public BaseObject Base { get; private set; }
+        public FiniteStateMachine FSMachine { get; private set; }
 
         [Foldout("Events")]
         public UnityEvent EventEnter = new UnityEvent();
@@ -41,9 +41,9 @@ namespace PahlUnity
         public bool IsJustEntered { get; set; } = false; // 처음 딱 현재 State모션 진입했을때는 UpdateState호출 안해주기 위한 장치
         public bool IsStateCancelable { get; protected set; } = true; // 점프나 대쉬로 모션 캔슬 가능한지 여부
 
-        public virtual void InitState()
+        public virtual void InitState(FiniteStateMachine fsm)
         {
-            Base = GetComponentInParent<BaseObject>();
+            FSMachine = fsm;
         }
 
         public virtual void HandleInput()
@@ -73,23 +73,23 @@ namespace PahlUnity
 
         protected void ChangeStateToIdle()
         {
-            Base.StateMachine.TryChangeStateToIdle(Layer);
+            FSMachine.TryChangeStateToIdle(Layer);
         }
         protected void ChangeStateToThis()
         {
-            Base.StateMachine.TryChangeState(this);
+            FSMachine.TryChangeState(this);
         }
         public bool IsCurrentThisState()
         {
-            return Base.StateMachine.GetCurrentState(Layer) == this;
+            return FSMachine.GetCurrentState(Layer) == this;
         }
         protected FiniteStateBase GetCurrentState()
         {
-            return Base.StateMachine.GetCurrentState(Layer);
+            return FSMachine.GetCurrentState(Layer);
         }
         public bool IsChangable()
         {
-            FiniteStateBase currentState = Base.StateMachine.GetCurrentState(Layer);
+            FiniteStateBase currentState = FSMachine.GetCurrentState(Layer);
             if (currentState == this)
                 return false;
 

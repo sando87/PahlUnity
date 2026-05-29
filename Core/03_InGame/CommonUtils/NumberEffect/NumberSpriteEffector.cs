@@ -8,11 +8,11 @@ namespace PahlUnity
     {
         [SerializeField] NumberSprites NumberPrefab;
 
-        BaseObject mBaseObject = null;
+        ObjectBody mBaseBody = null;
 
         void Awake()
         {
-            mBaseObject = this.ExGetBase();
+            mBaseBody = this.ExGetCompInBase<ObjectBody>();
         }
 
         public void ShowNumberEffect(HealthInfo before, HealthInfo after)
@@ -23,7 +23,7 @@ namespace PahlUnity
 
         public void ShowNumberEffect(float number)
         {
-            Vector2 startPos = mBaseObject.Body.Head + new Vector2(0, 0.5f);
+            Vector2 startPos = mBaseBody.Head + new Vector2(0, 0.5f);
             NumberSprites effect = Instantiate(NumberPrefab, startPos, Quaternion.identity);
             effect.SetNumber(number.ExFloorToInt());
             effect.transform.DOMoveY(startPos.y + 0.5f, 0.5f).SetEase(Ease.OutQuad)

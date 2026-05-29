@@ -19,7 +19,7 @@ namespace PahlUnity
             FiniteStateBase[] states = GetComponentsInChildren<FiniteStateBase>();
             foreach (var state in states)
             {
-                state.InitState();
+                state.InitState(this);
 
                 if (!mLayers.ContainsKey(state.Layer))
                 {

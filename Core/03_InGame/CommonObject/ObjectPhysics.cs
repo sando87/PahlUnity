@@ -6,30 +6,21 @@ namespace PahlUnity
 {
     public class ObjectPhysics : MonoBehaviour
     {
-        [SerializeField] private LayerMask _LayersForGroundCheck;
-
         public float VelocityX { get { return mRB2D.linearVelocity.x; } set { mRB2D.linearVelocity = new Vector2(value, mRB2D.linearVelocity.y); } }
         public float VelocityY { get { return mRB2D.linearVelocity.y; } set { mRB2D.linearVelocity = new Vector2(mRB2D.linearVelocity.x, value); } }
         public Vector2 Velocity { get { return mRB2D.linearVelocity; } set { mRB2D.linearVelocity = value; } }
         public bool LockGravity { get => mRB2D.gravityScale == 0; set => mRB2D.gravityScale = value ? 0 : mOriGravityScale; }
         public bool LockMovement { get => mRB2D.bodyType != RigidbodyType2D.Dynamic; set => mRB2D.bodyType = value ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic; }
-        public bool IsGrounded { get => mIsGround && VelocityY <= 0.1f; }
 
         private BaseObject mBase = null;
         private Rigidbody2D mRB2D = null;
         private float mOriGravityScale = 1;
-        private bool mIsGround = false;
 
         private void Awake()
         {
             mBase = this.ExGetBase();
             mRB2D = GetComponent<Rigidbody2D>();
             mOriGravityScale = mRB2D.gravityScale;
-        }
-
-        void FixedUpdate()
-        {
-            UpdateGroundState();
         }
 
         public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Impulse)
@@ -42,17 +33,6 @@ namespace PahlUnity
             mRB2D.transform.position = pos;
         }
 
-
-        public void MoveHorizontally(float moveHoriVelocity)
-        {
-            mBase.Body.Turn(moveHoriVelocity);
-            VelocityX = moveHoriVelocity;
-        }
-        public void SetMoveSpeedOnly(float moveSpeedX)
-        {
-            float curDir = mBase.transform.right.x > 0 ? 1 : -1;
-            VelocityX = curDir * Mathf.Abs(moveSpeedX);
-        }
         public void StopMoving()
         {
             Velocity = Vector2.zero;
@@ -71,20 +51,5 @@ namespace PahlUnity
                 VelocityY = 5;
         }
 
-        private void UpdateGroundState()
-        {
-            int layerMask = _LayersForGroundCheck.value;
-            Vector2 footPos = mBase.Body.Foot;
-
-            bool isOverlapped = Physics2D.OverlapCircle(footPos + new Vector2(0, 0.1f), 0.05f, layerMask);
-
-            Vector2 bodySize = mBase.Body.Size;
-            Rect box = new Rect();
-            box.size = new Vector2(bodySize.x, 0.1f);
-            box.center = footPos + new Vector2(0, 0.05f);
-            bool isCasted = Physics2D.BoxCast(box.center, box.size, 0, Vector2.down, 0.1f, layerMask);
-
-            mIsGround = !isOverlapped && isCasted;
-        }
     }
 }
