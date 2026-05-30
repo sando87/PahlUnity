@@ -81,7 +81,6 @@ namespace PahlUnity
         {
             mVelocity.x = 0f;
             mVelocity.z = 0f;
-            StopDash();
         }
 
         public void DoJump(float jumpForce)
