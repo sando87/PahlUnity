@@ -118,15 +118,16 @@ namespace PahlUnity
             EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
-        protected void ApplySkillStatsToProjectile(ProjectileBase proj)
+        protected void ApplySkillStatsToProjectile(ProjectileInfo projStats)
         {
-            proj.Stats.MoveSpeed = Spec.ProjectileSpeed;
-            proj.Stats.FireAngle = 0;
-            proj.Stats.AttackRange = Spec.AttackRange;
-            proj.Stats.SplashRange = Spec.SplashRange;
-            proj.Stats.Duration = Spec.Duration;
-            proj.Stats.Interval = Spec.Interval;
-            proj.Stats.StartDelay = Spec.StartDelay;
+            projStats.MoveSpeed = Spec.ProjectileSpeed;
+            projStats.FireAngle = 0;
+            projStats.AttackRange = Spec.AttackRange;
+            projStats.SplashRange = Spec.SplashRange;
+            projStats.Duration = Spec.Duration;
+            projStats.Interval = Spec.Interval;
+            projStats.StartDelay = Spec.StartDelay;
         }
+        
     }
 }
