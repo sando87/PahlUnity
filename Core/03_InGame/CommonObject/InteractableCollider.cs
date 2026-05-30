@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace PahlUnity
 {
@@ -11,80 +11,97 @@ namespace PahlUnity
         public InteractMask MyProperty => _MyProperty;
         public bool LockInteract { get; set; } = false;
 
-        public UnityEvent<Collider2D> OnInteractEnter;
-        public UnityEvent<Collider2D> OnInteractLeave;
-        public UnityEvent<BaseObject, InteractMask> OnInteractSignal;
+        public event Action<Collider2D> OnInteractEnter2D;
+        public event Action<Collider2D> OnInteractLeave2D;
+        public event Action<Collider> OnInteractEnter3D;
+        public event Action<Collider> OnInteractLeave3D;
+        public event Action<BaseObject, InteractMask> OnInteractSignal;
 
-        private Collider2D mCollider = null;
+        private Collider2D mCollider2D = null;
+        private Collider mCollider3D = null;
 
         void Awake()
         {
-            mCollider = GetComponent<Collider2D>();
+            mCollider2D = GetComponent<Collider2D>();
+            mCollider3D = GetComponent<Collider>();
         }
 
+        #region  2D Collider
         void OnCollisionEnter2D(Collision2D collision)
         {
-            if (IsInteractable(collision.collider))
+            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
             {
-                DoInteractEnter(collision.collider);
+                OnInteractEnter2D?.Invoke(collision.collider);
             }
         }
-
-        void OnCollisionStay2D(Collision2D collision)
-        {
-        }
-
         void OnCollisionExit2D(Collision2D collision)
         {
-            if (IsInteractable(collision.collider))
+            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
             {
-                DoInteractLeave(collision.collider);
+                OnInteractLeave2D?.Invoke(collision.collider);
             }
         }
-
         void OnTriggerEnter2D(Collider2D collision)
         {
-            if (IsInteractable(collision))
+            if (IsInteractable(collision.GetComponent<InteractableCollider>()))
             {
-                DoInteractEnter(collision);
+                OnInteractEnter2D?.Invoke(collision);
             }
         }
-
-        void OnTriggerStay2D(Collider2D collision)
-        {
-        }
-
         void OnTriggerExit2D(Collider2D collision)
         {
-            if (IsInteractable(collision))
+            if (IsInteractable(collision.GetComponent<InteractableCollider>()))
             {
-                DoInteractLeave(collision);
+                OnInteractLeave2D?.Invoke(collision);
             }
         }
+        #endregion
 
-        private bool IsInteractable(Collider2D other)
+        #region 3D Collider
+        void OnCollisionEnter(Collision collision)
         {
-            if (LockInteract)
+            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
+            {
+                OnInteractEnter3D?.Invoke(collision.collider);
+            }
+        }
+        void OnCollisionExit(Collision collision)
+        {
+            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
+            {
+                OnInteractLeave3D?.Invoke(collision.collider);
+            }
+        }
+        void OnTriggerEnter(Collider other)
+        {
+            if (IsInteractable(other.GetComponent<InteractableCollider>()))
+            {
+                OnInteractEnter3D?.Invoke(other);
+            }
+        }
+        void OnTriggerExit(Collider other)
+        {
+            if (IsInteractable(other.GetComponent<InteractableCollider>()))
+            {
+                OnInteractLeave3D?.Invoke(other);
+            }
+        }
+        #endregion
+
+        private bool IsInteractable(InteractableCollider other)
+        {
+            if (LockInteract || other == null)
                 return false;
 
             // 콜라이더 이벤트는 콜라이더가 붙어있는 객체에게만 이벤트가 전달 되도록 하기 위함
-            if (gameObject != mCollider.gameObject)
+            if (mCollider2D != null && gameObject != mCollider2D.gameObject)
                 return false;
 
-            InteractableCollider opp = other.GetComponent<InteractableCollider>();
-            if (opp == null)
+            if (mCollider3D != null && gameObject != mCollider3D.gameObject)
                 return false;
 
-            InteractMask mask = _InteractableWith & opp._MyProperty;
+            InteractMask mask = _InteractableWith & other._MyProperty;
             return mask != InteractMask.Nothing;
-        }
-        private void DoInteractEnter(Collider2D other)
-        {
-            OnInteractEnter?.Invoke(other);
-        }
-        private void DoInteractLeave(Collider2D other)
-        {
-            OnInteractLeave?.Invoke(other);
         }
         public void InvokeInteractSignal(BaseObject invoker, InteractMask signal)
         {
@@ -92,7 +109,7 @@ namespace PahlUnity
                 return;
 
             // 콜라이더 이벤트는 콜라이더가 붙어있는 객체에게만 이벤트가 전달 되도록 하기 위함
-            if (gameObject != mCollider.gameObject)
+            if (gameObject != mCollider2D.gameObject)
                 return;
 
             InteractMask mask = _InteractableWith & signal;

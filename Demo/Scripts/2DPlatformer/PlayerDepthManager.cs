@@ -29,9 +29,9 @@ namespace PahlUnity
         [SerializeField] Tilemap _Tilemap = null;
 
         BaseObject mPlayer = null;
-        ObjectBody mPlayerBody = null;
+        ObjectBody2D mPlayerBody = null;
         Health mPlayerHealth = null;
-        PlayerController mPlayerController = null;
+        PlayerController2D mPlayerController = null;
 
         // BFS용 큐
         Queue<Vector2Int> mQueue = new Queue<Vector2Int>();
@@ -45,9 +45,9 @@ namespace PahlUnity
         {
             FrameCounter = 0;
             mPlayer = player;
-            mPlayerBody = mPlayer.GetComp<ObjectBody>();
+            mPlayerBody = mPlayer.GetComp<ObjectBody2D>();
             mPlayerHealth = mPlayer.GetComp<Health>();
-            mPlayerController = mPlayer.GetComp<PlayerController>();
+            mPlayerController = mPlayer.GetComp<PlayerController2D>();
         }
 
         void Update()

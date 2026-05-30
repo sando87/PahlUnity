@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectBody : MonoBehaviour
+    public class ObjectBody2D : MonoBehaviour
     {
         [SerializeField] BoxCollider2D _ThinPlatform = null;
 

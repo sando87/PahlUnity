@@ -8,11 +8,11 @@ namespace PahlUnity
     {
         [SerializeField] NumberSprites NumberPrefab;
 
-        ObjectBody mBaseBody = null;
+        ObjectBody2D mBaseBody = null;
 
         void Awake()
         {
-            mBaseBody = this.ExGetCompInBase<ObjectBody>();
+            mBaseBody = this.ExGetCompInBase<ObjectBody2D>();
         }
 
         public void ShowNumberEffect(HealthInfo before, HealthInfo after)

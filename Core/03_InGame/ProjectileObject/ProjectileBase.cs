@@ -13,8 +13,8 @@ namespace PahlUnity
         public ProjectileInfo Stats { get; set; }
 
         protected BaseObject mBaseObj = null;
-        protected ObjectPhysics mPhy = null;
-        protected ObjectBody mBody = null;
+        protected ObjectPhysics2D mPhy = null;
+        protected ObjectBody2D mBody = null;
         protected InteractableCollider mInteractCollider = null;
         protected List<HitColliderInfo> mHitColliders = new List<HitColliderInfo>();
         protected Vector2 mStartPos = Vector2.zero;
@@ -42,23 +42,24 @@ namespace PahlUnity
         protected virtual void Awake()
         {
             mBaseObj = this.ExGetBase();
-            mPhy = mBaseObj.ExGetCompInBase<ObjectPhysics>();
-            mBody = mBaseObj.ExGetCompInBase<ObjectBody>();
+            mPhy = mBaseObj.ExGetCompInBase<ObjectPhysics2D>();
+            mBody = mBaseObj.ExGetCompInBase<ObjectBody2D>();
             mInteractCollider = GetComponentInChildren<InteractableCollider>();
             InitColliderEvents();
         }
 
         void InitColliderEvents()
         {
-            mInteractCollider.OnInteractEnter.AddListener((col) =>
+            mInteractCollider.OnInteractEnter2D += (col) =>
             {
                 mHitColliders.Add(new HitColliderInfo { Collider = col, HitTime = Time.time });
                 OnHit?.Invoke(col);
-            });
-            mInteractCollider.OnInteractLeave.AddListener((col) =>
+            };
+
+            mInteractCollider.OnInteractLeave2D += (col) =>
             {
                 mHitColliders.RemoveAll(info => info.Collider == col);
-            });
+            };
         }
 
         protected virtual void Start()

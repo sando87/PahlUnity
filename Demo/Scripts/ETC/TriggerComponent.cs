@@ -19,10 +19,10 @@ namespace PahlUnity.Demo
         void Start()
         {
             mBaseObj = this.ExGetBase();
-            _DetectArea.OnInteractEnter.AddListener((col) => mCollidersInDetectArea.Add(col));
-            _DetectArea.OnInteractLeave.AddListener((col) => mCollidersInDetectArea.Remove(col));
-            _TriggerArea.OnInteractEnter.AddListener((col) => mCollidersInTriggerArea.Add(col));
-            _TriggerArea.OnInteractLeave.AddListener((col) => mCollidersInTriggerArea.Remove(col));
+            _DetectArea.OnInteractEnter2D += (col) => mCollidersInDetectArea.Add(col);
+            _DetectArea.OnInteractLeave2D += (col) => mCollidersInDetectArea.Remove(col);
+            _TriggerArea.OnInteractEnter2D += (col) => mCollidersInTriggerArea.Add(col);
+            _TriggerArea.OnInteractLeave2D += (col) => mCollidersInTriggerArea.Remove(col);
         }
 
         void Update()

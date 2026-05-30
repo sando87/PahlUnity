@@ -19,9 +19,8 @@ namespace PahlUnity
 
         public override float BaseAttack => BaseStats.Attack + Option.BaseAttackAdd;
         public override float PhyDefence => BaseStats.Defence * Option.DefenceUp;
-
-        public float MoveSpeed => BaseStats.MoveSpeed * Option.MoveSpeedUp;
-        public float AttackSpeed => BaseStats.AttackSpeed * Option.AttackSpeedUp;
+        public override float MoveSpeed => BaseStats.MoveSpeed * Option.MoveSpeedUp;
+        public override float AttackSpeed => BaseStats.AttackSpeed * Option.AttackSpeedUp;
         public float AttackInterval => 1 / AttackSpeed;
         public float DetectRange => BaseStats.DetectRange;
         public float AttackRange => BaseStats.AttackRange;

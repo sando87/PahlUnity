@@ -14,13 +14,13 @@ namespace PahlUnity
         List<string> IDList { get => TableDataContainer<EnemyResourceData>.Instance.GetAllInfo().Select(info => info.EnemyID).ToList(); }
 
         protected BaseObject mBase = null;
-        protected ObjectBody mBody = null;
+        protected ObjectBody2D mBody = null;
         protected SpecEnemy mSpec = null;
 
         private void Awake()
         {
             mBase = GetComponentInParent<BaseObject>();
-            mBody = mBase.GetComp<ObjectBody>();
+            mBody = mBase.GetComp<ObjectBody2D>();
             mSpec = mBase.GetComp<SpecEnemy>();
 
             mSpec = mBase.GetComp<SpecEnemy>();

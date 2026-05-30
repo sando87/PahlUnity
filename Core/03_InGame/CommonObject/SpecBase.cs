@@ -10,6 +10,8 @@ namespace PahlUnity
         public virtual float MaxShield { get; }
         public virtual float BaseAttack { get; }
         public virtual float PhyDefence { get; }
+        public virtual float MoveSpeed { get; }
+        public virtual float AttackSpeed { get; }
 
         SpecOption mTotalOption = new SpecOption();
         List<SpecOption> mLinkedOptions = new List<SpecOption>();

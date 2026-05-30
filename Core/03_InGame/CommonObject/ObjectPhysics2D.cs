@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectPhysics : MonoBehaviour
+    public class ObjectPhysics2D : MonoBehaviour
     {
         public float VelocityX { get { return mRB2D.linearVelocity.x; } set { mRB2D.linearVelocity = new Vector2(value, mRB2D.linearVelocity.y); } }
         public float VelocityY { get { return mRB2D.linearVelocity.y; } set { mRB2D.linearVelocity = new Vector2(mRB2D.linearVelocity.x, value); } }

@@ -31,6 +31,19 @@ namespace PahlUnity
             }
             return null;
         }
+        public static BaseObject ExGetBase(this Collider col)
+        {
+            return col.GetComponentInParent<BaseObject>();
+        }
+        public static T ExGetCompInBase<T>(this Collider col) where T : MonoBehaviour
+        {
+            BaseObject baseObj = col.GetComponentInParent<BaseObject>();
+            if (baseObj != null)
+            {
+                return baseObj.GetComponentInChildren<T>();
+            }
+            return null;
+        }
 
         public static int ExFloorToInt(this float val)
         {

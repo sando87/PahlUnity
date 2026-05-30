@@ -64,8 +64,8 @@ namespace PahlUnity
 
         void Start()
         {
-            mBaseObj.GetComp<InteractableCollider>().OnInteractEnter.AddListener(OnColliderEnter);
-            mBaseObj.GetComp<InteractableCollider>().OnInteractLeave.AddListener(OnColliderLeave);
+            mBaseObj.GetComp<InteractableCollider>().OnInteractEnter2D += OnColliderEnter;
+            mBaseObj.GetComp<InteractableCollider>().OnInteractLeave2D += OnColliderLeave;
 
             // 캐릭터별 처음 생성시 주어지는 초기 시작 아이템 및 스킬 부여
             if (mCharSaveData.IsFirstPlay)

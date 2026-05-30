@@ -17,8 +17,8 @@ namespace PahlUnity
         public override float MaxShield => BaseStats.Shield + Option.ShieldAdd;
         public override float BaseAttack => BaseStats.Attack + Option.BaseAttackAdd;
         public override float PhyDefence => BaseStats.Defence * Option.DefenceUp;
-        public float MoveSpeed => BaseStats.MoveSpeed * Option.MoveSpeedUp;
-        public float AttackSpeed => BaseStats.AttackSpeed * Option.AttackSpeedUp;
+        public override float MoveSpeed => BaseStats.MoveSpeed * Option.MoveSpeedUp;
+        public override float AttackSpeed => BaseStats.AttackSpeed * Option.AttackSpeedUp;
         public float HealthRegen => Option.HealthRegen;
         public float ManaRegen => Option.ManaRegen;
         public float ShieldRegen => Option.ShieldRegen;
