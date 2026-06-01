@@ -175,8 +175,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 238919684}
-  - component: {fileID: 238919685}
   - component: {fileID: 238919686}
+  - component: {fileID: 238919687}
   m_Layer: 0
   m_Name: EnemySpecDataTest
   m_TagString: Untagged
@@ -199,19 +199,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &238919685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 238919682}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c06dc74cdcdd7614c8cac87425d1fa8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DefenseDays.SpecSystem.EnemySpecMono
-  _SpecData: {fileID: 11400000, guid: 2b7268bd0406d0f49a5354ffb5a5510b, type: 2}
 --- !u!114 &238919686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +211,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d41946a2a1f32428e458c5e28d39a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseDays.SpecSystem.SpecBaseMono
+--- !u!114 &238919687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238919682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be24e804b1ff2e74bb146d41d0d6e50d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.EnemyObjectMono
+  _SpecData: {fileID: 0}
 --- !u!1 &805003844
 GameObject:
   m_ObjectHideFlags: 0
