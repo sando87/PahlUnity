@@ -1,7 +1,7 @@
 
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     [System.Serializable]
     public class ProjectileInfo

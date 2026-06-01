@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class ProjectileBase3D : MonoBehaviour
     {

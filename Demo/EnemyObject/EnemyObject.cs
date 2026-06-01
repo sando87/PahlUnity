@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PahlUnity.Demo
 {
-    public class EnemySpecMono : MonoBehaviour
+    public class EnemyObject : MonoBehaviour
     {
         [SerializeField] private EnemySpecData _SpecData;
 
@@ -17,8 +17,6 @@ namespace PahlUnity.Demo
 
         void Start()
         {
-            Init();
-
             Debug.Log(mSpecBase[SpecFields.MaxHP]);
             Debug.Log(mSpecBase[SpecFields.MaxMP]);
             Debug.Log(mSpecBase[SpecFields.MoveSpeed]);

@@ -11,7 +11,7 @@ namespace PahlUnity.Demo
 		[SerializeField] GameObject _ManagerB = null;
 		[SerializeField] GameObject _ManagerC = null;
 
-		[SerializeField] ItemDatabase _ItemDB = null;
+		// [SerializeField] ItemDatabase _ItemDB = null;
 
 		public LocalizationManager ManagerA => _ManagerA;
 		public GameObject ManagerB => _ManagerB;
@@ -29,8 +29,8 @@ namespace PahlUnity.Demo
 			ManagerB.SetActive(false);
 			ManagerC.SetActive(false);
 
-			IInitializer playerSaveDataManager = SaveManager<PlayerSaveData>.Instance as IInitializer;
-			string filename = typeof(PlayerSaveData).Name + ".json";
+			IInitializer playerSaveDataManager = SaveManager<InGameSaveData>.Instance as IInitializer;
+			string filename = typeof(InGameSaveData).Name + ".json";
 			string fullPath = Path.Combine(Application.persistentDataPath, filename);
 			InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
 			if (state == InitializingState.InitializedSuccess)
@@ -38,9 +38,9 @@ namespace PahlUnity.Demo
 				EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
 				{
 					if (eventType.ImmediateSave)
-						SaveManager<PlayerSaveData>.Instance.SaveImmediate();
+						SaveManager<InGameSaveData>.Instance.SaveImmediate();
 					else
-						SaveManager<PlayerSaveData>.Instance.RequestSave();
+						SaveManager<InGameSaveData>.Instance.RequestSave();
 				});
 			}
 
@@ -65,8 +65,8 @@ namespace PahlUnity.Demo
 
 		void InitItemDatabase()
 		{
-			LOG.errorif(_ItemDB == null);
-			TableDataContainer<ItemResourceData>.Instance.InitDataList(_ItemDB.ItemList.ToArray());
+			// LOG.errorif(_ItemDB == null);
+			// TableDataContainer<ItemResourceData>.Instance.InitDataList(_ItemDB.ItemList.ToArray());
 		}
 	}
 }

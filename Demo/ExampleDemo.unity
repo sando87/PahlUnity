@@ -166,7 +166,6 @@ MonoBehaviour:
   _ManagerA: {fileID: 0}
   _ManagerB: {fileID: 0}
   _ManagerC: {fileID: 0}
-  _ItemDB: {fileID: 11400000, guid: 053199a539be09c469b9addb7ad0fbe8, type: 2}
 --- !u!1 &238919682
 GameObject:
   m_ObjectHideFlags: 0

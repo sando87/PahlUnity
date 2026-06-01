@@ -53,7 +53,7 @@ namespace PahlUnity
                 foreach (var spec in specSet)
                 {
                     if (spec.Info.ModifierType == SpecModifierType.Additive)
-                        totalModifier += spec.Value;
+                        totalModifier += spec.CurrentValue;
                 }
             }
             return totalModifier;
@@ -67,7 +67,7 @@ namespace PahlUnity
                 foreach (var spec in specSet)
                 {
                     if (spec.Info.ModifierType == SpecModifierType.Multiply)
-                        totalModifier += spec.Value;
+                        totalModifier += spec.CurrentValue;
                 }
             }
             return totalModifier;

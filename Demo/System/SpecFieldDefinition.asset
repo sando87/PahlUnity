@@ -17,3 +17,5 @@ MonoBehaviour:
   - MaxMP
   - MoveSpeed
   - AttackSpeed
+  - Attack
+  - Defense

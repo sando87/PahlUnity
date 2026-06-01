@@ -17,8 +17,34 @@ namespace PahlUnity
                 int key = StableHash.ToInt32(spec.KeyName);
                 SpecValue specValue = new SpecValue();
                 specValue.Info = spec;
-                specValue.Value = specValue.Info.GetValue();
+                specValue.BaseValue = specValue.Info.GetValue();
+                specValue.CurrentValue = specValue.BaseValue;
                 mSpecs[key] = specValue;
+            }
+        }
+
+        public void UpdateAllBaseValues(float normalizedRange)
+        {
+            foreach (var kvp in mSpecs)
+            {
+                SpecValue specValue = kvp.Value;
+                specValue.BaseValue = specValue.Info.GetValue(normalizedRange);
+            }
+        }
+
+        public void UpdateAllValuesByStep(int step)
+        {
+            foreach (var kvp in mSpecs)
+            {
+                SpecValue specValue = kvp.Value;
+                specValue.CurrentValue = specValue.BaseValue + (specValue.Info.Step * step);
+            }
+        }
+        public void UpdateCurrentValueByStep(int key, int step)
+        {
+            if (mSpecs.TryGetValue(key, out SpecValue specValue))
+            {
+                specValue.CurrentValue = specValue.BaseValue + (specValue.Info.Step * step);
             }
         }
 
@@ -37,7 +63,7 @@ namespace PahlUnity
         {
             if (mSpecs.TryGetValue(key, out SpecValue spec))
             {
-                float value = spec.Value;
+                float value = spec.CurrentValue;
 
                 float addModifier = 0f;
                 foreach (var Modifier in mModifiers)

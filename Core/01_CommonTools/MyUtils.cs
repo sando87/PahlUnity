@@ -94,7 +94,7 @@ namespace PahlUnity
         {
             return UnityEngine.Random.Range(minInclusive, maxInclusive);
         }
-        public static float RandomRate()
+        public static float RandomNormalizedFloat()
         {
             return UnityEngine.Random.value;
         }

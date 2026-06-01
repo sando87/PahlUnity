@@ -37,7 +37,7 @@ namespace PahlUnity
             mHealth = mBaseObj.GetComp<Health>();
             mSpec = mBaseObj.GetComp<SpecBase>();
 
-            PlayerSaveData allCharacterSaveData = SaveManager<PlayerSaveData>.Instance.SaveData;
+            InGameSaveData allCharacterSaveData = SaveManager<InGameSaveData>.Instance.SaveData;
             mCharSaveData = allCharacterSaveData.Characters[_ResourceID];
 
             Exp = mBaseObj.GetComp<PlayerGrowth>();

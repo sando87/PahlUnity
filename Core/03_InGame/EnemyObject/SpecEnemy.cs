@@ -53,7 +53,7 @@ namespace PahlUnity
             BaseStats.DetectRange = ResourceData._DetectRange.GetValue();
             BaseStats.AttackRange = ResourceData._AttackRange.GetValue();
             BaseStats.ItemDrop = (PercentUp)ResourceData._ItemDrop.GetValue();
-            BaseStats.GoldOnDeath = ResourceData._GoldOnDeath.GetIntInRange(MyUtils.RandomRate());
+            BaseStats.GoldOnDeath = ResourceData._GoldOnDeath.GetIntInRange(MyUtils.RandomNormalizedFloat());
             BaseStats.ExpOnDeath = ResourceData._ExpOnDeath.GetValue();
             BaseStats.HitChance = (Percent)ResourceData._HitChance.GetValue();
         }

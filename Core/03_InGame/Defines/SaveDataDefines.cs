@@ -71,7 +71,7 @@ namespace PahlUnity
     }
 
     [System.Serializable]
-    public class PlayerSaveData : SaveDataBase
+    public class InGameSaveData : SaveDataBase
     {
         public Dictionary<string, CharacterSaveData> Characters = new Dictionary<string, CharacterSaveData>();
     }
