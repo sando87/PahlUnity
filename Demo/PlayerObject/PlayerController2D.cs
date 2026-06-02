@@ -7,7 +7,7 @@ using NaughtyAttributes;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     /// <summary>
     /// 플레이어 캐릭터의 입력을 받아서 이동, 점프, 상호작용 등을 처리하는 컨트롤러 클래스
@@ -33,7 +33,7 @@ namespace PahlUnity
         ObjectPhysics2D mPhy = null;
         ObjectBody2D mBody = null;
         InputPlayer mPlayerInput = null;
-        SpecBase mSpec = null;
+        SpecBaseMono mSpec = null;
 
         bool mIsSecondJump = false;
 
@@ -43,7 +43,7 @@ namespace PahlUnity
             mPhy = mBaseObj.GetComp<ObjectPhysics2D>();
             mBody = mBaseObj.GetComp<ObjectBody2D>();
             mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBase>();
+            mSpec = mBaseObj.GetComp<SpecBaseMono>();
         }
 
         private void Update()
@@ -61,7 +61,7 @@ namespace PahlUnity
 
             float moveX = mPlayerInput.MoveX;
             moveX = moveX > 0 ? 1 : moveX < 0 ? -1 : 0;
-            mPhy.VelocityX = moveX * mSpec.MoveSpeed;
+            mPhy.VelocityX = moveX * mSpec[SpecFields.MoveSpeed];
         }
         void Jump()
         {

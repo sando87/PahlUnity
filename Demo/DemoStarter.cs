@@ -29,8 +29,8 @@ namespace PahlUnity.Demo
 			ManagerB.SetActive(false);
 			ManagerC.SetActive(false);
 
-			IInitializer playerSaveDataManager = SaveManager<InGameSaveData>.Instance as IInitializer;
-			string filename = typeof(InGameSaveData).Name + ".json";
+			IInitializer playerSaveDataManager = SaveManager<InGamePlayingData>.Instance as IInitializer;
+			string filename = typeof(InGamePlayingData).Name + ".json";
 			string fullPath = Path.Combine(Application.persistentDataPath, filename);
 			InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
 			if (state == InitializingState.InitializedSuccess)
@@ -38,9 +38,9 @@ namespace PahlUnity.Demo
 				EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
 				{
 					if (eventType.ImmediateSave)
-						SaveManager<InGameSaveData>.Instance.SaveImmediate();
+						SaveManager<InGamePlayingData>.Instance.SaveImmediate();
 					else
-						SaveManager<InGameSaveData>.Instance.RequestSave();
+						SaveManager<InGamePlayingData>.Instance.RequestSave();
 				});
 			}
 

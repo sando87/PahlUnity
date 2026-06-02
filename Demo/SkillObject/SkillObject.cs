@@ -5,17 +5,20 @@ namespace PahlUnity.Demo
 {
     public class SkillObject : MonoBehaviour
     {
-        [SerializeField] private SkillSpecData _SpecData;
-
-        private SpecBaseMono mSpecBase;
+        private SkillInstData mSkillInstData;
         private SkillSaveData mSaveData;
 
-        public void Init(SkillSaveData saveData)
+        private SpecBaseMono mSpecBase;
+
+        public void Init(SkillInstData instData, SkillSaveData saveData)
         {
+            mSkillInstData = instData;
             mSaveData = saveData;
 
             mSpecBase = GetComponent<SpecBaseMono>();
-            mSpecBase.Init(_SpecData.Specs, new System.Random());
+
+            mSpecBase.Init(mSkillInstData.SpecData.Specs, 0);
+
             mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
         }
 

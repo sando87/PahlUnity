@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class NodeNavGroup
     {

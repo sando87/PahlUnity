@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     /// <summary>
     /// 플레이어 캐릭터의 입력을 받아서 이동, 점프, 대쉬 등을 처리하는 컨트롤러 클래스
@@ -29,7 +29,7 @@ namespace PahlUnity
         ObjectPhysics3D mPhy = null;
         ObjectBody3D mBody = null;
         InputPlayer mPlayerInput = null;
-        SpecBase mSpec = null;
+        SpecBaseMono mSpec = null;
         AnimatorHelper mAnim = null;
 
         int mAnimParamMoveSpeed = 0;
@@ -43,7 +43,7 @@ namespace PahlUnity
             mPhy = mBaseObj.GetComp<ObjectPhysics3D>();
             mBody = mBaseObj.GetComp<ObjectBody3D>();
             mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBase>();
+            mSpec = mBaseObj.GetComp<SpecBaseMono>();
             mAnim = mBaseObj.GetComp<AnimatorHelper>();
 
             mAnimParamMoveSpeed = Animator.StringToHash(_AnimParamMoveSpeed);
@@ -71,7 +71,7 @@ namespace PahlUnity
 
             if (TryGetMoveInput(out Vector3 moveDir))
             {
-                mPhy.Move(moveDir, mSpec.MoveSpeed);
+                mPhy.Move(moveDir, mSpec[SpecFields.MoveSpeed]);
                 mBody.Turn(moveDir);
                 mAnim.SetParamFloat(mAnimParamMoveSpeed, moveDir.magnitude);
             }

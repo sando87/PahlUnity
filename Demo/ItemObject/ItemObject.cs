@@ -5,24 +5,20 @@ namespace PahlUnity.Demo
 {
     public class ItemObject : MonoBehaviour
     {
-        [SerializeField] private ItemSpecData _SpecData;
-
         private ItemInstInfo mItemInfo;
         private ItemSaveData mSaveData;
 
         private SpecBaseMono mSpecBase;
 
-        public void Init(ItemInstInfo itemInfo)
+        public void Init(ItemInstInfo itemInfo, ItemSaveData saveData)
         {
             mItemInfo = itemInfo;
-
-            InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
-            saveData.Items.TryGetValue(itemInfo.InstanceID, out mSaveData);
+            mSaveData = saveData;
 
             mSpecBase = GetComponent<SpecBaseMono>();
 
             System.Random random = new System.Random(mItemInfo.RandomSeed);
-            mSpecBase.Init(_SpecData.Specs, random);
+            mSpecBase.Init(mItemInfo.SpecData.Specs, random);
 
             mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
         }

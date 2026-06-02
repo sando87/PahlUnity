@@ -23,19 +23,6 @@ namespace PahlUnity
             }
         }
 
-        public void InitItems(IReadOnlyList<IInvenItem> itemDataList)
-        {
-            for (int i = 0; i < mSlots.Count && i < itemDataList.Count; i++)
-            {
-                IInvenItem itemData = itemDataList[i];
-                if (itemData != null)
-                {
-                    mSlots[i].Item = itemData;
-                    mSlots[i].Count = 1;
-                }
-            }
-        }
-
         public int AddItem(IInvenItem item, int count = 1)
         {
             LOG.errorif(item == null || count <= 0);

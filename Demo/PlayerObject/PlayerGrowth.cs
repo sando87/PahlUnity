@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class PlayerGrowth : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace PahlUnity
 
         private float mFromExp = 0;
         private float mToExp = 0;
-        private CharSaveData mCharacterSaveData = null;
+        private PlayerStatData mCharacterSaveData = null;
 
         public int CurrentLevel { get; private set; } = 0;
         public int CurrentLevelIdx { get => CurrentLevel - 1; }
@@ -39,25 +39,9 @@ namespace PahlUnity
 
         void Start()
         {
-            // BattleDispatcher battleDispatcher = this.ExGetBase().GetComponentInChildren<BattleDispatcher>();
-            // if (battleDispatcher != null)
-            // {
-            //     battleDispatcher.EventOnKillResult.AddListener((result) =>
-            //     {
-            //         if (result.IsKilled)
-            //         {
-            //             EnemyBase enemy = result.Target.ExGetBase().EnemyObj;
-            //             if (enemy != null)
-            //             {
-            //                 float gainedExp = enemy.Spec.ExpOnDeath;
-            //                 AddExp(gainedExp);
-            //             }
-            //         }
-            //     });
-            // }
         }
 
-        public void Init(CharSaveData characterSaveData)
+        public void Init(PlayerStatData characterSaveData)
         {
             mCharacterSaveData = characterSaveData;
             CurrentExp = mCharacterSaveData.CurrentExp;

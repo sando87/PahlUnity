@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class PlayerInputRecorder : MonoBehaviour
     {

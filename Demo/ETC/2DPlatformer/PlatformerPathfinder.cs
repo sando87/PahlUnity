@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class PlatformerPathfinder : MonoBehaviour
     {

@@ -43,7 +43,7 @@ namespace PahlUnity.Demo
             if (mCollidersInDetectArea.Count > 0)
             {
                 BaseObject obj = mCollidersInDetectArea[0].ExGetBase();
-                if (obj != null && obj.HasComp<PlayerBase>())
+                if (obj != null && obj.HasComp<PlayerObject>())
                 {
                     return true;
                 }

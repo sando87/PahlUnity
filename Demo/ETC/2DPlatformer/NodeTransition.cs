@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class NodeTransition
     {

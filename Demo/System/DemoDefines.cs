@@ -72,9 +72,17 @@ namespace PahlUnity
         }
 
         [System.Serializable]
+        public class PlayerData
+        {
+            public PlayerStatData PlayerStat = new PlayerStatData();
+            public Dictionary<long, ItemSaveData> Items = new Dictionary<long, ItemSaveData>();
+            public Dictionary<long, SkillSaveData> Skills = new Dictionary<long, SkillSaveData>();
+        }
+
+        [System.Serializable]
         public class InGamePlayingData : SaveDataBase
         {
-            public Dictionary<long, ItemSaveData> Items = new Dictionary<long, ItemSaveData>();
+            public Dictionary<long, PlayerData> Characters = new Dictionary<long, PlayerData>();
         }
     }
 }

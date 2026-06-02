@@ -5,35 +5,80 @@ namespace PahlUnity.Demo
 {
     public class PlayerObject : MonoBehaviour
     {
-        [SerializeField] private PlayerSpecData _SpecData;
+        PlayerInstData mPlayerInstData;
+        PlayerData mPlayerSaveData;
 
-        private SpecBaseMono mSpecBase;
-        private PlayerSaveData mSaveData;
+        BaseObject mBaseObj = null;
 
-        public void Init(PlayerSaveData saveData)
+        SpecBaseMono mSpecBase = null;
+
+        PlayerGrowth mExp = null;
+        Inventory mInven = null;
+        Equipment mEquip = null;
+
+        void Awake()
         {
-            mSaveData = saveData;
+            mBaseObj = GetComponentInParent<BaseObject>();
 
+            mSpecBase = mBaseObj.GetComp<SpecBaseMono>();
+
+            mExp = mBaseObj.GetComp<PlayerGrowth>();
+            mInven = new Inventory(20);
+            mEquip = new Equipment();
+        }
+
+        public void Init(PlayerInstData instData)
+        {
+            mPlayerInstData = instData;
+
+            InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
+            saveData.Characters.TryGetValue(mPlayerInstData.InstanceID, out mPlayerSaveData);
+
+            mExp.Init(mPlayerSaveData.PlayerStat);
+
+            InitItems();
+
+            InitSpec();
+        }
+
+        void InitItems()
+        {
+            foreach (ItemSaveData saveData in mPlayerSaveData.Items.Values)
+            {
+                ItemSpecData specData = TableDataContainer<ItemSpecData>.Instance.GetInfo(saveData.ResourceID);
+                ItemInstInfo instData = new ItemInstInfo(specData, saveData.InstanceID);
+
+                if (saveData.IsEquipped)
+                {
+                    mEquip.Equip(instData);
+                }
+                else
+                {
+                    mInven.AddItem(instData, saveData.Count);
+                }
+            }
+        }
+
+        void InitSpec()
+        {
             mSpecBase = GetComponent<SpecBaseMono>();
-            mSpecBase.Init(_SpecData.Specs, new System.Random());
 
-            int currentLevel = 12;  // mSaveData.CurrentExp.ToLevel();
+            int currentLevel = mExp.CurrentLevel;
             float maxLevel = 99;
-            float levelRate = currentLevel / maxLevel;
-            mSpecBase.UpdateAllBaseValues(levelRate);
+            float normalizedRange = currentLevel / maxLevel;
+            mSpecBase.Init(mPlayerInstData.SpecData.Specs, normalizedRange);
 
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxHP, mSaveData.HealthPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxMP, mSaveData.ManaPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.Attack, mSaveData.AttackPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.Defense, mSaveData.DefensePoint);
+            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxHP, mPlayerSaveData.PlayerStat.HealthPoint);
+            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxMP, mPlayerSaveData.PlayerStat.ManaPoint);
+            mSpecBase.UpdateCurrentValueByStep(SpecFields.Attack, mPlayerSaveData.PlayerStat.AttackPoint);
+            mSpecBase.UpdateCurrentValueByStep(SpecFields.Defense, mPlayerSaveData.PlayerStat.DefensePoint);
+
+            SpecModifierMono[] modifiers = GetComponentsInChildren<SpecModifierMono>();
+            foreach (var modifier in modifiers)
+            {
+                mSpecBase.AddModifier(modifier);
+            }
         }
 
-        void Start()
-        {
-            Debug.Log(mSpecBase[SpecFields.MaxHP]);
-            Debug.Log(mSpecBase[SpecFields.MaxMP]);
-            Debug.Log(mSpecBase[SpecFields.Attack]);
-            Debug.Log(mSpecBase[SpecFields.Defense]);
-        }
     }
 }

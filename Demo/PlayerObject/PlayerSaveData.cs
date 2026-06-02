@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PahlUnity.Demo
 {
     [System.Serializable]
-    public class PlayerSaveData
+    public class PlayerStatData
     {
         public float CurrentExp;
         public int RemainPoint;

@@ -8,7 +8,7 @@ using System.IO;
 using System.Data;
 
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public class PlayerDepthManager : MonoBehaviour
     {
