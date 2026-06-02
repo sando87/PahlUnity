@@ -33,7 +33,7 @@ namespace PahlUnity.Demo
         ObjectPhysics2D mPhy = null;
         ObjectBody2D mBody = null;
         InputPlayer mPlayerInput = null;
-        SpecBaseMono mSpec = null;
+        SpecBase mSpec = null;
 
         bool mIsSecondJump = false;
 
@@ -43,7 +43,7 @@ namespace PahlUnity.Demo
             mPhy = mBaseObj.GetComp<ObjectPhysics2D>();
             mBody = mBaseObj.GetComp<ObjectBody2D>();
             mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBaseMono>();
+            mSpec = mBaseObj.GetComp<SpecBase>();
         }
 
         private void Update()

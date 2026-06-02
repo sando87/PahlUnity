@@ -8,14 +8,14 @@ namespace PahlUnity.Demo
         private ItemInstInfo mItemInfo;
         private ItemSaveData mSaveData;
 
-        private SpecBaseMono mSpecBase;
+        private SpecBase mSpecBase;
 
         public void Init(ItemInstInfo itemInfo, ItemSaveData saveData)
         {
             mItemInfo = itemInfo;
             mSaveData = saveData;
 
-            mSpecBase = GetComponent<SpecBaseMono>();
+            mSpecBase = GetComponent<SpecBase>();
 
             System.Random random = new System.Random(mItemInfo.RandomSeed);
             mSpecBase.Init(mItemInfo.SpecData.Specs, random);

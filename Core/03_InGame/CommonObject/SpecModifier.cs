@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PahlUnity
 {
-    public class SpecModifierMono : MonoBehaviour
+    public class SpecModifier : MonoBehaviour
     {
         private Dictionary<int, HashSet<SpecValue>> mSpecs = new Dictionary<int, HashSet<SpecValue>>();
 

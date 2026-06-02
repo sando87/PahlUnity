@@ -10,11 +10,11 @@ namespace PahlUnity.Demo
     {
         [SerializeField] private EnemySpecData _SpecData;
 
-        private SpecBaseMono mSpecBase;
+        private SpecBase mSpecBase;
 
         void Awake()
         {
-            mSpecBase = GetComponent<SpecBaseMono>();
+            mSpecBase = GetComponent<SpecBase>();
             mSpecBase.Init(_SpecData.Specs, 0);
         }
     }

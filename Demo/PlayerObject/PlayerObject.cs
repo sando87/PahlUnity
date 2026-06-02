@@ -10,7 +10,7 @@ namespace PahlUnity.Demo
 
         BaseObject mBaseObj = null;
 
-        SpecBaseMono mSpecBase = null;
+        SpecBase mSpecBase = null;
 
         PlayerGrowth mExp = null;
         Inventory mInven = null;
@@ -20,7 +20,7 @@ namespace PahlUnity.Demo
         {
             mBaseObj = GetComponentInParent<BaseObject>();
 
-            mSpecBase = mBaseObj.GetComp<SpecBaseMono>();
+            mSpecBase = mBaseObj.GetComp<SpecBase>();
 
             mExp = mBaseObj.GetComp<PlayerGrowth>();
             mInven = new Inventory(20);
@@ -61,7 +61,7 @@ namespace PahlUnity.Demo
 
         void InitSpec()
         {
-            mSpecBase = GetComponent<SpecBaseMono>();
+            mSpecBase = GetComponent<SpecBase>();
 
             int currentLevel = mExp.CurrentLevel;
             float maxLevel = 99;
@@ -73,7 +73,7 @@ namespace PahlUnity.Demo
             mSpecBase.UpdateCurrentValueByStep(SpecFields.Attack, mPlayerSaveData.PlayerStat.AttackPoint);
             mSpecBase.UpdateCurrentValueByStep(SpecFields.Defense, mPlayerSaveData.PlayerStat.DefensePoint);
 
-            SpecModifierMono[] modifiers = GetComponentsInChildren<SpecModifierMono>();
+            SpecModifier[] modifiers = GetComponentsInChildren<SpecModifier>();
             foreach (var modifier in modifiers)
             {
                 mSpecBase.AddModifier(modifier);

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace PahlUnity
 {
-    public class SpecBaseMono : MonoBehaviour
+    public class SpecBase : MonoBehaviour
     {
         private Dictionary<int, SpecValue> mSpecs = new Dictionary<int, SpecValue>();
 
-        private List<SpecModifierMono> mModifiers = new List<SpecModifierMono>();
+        private List<SpecModifier> mModifiers = new List<SpecModifier>();
 
         public void Init(IReadOnlyList<SpecValueInfo> specs, float normalizedRange)
         {
@@ -60,7 +60,7 @@ namespace PahlUnity
             }
         }
 
-        public void AddModifier(SpecModifierMono modifier)
+        public void AddModifier(SpecModifier modifier)
         {
             if (!mModifiers.Contains(modifier))
             {

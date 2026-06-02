@@ -8,14 +8,14 @@ namespace PahlUnity.Demo
         private SkillInstData mSkillInstData;
         private SkillSaveData mSaveData;
 
-        private SpecBaseMono mSpecBase;
+        private SpecBase mSpecBase;
 
         public void Init(SkillInstData instData, SkillSaveData saveData)
         {
             mSkillInstData = instData;
             mSaveData = saveData;
 
-            mSpecBase = GetComponent<SpecBaseMono>();
+            mSpecBase = GetComponent<SpecBase>();
 
             mSpecBase.Init(mSkillInstData.SpecData.Specs, 0);
 

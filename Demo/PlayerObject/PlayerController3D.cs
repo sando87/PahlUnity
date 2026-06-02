@@ -29,7 +29,7 @@ namespace PahlUnity.Demo
         ObjectPhysics3D mPhy = null;
         ObjectBody3D mBody = null;
         InputPlayer mPlayerInput = null;
-        SpecBaseMono mSpec = null;
+        SpecBase mSpec = null;
         AnimatorHelper mAnim = null;
 
         int mAnimParamMoveSpeed = 0;
@@ -43,7 +43,7 @@ namespace PahlUnity.Demo
             mPhy = mBaseObj.GetComp<ObjectPhysics3D>();
             mBody = mBaseObj.GetComp<ObjectBody3D>();
             mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBaseMono>();
+            mSpec = mBaseObj.GetComp<SpecBase>();
             mAnim = mBaseObj.GetComp<AnimatorHelper>();
 
             mAnimParamMoveSpeed = Animator.StringToHash(_AnimParamMoveSpeed);
