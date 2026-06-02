@@ -56,7 +56,7 @@ namespace PahlUnity
             Spec = mBaseObj.GetComp<SpecPlayer>();
             Spec.Init(mCharSaveData.Stats, _ResourceID);
             // Spec.LinkOption(Equip.TotalItemOption);
-            Spec.LinkOption(mBaseObj.GetComp<BuffController>().TotalBuffOption);
+            // Spec.LinkOption(mBaseObj.GetComp<BuffController>().TotalBuffOption);
 
             SkillCtrl = mBaseObj.GetComp<SkillController>();
             SkillCtrl.InitSkills(mCharSaveData);

@@ -6,64 +6,62 @@ using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
+    public class BuffInfo
+    {
+        public IBuff Buff;
+        public float EclipseTime;
+    }
+
     public class BuffController : MonoBehaviour
     {
-        public SpecOption TotalBuffOption { get; private set; } = new SpecOption();
+        List<BuffInfo> mBuffs = new();
+        public IReadOnlyList<BuffInfo> Buffs => mBuffs;
 
-        Dictionary<int, SpecOption> mBuffs = new Dictionary<int, SpecOption>();
+        public event Action<IBuff> OnBuffAdded;
+        public event Action<IBuff> OnBuffRefreshed;
+        public event Action<IBuff> OnBuffRemoved;
 
-        public void SetBuff(int buffID, SpecOption option)
+        public void ApplyBuff(IBuff buff)
         {
-            if (mBuffs.ContainsKey(buffID))
+            BuffInfo existingBuff = FindBuff(buff);
+            if (existingBuff != null)
             {
-                SpecOption oldOption = mBuffs[buffID];
-                TotalBuffOption.Subtract(oldOption);
-                TotalBuffOption.Add(option);
-                mBuffs[buffID] = option;
+                existingBuff.EclipseTime = 0;
+                OnBuffRefreshed?.Invoke(buff);
             }
             else
             {
-                TotalBuffOption.Add(option);
-                mBuffs[buffID] = option;
+                mBuffs.Add(new BuffInfo { Buff = buff, EclipseTime = 0 });
+                OnBuffAdded?.Invoke(buff);
             }
         }
-        public void RemoveBuff(int buffID)
+        public void RemoveBuff(IBuff buff)
         {
-            if (mBuffs.ContainsKey(buffID))
+            BuffInfo existingBuff = FindBuff(buff);
+            if (existingBuff != null)
             {
-                SpecOption option = mBuffs[buffID];
-                TotalBuffOption.Subtract(option);
-                mBuffs.Remove(buffID);
+                mBuffs.Remove(existingBuff);
+                OnBuffRemoved?.Invoke(buff);
             }
         }
-        public int AddBuff(SpecOption option, float duration)
+        void Update()
         {
-            int randomBuffID = (int)DateTime.Now.Ticks;
-            SetBuff(randomBuffID, option);
-            this.ExDelayedCoroutine(duration, () => RemoveBuff(randomBuffID));
-            return randomBuffID;
-        }
+            float deltaTime = Time.deltaTime;
+            for (int i = mBuffs.Count - 1; i >= 0; i--)
+            {
+                BuffInfo buffInfo = mBuffs[i];
+                buffInfo.EclipseTime += deltaTime;
 
-        // 자주 호출되는 함수는 따로 전용 함수를 만들어서 최적화 시킨다.
-        // 모션 속도 제어(감속 or 가속)는 프레임 단위로 자주 호출되는 함수라서 따로 분리시킴
-        public void SetMoveSpeedBuff(int buffID, PercentUp moveSpeedUp)
+                if (buffInfo.EclipseTime >= buffInfo.Buff.Duration)
+                {
+                    mBuffs.RemoveAt(i);
+                    OnBuffRemoved?.Invoke(buffInfo.Buff);
+                }
+            }
+        }
+        private BuffInfo FindBuff(IBuff buff)
         {
-            if (mBuffs.ContainsKey(buffID))
-            {
-                SpecOption option = mBuffs[buffID];
-                TotalBuffOption.MoveSpeedUp -= option.MoveSpeedUp;
-                option.MoveSpeedUp = moveSpeedUp;
-                TotalBuffOption.MoveSpeedUp += option.MoveSpeedUp;
-                TotalBuffOption.IsDirty = true;
-            }
-            else
-            {
-                SpecOption option = new SpecOption();
-                option.MoveSpeedUp = moveSpeedUp;
-                TotalBuffOption.MoveSpeedUp += option.MoveSpeedUp;
-                TotalBuffOption.IsDirty = true;
-                mBuffs[buffID] = option;
-            }
+            return mBuffs.Find(b => b.Buff == buff);
         }
     }
 }
