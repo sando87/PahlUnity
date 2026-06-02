@@ -1,88 +1,75 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using NaughtyAttributes;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
-    public class Equipment : MonoBehaviour
+    public class Equipment
     {
-        [SerializeField] UnityEvent<ItemInfo> _OnEquipItem = new UnityEvent<ItemInfo>();
-        [SerializeField] UnityEvent<ItemInfo> _OnUnEquipItem = new UnityEvent<ItemInfo>();
+        /// 새 아이템 장착 (slot, newItem, oldItem)
+        public event Action<EquipmentSlotType, IEquipItem, IEquipItem> OnEquipped;
 
-        public event UnityAction<ItemInfo> OnEquipItem { add => _OnEquipItem.AddListener(value); remove => _OnEquipItem.RemoveListener(value); }
-        public event UnityAction<ItemInfo> OnUnEquipItem { add => _OnUnEquipItem.AddListener(value); remove => _OnUnEquipItem.RemoveListener(value); }
+        /// 장비 해제 (slot, removedItem)
+        public event Action<EquipmentSlotType, IEquipItem> OnUnequipped;
 
-        private Dictionary<string, ItemInfo> mEquipItems = new Dictionary<string, ItemInfo>();
+        private readonly Dictionary<EquipmentSlotType, IEquipItem> mEquipments = new();
 
-        public SpecOption TotalItemOption { get; private set; } = new SpecOption();
+        public IReadOnlyDictionary<EquipmentSlotType, IEquipItem> Equipments => mEquipments;
 
-        [ShowIf(nameof(ShowEquipItems))]
-        [Dropdown(nameof(ListEquipItems))]
-        [OnValueChanged(nameof(SelectEquipItem))]
-        public ItemInfo mSelectEquipItem = null;
-        public ItemInfo[] ListEquipItems() { return mEquipItems.Values.ToArray(); }
-
-        [SerializeField]
-        [ShowIf(nameof(ShowEquipItems))]
-        private ItemInfo _SelectEquipItem = null;
-        void SelectEquipItem() { _SelectEquipItem = mSelectEquipItem; _SelectEquipItem._Option = mSelectEquipItem.Option; }
-
-
-        bool ShowEquipItems() { return Application.isPlaying && mEquipItems.Count > 0; }
-
-        [Button]
-        [ShowIf(nameof(ShowEquipItems))]
-        void _UnEquipItem() { UnEquipItem(mSelectEquipItem); }
-
-        public void LoadItemsFromData(ItemSaveData[] savedAllItemInfo)
+        public bool IsEquipped(EquipmentSlotType slot)
         {
-            foreach (ItemSaveData savedItemInfo in savedAllItemInfo)
+            return mEquipments.ContainsKey(slot);
+        }
+
+        public IEquipItem GetEquipment(EquipmentSlotType slot)
+        {
+            mEquipments.TryGetValue(slot, out var item);
+            return item;
+        }
+
+        public bool Equip(IEquipItem item)
+        {
+            if (item == null)
+                return false;
+
+            EquipmentSlotType slot = item.SlotType;
+
+            mEquipments.TryGetValue(slot, out IEquipItem oldItem);
+
+            mEquipments[slot] = item;
+
+            OnEquipped?.Invoke(slot, item, oldItem);
+
+            return true;
+        }
+
+        public bool Unequip(EquipmentSlotType slot)
+        {
+            if (!mEquipments.TryGetValue(slot, out IEquipItem item))
+                return false;
+
+            mEquipments.Remove(slot);
+
+            OnUnequipped?.Invoke(slot, item);
+
+            return true;
+        }
+
+        public bool Unequip(IEquipItem item)
+        {
+            if (item == null)
+                return false;
+
+            return Unequip(item.SlotType);
+        }
+
+        public void Clear()
+        {
+            var slots = new List<EquipmentSlotType>(mEquipments.Keys);
+
+            foreach (var slot in slots)
             {
-                ItemInfo item = new ItemInfo();
-                item.LoadItem(savedItemInfo);
-
-                if (item.IsEquipped)
-                {
-                    mEquipItems[savedItemInfo.InstanceID] = item;
-                    TotalItemOption.Add(item.Option);
-                }
+                Unequip(slot);
             }
-        }
-
-        public bool IsEquipItem(ItemInfo item)
-        {
-            return mEquipItems.ContainsKey(item.InstanceID);
-        }
-
-        public void EquipItem(ItemInfo item)
-        {
-            if (IsEquipItem(item))
-                return;
-
-            item.IsEquipped = true;
-            mEquipItems.Add(item.InstanceID, item);
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
-
-            TotalItemOption.Add(item.Option);
-            _OnEquipItem?.Invoke(item);
-        }
-
-        public void UnEquipItem(ItemInfo item)
-        {
-            if (!IsEquipItem(item))
-                return;
-
-            item.IsEquipped = false;
-            mEquipItems.Remove(item.InstanceID);
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
-
-            TotalItemOption.Subtract(item.Option);
-            _OnUnEquipItem?.Invoke(item);
         }
 
     }

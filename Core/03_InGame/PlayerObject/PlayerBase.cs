@@ -48,14 +48,14 @@ namespace PahlUnity
 
             ItemSaveData[] mSavedAllItems = mCharSaveData.Items.Values.ToArray();
 
-            Equip = mBaseObj.GetComp<Equipment>();
-            Equip.LoadItemsFromData(mSavedAllItems);
-            Equip.OnEquipItem += (item) => OnChangeEquipState();
-            Equip.OnUnEquipItem += (item) => OnChangeEquipState();
+            // Equip = mBaseObj.GetComp<Equipment>();
+            // Equip.LoadItemsFromData(mSavedAllItems);
+            // Equip.OnEquipItem += (item) => OnChangeEquipState();
+            // Equip.OnUnEquipItem += (item) => OnChangeEquipState();
 
             Spec = mBaseObj.GetComp<SpecPlayer>();
             Spec.Init(mCharSaveData.Stats, _ResourceID);
-            Spec.LinkOption(Equip.TotalItemOption);
+            // Spec.LinkOption(Equip.TotalItemOption);
             Spec.LinkOption(mBaseObj.GetComp<BuffController>().TotalBuffOption);
 
             SkillCtrl = mBaseObj.GetComp<SkillController>();
