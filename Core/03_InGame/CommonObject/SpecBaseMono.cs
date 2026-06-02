@@ -10,14 +10,14 @@ namespace PahlUnity
 
         private List<SpecModifierMono> mModifiers = new List<SpecModifierMono>();
 
-        public void Init(IReadOnlyList<SpecValueInfo> specs)
+        public void Init(IReadOnlyList<SpecValueInfo> specs, System.Random random)
         {
             foreach (var spec in specs)
             {
-                int key = StableHash.ToInt32(spec.KeyName);
+                int key = spec.KeyName.ExGetStableHash32();
                 SpecValue specValue = new SpecValue();
                 specValue.Info = spec;
-                specValue.BaseValue = specValue.Info.GetValue();
+                specValue.BaseValue = specValue.Info.GetValue(random);
                 specValue.CurrentValue = specValue.BaseValue;
                 mSpecs[key] = specValue;
             }

@@ -7,15 +7,23 @@ namespace PahlUnity.Demo
     {
         [SerializeField] private ItemSpecData _SpecData;
 
-        private SpecBaseMono mSpecBase;
+        private ItemInstInfo mItemInfo;
         private ItemSaveData mSaveData;
 
-        public void Init(ItemSaveData saveData)
+        private SpecBaseMono mSpecBase;
+
+        public void Init(ItemInstInfo itemInfo)
         {
-            mSaveData = saveData;
+            mItemInfo = itemInfo;
+
+            InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
+            saveData.Items.TryGetValue(itemInfo.InstanceID, out mSaveData);
 
             mSpecBase = GetComponent<SpecBaseMono>();
-            mSpecBase.Init(_SpecData.Specs);
+
+            System.Random random = new System.Random(mItemInfo.RandomSeed);
+            mSpecBase.Init(_SpecData.Specs, random);
+
             mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
         }
 

@@ -14,6 +14,15 @@ namespace PahlUnity
         private const uint Offset32 = 2166136261U;
         private const uint Prime32 = 16777619U;
 
+        public static int ExGetStableHash32(this string val)
+        {
+            return ToInt32(val);
+        }
+        public static long ExGetStableHash64(this string val)
+        {
+            return ToInt64(val);
+        }
+
         public static long ToInt64(string value)
         {
             ulong hash = Compute64(value);

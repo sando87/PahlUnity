@@ -15,7 +15,7 @@ namespace PahlUnity.Demo
         void Awake()
         {
             mSpecBase = GetComponent<SpecBaseMono>();
-            mSpecBase.Init(_SpecData.Specs);
+            mSpecBase.Init(_SpecData.Specs, new System.Random());
         }
 
         // [SerializeField]

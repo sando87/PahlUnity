@@ -15,7 +15,7 @@ namespace PahlUnity.Demo
             mSaveData = saveData;
 
             mSpecBase = GetComponent<SpecBaseMono>();
-            mSpecBase.Init(_SpecData.Specs);
+            mSpecBase.Init(_SpecData.Specs, new System.Random());
 
             int currentLevel = 12;  // mSaveData.CurrentExp.ToLevel();
             float maxLevel = 99;

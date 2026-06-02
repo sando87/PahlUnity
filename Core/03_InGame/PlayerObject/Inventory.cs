@@ -1,120 +1,157 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using DG.Tweening;
-using NaughtyAttributes;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
-    public class Inventory : MonoBehaviour
+    public class Inventory
     {
-        private CharacterSaveData mCharacterSaveData = null;
-        private Dictionary<string, ItemSaveData> mSaveData = null;
+        private readonly List<InventorySlot> mSlots;
 
-        private Dictionary<string, ItemInfo> mInvenItems = new Dictionary<string, ItemInfo>();
+        public IReadOnlyList<InventorySlot> Slots => mSlots;
 
-        public int CurrentGold
+        public event Action<IInvenItem, int> OnItemAdded;
+        public event Action<IInvenItem, int> OnItemRemoved;
+        public event Action<IInvenItem, int> OnItemMoved;
+
+        public Inventory(int slotCount)
         {
-            get { return mCharacterSaveData.Gold; }
-            set { mCharacterSaveData.Gold = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
-        }
-        public int CurrentLifePotionCount
-        {
-            get { return mCharacterSaveData.LifePotionCount; }
-            set { mCharacterSaveData.LifePotionCount = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
-        }
-        public int CurrentManaPotionCount
-        {
-            get { return mCharacterSaveData.ManaPotionCount; }
-            set { mCharacterSaveData.ManaPotionCount = value; EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(false)); }
-        }
+            mSlots = new List<InventorySlot>(slotCount);
 
-        [ShowIf(nameof(ShowInvenItems))]
-        [Dropdown(nameof(ListInvenItems))]
-        [OnValueChanged(nameof(SelectInvenItem))]
-        public ItemInfo mSelectedInvenItem = null;
-        public ItemInfo[] ListInvenItems() { return mInvenItems.Values.ToArray(); }
-
-        [SerializeField]
-        [ShowIf(nameof(ShowInvenItems))]
-        private ItemInfo _SelectInvenItem = null;
-        void SelectInvenItem() { _SelectInvenItem = mSelectedInvenItem; _SelectInvenItem._Option = mSelectedInvenItem.Option; }
-
-        bool ShowInvenItems() { return Application.isPlaying && mInvenItems.Count > 0; }
-
-        public void LoadItemsFromData(CharacterSaveData characterSaveData)
-        {
-            mCharacterSaveData = characterSaveData;
-            mSaveData = characterSaveData.Items;
-            foreach (var pair in mCharacterSaveData.Items)
+            for (int i = 0; i < slotCount; i++)
             {
-                ItemSaveData itemSaveData = pair.Value;
-                ItemInfo item = new ItemInfo();
-                item.LoadItem(itemSaveData);
+                mSlots.Add(new InventorySlot());
+            }
+        }
 
-                if (!item.IsEquipped)
+        public void InitItems(IReadOnlyList<IInvenItem> itemDataList)
+        {
+            for (int i = 0; i < mSlots.Count && i < itemDataList.Count; i++)
+            {
+                IInvenItem itemData = itemDataList[i];
+                if (itemData != null)
                 {
-                    mInvenItems[itemSaveData.InstanceID] = item;
+                    mSlots[i].Item = itemData;
+                    mSlots[i].Count = 1;
                 }
             }
         }
 
-        public void AddItem(ItemInfo item)
+        public int AddItem(IInvenItem item, int count = 1)
         {
-            if (mInvenItems.ContainsKey(item.InstanceID))
+            LOG.errorif(item == null || count <= 0);
+
+            if (item.IsStackable)
             {
-                mInvenItems[item.InstanceID].Count += item.Count;
+                InventorySlot sameItemSlot = FindSameItem(item.ResourceID);
+                if (sameItemSlot != null)
+                {
+                    int addCount = sameItemSlot.AddCount(count);
+                    OnItemAdded?.Invoke(item, addCount);
+                    return addCount;
+                }
+                else
+                {
+                    InventorySlot emptySlot = FindEmptySlot();
+                    if (emptySlot == null)
+                        return 0;
+
+                    int addCount = Math.Min(count, item.MaxStackCount);
+                    emptySlot.Item = item;
+                    emptySlot.Count = addCount;
+                    OnItemAdded?.Invoke(item, addCount);
+                    return addCount;
+                }
             }
             else
             {
-                mInvenItems[item.InstanceID] = item;
-                mSaveData[item.InstanceID] = item.SaveData;
+                InventorySlot emptySlot = FindEmptySlot();
+                if (emptySlot == null)
+                    return 0;
+
+                emptySlot.Item = item;
+                emptySlot.Count = 1;
+                OnItemAdded?.Invoke(item, 1);
+                return 1;
             }
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
-        public void RemoveItem(string itemInstID)
+
+        public int RemoveItem(int slotIndex, int count = 1)
         {
-            LOG.errorif(!mSaveData.ContainsKey(itemInstID));
-            mSaveData.Remove(itemInstID);
-            if (mInvenItems.ContainsKey(itemInstID))
-                mInvenItems.Remove(itemInstID);
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+            LOG.errorif(slotIndex < 0 || slotIndex >= mSlots.Count || count <= 0);
+
+            InventorySlot slot = mSlots[slotIndex];
+            if (slot.IsEmpty)
+                return 0;
+
+            int removeCount = Math.Min(slot.Count, count);
+            slot.Count -= removeCount;
+
+            if (slot.Count <= 0)
+            {
+                slot.Clear();
+            }
+
+            OnItemRemoved?.Invoke(slot.Item, removeCount);
+            return removeCount;
         }
-        public ItemInfo GetItem(string itemInstID)
+
+        public bool MoveItem(int fromIndex, int toIndex)
         {
-            if (mInvenItems.ContainsKey(itemInstID))
-                return mInvenItems[itemInstID];
+            LOG.errorif(fromIndex < 0 || fromIndex >= mSlots.Count || toIndex < 0 || toIndex >= mSlots.Count);
+            if (fromIndex == toIndex)
+                return true;
+
+            InventorySlot fromSlot = mSlots[fromIndex];
+            InventorySlot toSlot = mSlots[toIndex];
+            if (fromSlot.IsEmpty)
+                return false;
+
+            IInvenItem targetItem = fromSlot.Item;
+            int targetCount = fromSlot.Count;
+            if (toSlot.IsEmpty)
+            {
+                toSlot.Item = targetItem;
+                toSlot.Count = targetCount;
+                fromSlot.Clear();
+                OnItemMoved?.Invoke(targetItem, toIndex);
+            }
             else
-                return null;
+            {
+                fromSlot.Item = toSlot.Item;
+                fromSlot.Count = toSlot.Count;
+                toSlot.Item = targetItem;
+                toSlot.Count = targetCount;
+                OnItemMoved?.Invoke(targetItem, toIndex);
+                OnItemMoved?.Invoke(fromSlot.Item, fromIndex);
+            }
+
+            return true;
         }
 
-        public void SubItem(string itemInstID, int count)
+        private InventorySlot FindSameItem(int resourceId)
         {
-            GetItem(itemInstID).Count -= count;
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
-        }
-        public void UpgradeItem(string itemInstID)
-        {
-            GetItem(itemInstID).Level++;
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
-        }
-        public void RepairItem(string itemInstID)
-        {
-            GetItem(itemInstID).IsRepaired = true;
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
-        }
-        public void SetEquipableItem(string itemInstID)
-        {
-            GetItem(itemInstID).IsEquipable = true;
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+            foreach (InventorySlot slot in mSlots)
+            {
+                if (!slot.IsEmpty && slot.Item.ResourceID == resourceId)
+                {
+                    return slot;
+                }
+            }
+
+            return null;
         }
 
-        public void MoveItem(string itemInstID, int newPositionIndex)
+        private InventorySlot FindEmptySlot()
         {
-            GetItem(itemInstID).PositionIndex = newPositionIndex;
-            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+            foreach (InventorySlot slot in mSlots)
+            {
+                if (slot.IsEmpty)
+                {
+                    return slot;
+                }
+            }
+
+            return null;
         }
     }
 }

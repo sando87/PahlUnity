@@ -418,7 +418,7 @@ namespace PahlUnity
     public readonly partial struct InputActionName
     {
         public readonly int mVal;
-        public InputActionName(string value) => mVal = StableHash.ToInt32(value);
+        public InputActionName(string value) => mVal = value.ExGetStableHash32();
         public InputActionName(int value) => mVal = value;
 
         public static implicit operator int(InputActionName info) => info.mVal;

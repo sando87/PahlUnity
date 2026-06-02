@@ -89,7 +89,7 @@ namespace PahlUnity
     {
         long ID { get; } // 데이터 접근을 위한 id값
         int RowIndex { get; set; } // 전체 csv 테이블상에서 각 Row의 인덱스정보
-        static long ToID(string stringID) { return StableHash.ToInt64(stringID); } // 데이터 접근을 위한 id값
+        static long ToID(string stringID) { return stringID.ExGetStableHash64(); } // 데이터 접근을 위한 id값
         void OnLoad() { } // 추가로 초기화 할 데이터 있으면 여기서 처리
     }
 }

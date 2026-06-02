@@ -502,7 +502,7 @@ namespace PahlUnity
         }
         public static long GUIDToLong(string guid)
         {
-            return StableHash.ToInt64(guid);
+            return guid.ExGetStableHash64();
         }
 
 

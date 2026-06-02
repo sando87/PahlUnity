@@ -9,6 +9,8 @@ namespace PahlUnity.Demo
         [SerializeField] private string _ItemID = "";
         [SerializeField] private string _ItemName = "";
         [SerializeField] private string _ItemDesc = "";
+        [SerializeField] private bool _IsStackable = false;
+        [SerializeField] private int _MaxStackCount = 1;
         [SerializeField] private Sprite _ItemIcon = null;
         [SerializeField] private List<SpecValueInfo> _Specs = new List<SpecValueInfo>();
 
@@ -16,6 +18,8 @@ namespace PahlUnity.Demo
         public string ItemName => _ItemName;
         public string ItemDesc => _ItemDesc;
         public Sprite ItemIcon => _ItemIcon;
+        public bool IsStackable => _IsStackable;
+        public int MaxStackCount => _MaxStackCount;
 
         public IReadOnlyList<SpecValueInfo> Specs => _Specs;
 

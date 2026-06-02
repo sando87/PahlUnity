@@ -43,8 +43,8 @@ namespace PahlUnity
             Exp = mBaseObj.GetComp<PlayerGrowth>();
             Exp.Init(mCharSaveData.Stats);
 
-            Inven = mBaseObj.GetComp<Inventory>();
-            Inven.LoadItemsFromData(mCharSaveData);
+            Inven = new Inventory(20);
+            // Inven.LoadItemsFromData(mCharSaveData);
 
             ItemSaveData[] mSavedAllItems = mCharSaveData.Items.Values.ToArray();
 
@@ -75,13 +75,13 @@ namespace PahlUnity
                 mCharSaveData.LifePotionCount = 3;
                 mCharSaveData.ManaPotionCount = 3;
 
-                ItemInfo itemInfo = new ItemInfo();
-                itemInfo.InitItem("Item10");
-                Inven.AddItem(itemInfo);
-                Inven.RepairItem(itemInfo.InstanceID);
-                Inven.SetEquipableItem(itemInfo.InstanceID);
+                // ItemInfo itemInfo = new ItemInfo();
+                // itemInfo.InitItem("Item10");
+                // Inven.AddItem(itemInfo);
+                // Inven.RepairItem(itemInfo.InstanceID);
+                // Inven.SetEquipableItem(itemInfo.InstanceID);
 
-                Equip.EquipItem(itemInfo);
+                // Equip.EquipItem(itemInfo);
 
                 SkillCtrl.LearnNewSkill("Skill05");
                 SkillCtrl.EquipSkill("Skill05", 0);

@@ -25,7 +25,7 @@ namespace PahlUnity
 
         public void AddModifier(SpecValue spec)
         {
-            int key = PahlUnity.StableHash.ToInt32(spec.Info.KeyName);
+            int key = spec.Info.KeyName.ExGetStableHash32();
             if (!mSpecs.ContainsKey(key))
             {
                 mSpecs[key] = new HashSet<SpecValue>();
@@ -34,7 +34,7 @@ namespace PahlUnity
         }
         public void RemoveModifier(SpecValue spec)
         {
-            int key = PahlUnity.StableHash.ToInt32(spec.Info.KeyName);
+            int key = spec.Info.KeyName.ExGetStableHash32();
             if (mSpecs.TryGetValue(key, out HashSet<SpecValue> specSet))
             {
                 specSet.Remove(spec);

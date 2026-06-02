@@ -14,7 +14,7 @@ namespace PahlUnity.Demo
         public bool IsRepaired;
         public bool IsEquipable;
 
-        public int RandomSeed { get => StableHash.ToInt32(InstanceID); }
+        public int RandomSeed { get => InstanceID.ExGetStableHash32(); }
         public int LevelIndex { get => Level - 1; }
     }
 }
