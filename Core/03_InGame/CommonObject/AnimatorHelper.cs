@@ -21,18 +21,15 @@ namespace PahlUnity
         public void PlayAnim(int stateNameHash)
         {
             if (mAnimEventState != null)
-            {
                 mAnimEventState.IsEnd = true;
-                mAnimEventState = null;
-            }
+
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
         public void PlayAnim(int stateNameHash, Action<int> onFire)
         {
             if (mAnimEventState != null)
-            {
                 mAnimEventState.IsEnd = true;
-            }
+
             mAnimEventState = new AnimEventState(stateNameHash);
             mAnimEventState.onFire = onFire;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
@@ -40,9 +37,8 @@ namespace PahlUnity
         public AnimEventState PlayAnimWithEvent(int stateNameHash)
         {
             if (mAnimEventState != null)
-            {
                 mAnimEventState.IsEnd = true;
-            }
+
             mAnimEventState = new AnimEventState(stateNameHash);
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
             return mAnimEventState;
@@ -51,24 +47,39 @@ namespace PahlUnity
         public async UniTask<bool> PlayAnimWaitFire(int stateNameHash)
         {
             if (mAnimEventState != null)
-            {
                 mAnimEventState.IsEnd = true;
-            }
+
             mAnimEventState = new AnimEventState(stateNameHash);
+            AnimEventState animEventState = mAnimEventState;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
-            await UniTask.WaitUntil(() => mAnimEventState.IsFired || mAnimEventState.IsEnd);
-            return mAnimEventState.IsFired;
+            await UniTask.WaitUntil(() => animEventState.IsFired || animEventState.IsEnd,
+                                        cancellationToken: animEventState.cancelToken.Token,
+                                        cancelImmediately: true);
+            return animEventState.IsFired;
         }
 
         public async UniTask PlayAnimWaitEnd(int stateNameHash)
         {
             if (mAnimEventState != null)
+                mAnimEventState.IsEnd = true;
+
+            mAnimEventState = new AnimEventState(stateNameHash);
+            AnimEventState animEventState = mAnimEventState;
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+            await UniTask.WaitUntil(() => animEventState.IsEnd,
+                                        cancellationToken: animEventState.cancelToken.Token,
+                                        cancelImmediately: true);
+        }
+
+        public void CancelPreviousAnim()
+        {
+            if (mAnimEventState != null)
             {
                 mAnimEventState.IsEnd = true;
+                mAnimEventState.cancelToken.Cancel();
+                mAnimEventState.cancelToken.Dispose();
+                mAnimEventState = null;
             }
-            mAnimEventState = new AnimEventState(stateNameHash);
-            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
-            await UniTask.WaitUntil(() => mAnimEventState.IsEnd);
         }
 
         public void SetParamFloat(string paramName, float value)
@@ -188,6 +199,7 @@ namespace PahlUnity
         public bool IsEnd = false;
         public int FireIndex = -1;
         public Action<int> onFire = null;
+        public CancellationTokenSource cancelToken = null;
 
         public AnimEventState(int animStateNameHash)
         {
@@ -195,6 +207,7 @@ namespace PahlUnity
             IsFired = false;
             IsEnd = false;
             FireIndex = -1;
+            cancelToken = new CancellationTokenSource();
         }
     }
 }
