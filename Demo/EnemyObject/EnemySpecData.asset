@@ -23,8 +23,6 @@ MonoBehaviour:
     _Value: 123
     _Min: 0
     _Max: 0
-    _Base: 0
-    _Step: 0
     _Curve:
       serializedVersion: 2
       m_Curve: []
@@ -32,14 +30,13 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     _CustomValue: 
+    _Step: 0
   - _Key: MaxHP
     _ModifierType: 2
     _ValueType: 0
     _Value: 0.2
     _Min: 0
     _Max: 0
-    _Base: 0
-    _Step: 0
     _Curve:
       serializedVersion: 2
       m_Curve: []
@@ -47,3 +44,4 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     _CustomValue: 
+    _Step: 0
