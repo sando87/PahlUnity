@@ -6,6 +6,7 @@ namespace PahlUnity
     {
         [SerializeField] BoxCollider _ThinPlatform = null;
 
+        BaseObject mBaseObj = null;
         BoxCollider mCollider = null;
 
         public Vector3 Center { get => mCollider.transform.TransformPoint(mCollider.center); }
@@ -26,6 +27,7 @@ namespace PahlUnity
 
         void Awake()
         {
+            mBaseObj = this.ExGetBase();
             mCollider = GetComponent<BoxCollider>();
 
             // 유닛 이동시 Terrain와 얇은지형 경계에서 자꾸 밑으로 떨어지는 버그 수정
@@ -44,7 +46,16 @@ namespace PahlUnity
         {
             if (worldDir.sqrMagnitude <= 0.0001f) return;
 
-            transform.rotation = Quaternion.LookRotation(worldDir.normalized, transform.up);
+            mBaseObj.transform.rotation = Quaternion.LookRotation(worldDir.normalized, mBaseObj.transform.up);
+        }
+        public void Turn(Vector3 worldDir, float delta)
+        {
+            if (worldDir.sqrMagnitude <= 0.0001f || delta <= 0f) return;
+
+            mBaseObj.transform.rotation = Quaternion.RotateTowards(
+                mBaseObj.transform.rotation,
+                Quaternion.LookRotation(worldDir.normalized, mBaseObj.transform.up),
+                delta);
         }
     }
 }

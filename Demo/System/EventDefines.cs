@@ -1,7 +1,3 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-#define IS_DEBUG_MODE
-#endif
-
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Unity.Collections.LowLevel.Unsafe;

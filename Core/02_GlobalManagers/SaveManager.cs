@@ -1,3 +1,7 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#define IS_DEBUG_MODE
+#endif
+
 using System;
 using System.Collections;
 using Cysharp.Threading.Tasks;
