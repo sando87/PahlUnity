@@ -69,12 +69,6 @@ namespace PahlUnity.Demo
         public static readonly int StandableOnThin = LayerMask.NameToLayer("StandableOnThin");
     }
 
-    public static class InteractMaskDemo
-    {
-        public const InteractMask DetectSignal = (InteractMask)(1 << 6);
-        public const InteractMask TriggerSignal = (InteractMask)(1 << 7);
-    }
-
     [System.Serializable]
     public class PlayerData
     {

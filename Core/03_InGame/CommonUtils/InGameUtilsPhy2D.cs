@@ -34,7 +34,7 @@ namespace PahlUnity
             }
         }
 
-        public static int OverlapCircleAll(Vector2 center, float radius, int layerMask, InteractMask interactMask, List<BaseObject> rets)
+        public static int OverlapCircleAll(Vector2 center, float radius, int layerMask, uint interactMask, List<BaseObject> rets)
         {
             ContactFilter2D filter2D = new ContactFilter2D();
             filter2D.useLayerMask = true;
@@ -53,8 +53,8 @@ namespace PahlUnity
                 if (interCol == null)
                     continue;
 
-                InteractMask mask = interactMask & interCol.MyProperty;
-                if (mask != InteractMask.Nothing)
+                uint mask = interactMask & interCol.MyProperty;
+                if (mask != 0)
                 {
                     BaseObject baseObj = col.ExGetBase();
                     if (baseObj != null)
@@ -68,7 +68,7 @@ namespace PahlUnity
             return retCount;
         }
 
-        public static BaseObject CircleCast(Vector2 center, float radius, Vector2 direction, float distance, int layerMask, InteractMask interactMask)
+        public static BaseObject CircleCast(Vector2 center, float radius, Vector2 direction, float distance, int layerMask, uint interactMask)
         {
             ContactFilter2D filter2D = new ContactFilter2D();
             filter2D.useLayerMask = true;
@@ -88,8 +88,8 @@ namespace PahlUnity
                 if (interCol == null)
                     continue;
 
-                InteractMask mask = interactMask & interCol.MyProperty;
-                if (mask != InteractMask.Nothing)
+                uint mask = interactMask & interCol.MyProperty;
+                if (mask != 0)
                 {
                     if (minDist > _hits[i].distance)
                     {

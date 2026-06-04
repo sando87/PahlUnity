@@ -5,17 +5,17 @@ namespace PahlUnity
 {
     public class InteractableCollider : MonoBehaviour
     {
-        [SerializeField] InteractMask _MyProperty = InteractMask.Everything;
-        [SerializeField] InteractMask _InteractableWith = InteractMask.Everything;
+        [SerializeField, InteractMaskSelector] uint _MyProperty = 0;
+        [SerializeField, InteractMaskSelector] uint _InteractableWith = 0;
 
-        public InteractMask MyProperty => _MyProperty;
+        public uint MyProperty => _MyProperty;
         public bool LockInteract { get; set; } = false;
 
         public event Action<Collider2D> OnInteractEnter2D;
         public event Action<Collider2D> OnInteractLeave2D;
         public event Action<Collider> OnInteractEnter3D;
         public event Action<Collider> OnInteractLeave3D;
-        public event Action<BaseObject, InteractMask> OnInteractSignal;
+        public event Action<BaseObject, uint> OnInteractSignal;
 
         private Collider2D mCollider2D = null;
         private Collider mCollider3D = null;
@@ -100,10 +100,10 @@ namespace PahlUnity
             if (mCollider3D != null && gameObject != mCollider3D.gameObject)
                 return false;
 
-            InteractMask mask = _InteractableWith & other._MyProperty;
-            return mask != InteractMask.Nothing;
+            uint mask = _InteractableWith & other._MyProperty;
+            return mask != 0;
         }
-        public void InvokeInteractSignal(BaseObject invoker, InteractMask signal)
+        public void InvokeInteractSignal(BaseObject invoker, uint signal)
         {
             if (LockInteract)
                 return;
@@ -112,8 +112,8 @@ namespace PahlUnity
             if (gameObject != mCollider2D.gameObject)
                 return;
 
-            InteractMask mask = _InteractableWith & signal;
-            if (mask != InteractMask.Nothing)
+            uint mask = _InteractableWith & signal;
+            if (mask != 0)
             {
                 OnInteractSignal?.Invoke(invoker, signal);
             }
