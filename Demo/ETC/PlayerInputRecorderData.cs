@@ -29,7 +29,7 @@ namespace PahlUnity.Demo
     public struct RecordedInputData
     {
         public float delayTime;
-        public InputActionName buttonType;
+        public int buttonType;
         public bool isPressed;
         public Vector2 MoveValue;
     }

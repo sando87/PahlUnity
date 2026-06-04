@@ -8,6 +8,8 @@ namespace PahlUnity
 {
     public class InputUI : MonoBehaviour, IInputHandler
     {
+        [SerializeField] string _InputActionUIMove = "UIMove";
+        [SerializeField] string _InputActionUIBack = "UIBack";
         [SerializeField] UIPartsHandler[] _UIParts;
 
         public Action EventCancel { get; set; }
@@ -15,8 +17,14 @@ namespace PahlUnity
         public UIPartsHandler CurrentSelectedPart { get; private set; }
         public UIPartsHandler[] UIParts { get => _UIParts; }
 
+        private int mInputActionUIMove = 0;
+        private int mInputActionUIBack = 0;
+
         void Awake()
         {
+            mInputActionUIMove = InputManager.GetInputActionNameHash(_InputActionUIMove);
+            mInputActionUIBack = InputManager.GetInputActionNameHash(_InputActionUIBack);
+
             if (_UIParts == null || _UIParts.Length == 0)
                 _UIParts = GetComponentsInChildren<UIPartsHandler>();
         }
@@ -37,15 +45,15 @@ namespace PahlUnity
 
         public void OnInputUpdate(InputManager inputManager)
         {
-            if (inputManager.JustPressed(InputActionName.UIMove))
+            if (inputManager.JustPressed(mInputActionUIMove))
             {
-                Vector2 moveDir = inputManager.GetInputValue<Vector2>(InputActionName.UIMove);
+                Vector2 moveDir = inputManager.GetInputValue<Vector2>(mInputActionUIMove);
                 if (moveDir.magnitude > 0.1f)
                 {
                     Move(moveDir.normalized);
                 }
             }
-            else if (inputManager.JustPressed(InputActionName.UIBack))
+            else if (inputManager.JustPressed(mInputActionUIBack))
             {
                 EventCancel?.Invoke();
             }

@@ -18,46 +18,46 @@ namespace PahlUnity.Demo
         [Button("Jump")]
         void Jump()
         {
-            VirtualInput.Tap(InputActionName.Jump);
+            VirtualInput.Tap(InputActionNameHash.Jump);
         }
 
         [Button("Move Right")]
         void MoveRight()
         {
-            VirtualInput.SetValue(InputActionName.Move, new Vector2(1, 0));
+            VirtualInput.SetValue(InputActionNameHash.Move, new Vector2(1, 0));
         }
 
         [Button("Move Left")]
         void MoveLeft()
         {
-            VirtualInput.SetValue(InputActionName.Move, new Vector2(-1, 0));
+            VirtualInput.SetValue(InputActionNameHash.Move, new Vector2(-1, 0));
         }
 
         [Button("Move Stop")]
         void MoveStop()
         {
-            VirtualInput.SetValue(InputActionName.Move, new Vector2(0, 0));
+            VirtualInput.SetValue(InputActionNameHash.Move, new Vector2(0, 0));
         }
 
         [Button("AttackA")]
         void AttackA()
         {
-            VirtualInput.Tap(InputActionName.SkillSlotA);
+            VirtualInput.Tap(InputActionNameHash.SkillSlotA);
         }
         [Button("AttackB")]
         void AttackB()
         {
-            VirtualInput.Tap(InputActionName.SkillSlotB);
+            VirtualInput.Tap(InputActionNameHash.SkillSlotB);
         }
         [Button("AttackStartC")]
         void AttackStartC()
         {
-            VirtualInput.Press(InputActionName.SkillSlotC);
+            VirtualInput.Press(InputActionNameHash.SkillSlotC);
         }
         [Button("AttackStopC")]
         void AttackStopC()
         {
-            VirtualInput.Release(InputActionName.SkillSlotC);
+            VirtualInput.Release(InputActionNameHash.SkillSlotC);
         }
     }
 

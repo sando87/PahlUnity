@@ -87,7 +87,7 @@ namespace PahlUnity.Demo
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionName.Jump)
+            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
             && mPlayerInput.MoveY >= 0)
             {
                 if (IsGrounded)
@@ -104,7 +104,7 @@ namespace PahlUnity.Demo
                     }
                 }
             }
-            else if (mPlayerInput.JustReleased(InputActionName.Jump))
+            else if (mPlayerInput.JustReleased(InputActionNameHash.Jump))
             {
                 mPhy.StopJump();
             }
@@ -115,7 +115,7 @@ namespace PahlUnity.Demo
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionName.Jump)
+            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
             && mPlayerInput.MoveY < 0
             && IsGrounded)
             {
@@ -129,7 +129,7 @@ namespace PahlUnity.Demo
             if (LockDash)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionName.Dash))
+            if (mPlayerInput.JustPressed(InputActionNameHash.Dash))
             {
                 Vector3 dashDir = mBody.FrontDirVec3;
                 mPhy.DoDash(dashDir, _DashSpeed, _DashDuration);

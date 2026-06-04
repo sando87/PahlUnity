@@ -93,9 +93,11 @@ namespace PahlUnity
 
         private InputActionMap _playerMap;
         private InputActionMap _uiMap;
-        private Dictionary<InputActionName, InputAction> mActionMap = new();
+        private Dictionary<int, InputAction> mActionMap = new();
 
         private IInputHandler mHandlerInput = null;
+
+        public static int GetInputActionNameHash(string actionName) => actionName.ExGetStableHash32();
 
         // =========================
         // Unity
@@ -161,8 +163,8 @@ namespace PahlUnity
             {
                 foreach (InputAction action in map.actions)
                 {
-                    InputActionName inputType = new(action.name);
-                    mActionMap[inputType] = action;
+                    int nameHash = GetInputActionNameHash(action.name);
+                    mActionMap[nameHash] = action;
                 }
             }
         }
@@ -378,20 +380,20 @@ namespace PahlUnity
             return Touchscreen.current != null;
         }
 
-        public bool JustPressed(InputActionName inputType) => GetInputAction(inputType).triggered;
-        public bool IsPressing(InputActionName inputType) => GetInputAction(inputType).IsPressed();
-        public bool JustReleased(InputActionName inputType) => GetInputAction(inputType).WasReleasedThisFrame();
+        public bool JustPressed(int inputActionNameHash) => GetInputAction(inputActionNameHash).triggered;
+        public bool IsPressing(int inputActionNameHash) => GetInputAction(inputActionNameHash).IsPressed();
+        public bool JustReleased(int inputActionNameHash) => GetInputAction(inputActionNameHash).WasReleasedThisFrame();
 
-        public TValue GetInputValue<TValue>(InputActionName inputType) where TValue : struct
+        public TValue GetInputValue<TValue>(int inputActionNameHash) where TValue : struct
         {
-            InputAction action = GetInputAction(inputType);
+            InputAction action = GetInputAction(inputActionNameHash);
             return action.ReadValue<TValue>();
         }
 
-        private InputAction GetInputAction(InputActionName inputType)
+        private InputAction GetInputAction(int inputActionNameHash)
         {
-            LOG.errorif(!mActionMap.ContainsKey(inputType));
-            return mActionMap[inputType];
+            LOG.errorif(!mActionMap.ContainsKey(inputActionNameHash));
+            return mActionMap[inputActionNameHash];
         }
 
 
@@ -413,34 +415,5 @@ namespace PahlUnity
                 mHandlerInput.OnInputEnter(this);
             }
         }
-    }
-
-    public readonly partial struct InputActionName
-    {
-        public readonly int mVal;
-        public InputActionName(string value) => mVal = value.ExGetStableHash32();
-        public InputActionName(int value) => mVal = value;
-
-        public static implicit operator int(InputActionName info) => info.mVal;
-        public static implicit operator InputActionName(int val) => new InputActionName(val);
-        public static implicit operator InputActionName(string val) => new InputActionName(val);
-
-        public override bool Equals(object obj) => obj is InputActionName other && mVal == other.mVal;
-        public override int GetHashCode() => mVal;
-
-        public static bool operator ==(InputActionName a, InputActionName b) => a.mVal == b.mVal;
-        public static bool operator !=(InputActionName a, InputActionName b) => a.mVal != b.mVal;
-
-        public static readonly InputActionName UIMove = new("UIMove");
-        public static readonly InputActionName UIBack = new("UIBack");
-        public static readonly InputActionName Move = new("Move");
-        public static readonly InputActionName Jump = new("Jump");
-        public static readonly InputActionName Dash = new("Dash");
-
-        // Example
-        // public static readonly InputActionName Jump = new("Jump");
-        // public static readonly InputActionName Dash = new("Dash");
-        // public static readonly InputActionName SkillA = new("SkillA");
-        // public static readonly InputActionName SkillB = new("SkillB");
     }
 }

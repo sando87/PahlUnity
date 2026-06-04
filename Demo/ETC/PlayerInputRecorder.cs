@@ -86,7 +86,7 @@ namespace PahlUnity.Demo
             // }
         }
 
-        IEnumerator ProcessButtonInput(InputActionName buttonType)
+        IEnumerator ProcessButtonInput(int buttonType)
         {
             while (true)
             {
@@ -104,7 +104,7 @@ namespace PahlUnity.Demo
                 Vector2 curMoveXY = PlayerInput.MoveXY;
                 if (!curMoveXY.Equals(prevMoveXY))
                 {
-                    Record(InputActionName.Move, curMoveXY);
+                    Record(InputActionNameHash.Move, curMoveXY);
                     prevMoveXY = curMoveXY;
                 }
                 yield return null;
@@ -112,7 +112,7 @@ namespace PahlUnity.Demo
         }
 
 
-        void Record(InputActionName buttonType, bool isPressed)
+        void Record(int buttonType, bool isPressed)
         {
             float currentTime = Time.time;
             float delay = currentTime - mLastInputTime;
@@ -131,7 +131,7 @@ namespace PahlUnity.Demo
             UnityEditor.EditorUtility.SetDirty(_RecordData);
 #endif
         }
-        void Record(InputActionName buttonType, Vector2 moveValue)
+        void Record(int buttonType, Vector2 moveValue)
         {
             float currentTime = Time.time;
             float delay = currentTime - mLastInputTime;
@@ -158,9 +158,9 @@ namespace PahlUnity.Demo
             {
                 yield return new WaitForSeconds(input.delayTime);
 
-                if (input.buttonType == InputActionName.Move)
+                if (input.buttonType == InputActionNameHash.Move)
                 {
-                    VirtualInput.SetValue(InputActionName.Move, input.MoveValue);
+                    VirtualInput.SetValue(InputActionNameHash.Move, input.MoveValue);
                 }
                 else
                 {

@@ -10,9 +10,17 @@ namespace PahlUnity
 {
     public class InputPlayer : MonoBehaviour, IInputHandler
     {
+        [SerializeField] string _InputActionMove = "Move";
+
         private InputManager mInputManager = null;
+        private int mInputActionMove = 0;
 
         public bool IsLoseControl => mInputManager == null;
+
+        void Awake()
+        {
+            mInputActionMove = InputManager.GetInputActionNameHash(_InputActionMove);
+        }
 
         public void OnInputEnter(InputManager inputManager)
         {
@@ -43,19 +51,19 @@ namespace PahlUnity
             }
         }
 
-        public bool JustPressed(InputActionName inputType) => mInputManager != null ? mInputManager.JustPressed(inputType) : false;
-        public bool IsPressing(InputActionName inputType) => mInputManager != null ? mInputManager.IsPressing(inputType) : false;
-        public bool JustReleased(InputActionName inputType) => mInputManager != null ? mInputManager.JustReleased(inputType) : false;
+        public bool JustPressed(int inputActionNameHash) => mInputManager != null ? mInputManager.JustPressed(inputActionNameHash) : false;
+        public bool IsPressing(int inputActionNameHash) => mInputManager != null ? mInputManager.IsPressing(inputActionNameHash) : false;
+        public bool JustReleased(int inputActionNameHash) => mInputManager != null ? mInputManager.JustReleased(inputActionNameHash) : false;
 
-        public float MoveX { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(InputActionName.Move).x : 0f; }
-        public float MoveY { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(InputActionName.Move).y : 0f; }
-        public Vector2 MoveXY { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(InputActionName.Move) : Vector2.zero; }
+        public float MoveX { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(mInputActionMove).x : 0f; }
+        public float MoveY { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(mInputActionMove).y : 0f; }
+        public Vector2 MoveXY { get => mInputManager != null ? mInputManager.GetInputValue<Vector2>(mInputActionMove) : Vector2.zero; }
 
-        public TValue GetInputValue<TValue>(InputActionName inputType) where TValue : struct
+        public TValue GetInputValue<TValue>(int inputActionNameHash) where TValue : struct
         {
             if (mInputManager != null)
             {
-                return mInputManager.GetInputValue<TValue>(inputType);
+                return mInputManager.GetInputValue<TValue>(inputActionNameHash);
             }
             else
             {

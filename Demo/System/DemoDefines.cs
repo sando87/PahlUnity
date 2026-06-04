@@ -15,23 +15,29 @@ namespace PahlUnity
         public static readonly AnimStateHash Death = new("Death");
     }
 
-    public readonly partial struct InputActionName
-    {
-        public static readonly InputActionName SkillSlotA = new("SkillSlotA");
-        public static readonly InputActionName SkillSlotB = new("SkillSlotB");
-        public static readonly InputActionName SkillSlotC = new("SkillSlotC");
-        public static readonly InputActionName SkillSlotD = new("SkillSlotD");
-
-        public static readonly InputActionName PotionA = new("PotionA");
-        public static readonly InputActionName PotionB = new("PotionB");
-
-        public static readonly InputActionName ShowPopupStats = new("ShowPopupStats");
-        public static readonly InputActionName ShowPopupInven = new("ShowPopupInven");
-        public static readonly InputActionName ShowPopupSkill = new("ShowPopupSkill");
-    }
-
     namespace Demo
     {
+        public static class InputActionNameHash
+        {
+            public static readonly int UIMove = InputManager.GetInputActionNameHash("UIMove");
+            public static readonly int UIBack = InputManager.GetInputActionNameHash("UIBack");
+            public static readonly int Move = InputManager.GetInputActionNameHash("Move");
+            public static readonly int Jump = InputManager.GetInputActionNameHash("Jump");
+            public static readonly int Dash = InputManager.GetInputActionNameHash("Dash");
+
+            public static readonly int SkillSlotA = InputManager.GetInputActionNameHash("SkillSlotA");
+            public static readonly int SkillSlotB = InputManager.GetInputActionNameHash("SkillSlotB");
+            public static readonly int SkillSlotC = InputManager.GetInputActionNameHash("SkillSlotC");
+            public static readonly int SkillSlotD = InputManager.GetInputActionNameHash("SkillSlotD");
+
+            public static readonly int PotionA = InputManager.GetInputActionNameHash("PotionA");
+            public static readonly int PotionB = InputManager.GetInputActionNameHash("PotionB");
+
+            public static readonly int ShowPopupStats = InputManager.GetInputActionNameHash("ShowPopupStats");
+            public static readonly int ShowPopupInven = InputManager.GetInputActionNameHash("ShowPopupInven");
+            public static readonly int ShowPopupSkill = InputManager.GetInputActionNameHash("ShowPopupSkill");
+        }
+
         public static class AnimatorParams
         {
             public static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");

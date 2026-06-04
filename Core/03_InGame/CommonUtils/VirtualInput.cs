@@ -16,8 +16,8 @@ namespace PahlUnity
             public Coroutine coroutine;
         }
 
-        private Dictionary<InputActionName, VirtualState> mStates
-            = new Dictionary<InputActionName, VirtualState>();
+        private Dictionary<int, VirtualState> mStates
+            = new Dictionary<int, VirtualState>();
 
         void Awake()
         {
@@ -29,9 +29,9 @@ namespace PahlUnity
         }
 
         // ===== 버튼 입력 =====
-        public void Press(InputActionName type)
+        public void Press(int inputAction)
         {
-            var state = mStates[type];
+            var state = mStates[inputAction];
             if (!state.isPressed)
             {
                 state.isPressed = true;
@@ -41,9 +41,9 @@ namespace PahlUnity
             }
         }
 
-        public void Release(InputActionName type)
+        public void Release(int inputAction)
         {
-            var state = mStates[type];
+            var state = mStates[inputAction];
             state.isPressed = false;
             state.isReleasedJust = true;
             state.pressedTime = 0f;
@@ -55,63 +55,63 @@ namespace PahlUnity
             this.ExAfterFrameCoroutine(() => state.isReleasedJust = false);
         }
 
-        public void Tap(InputActionName type, float holdTime = 0.2f)
+        public void Tap(int inputAction, float holdTime = 0.2f)
         {
-            var state = mStates[type];
+            var state = mStates[inputAction];
             if (state.isPressed) return;
 
-            Press(type);
-            state.coroutine = this.ExDelayedCoroutine(holdTime, () => Release(type));
+            Press(inputAction);
+            state.coroutine = this.ExDelayedCoroutine(holdTime, () => Release(inputAction));
         }
 
         // ===== 값 입력 =====
-        public void SetValue(InputActionName type, Vector2 value)
+        public void SetValue(int inputAction, Vector2 value)
         {
-            var state = mStates[type];
+            var state = mStates[inputAction];
             state.vector2Value = value;
 
             if (value != Vector2.zero)
-                Press(type);
+                Press(inputAction);
             else
-                Release(type);
+                Release(inputAction);
         }
 
-        public void SetValue(InputActionName type, float value)
+        public void SetValue(int inputAction, float value)
         {
-            var state = mStates[type];
+            var state = mStates[inputAction];
             state.floatValue = value;
 
             if (Mathf.Abs(value) > 0.0001f)
-                Press(type);
+                Press(inputAction);
             else
-                Release(type);
+                Release(inputAction);
         }
 
         // ===== 조회 =====
-        public bool IsPressed(InputActionName type)
-            => mStates[type].isPressed;
+        public bool IsPressed(int inputAction)
+            => mStates[inputAction].isPressed;
 
-        public bool JustPressed(InputActionName type)
+        public bool JustPressed(int inputAction)
         {
-            var s = mStates[type];
+            var s = mStates[inputAction];
             return s.isPressedJust;
         }
-        public bool JustReleased(InputActionName type)
+        public bool JustReleased(int inputAction)
         {
-            var s = mStates[type];
+            var s = mStates[inputAction];
             return s.isReleasedJust;
         }
 
-        public float HeldTime(InputActionName type)
+        public float HeldTime(int inputAction)
         {
-            var s = mStates[type];
+            var s = mStates[inputAction];
             return s.isPressed ? Time.time - s.pressedTime : 0f;
         }
 
-        public Vector2 GetVector2(InputActionName type)
-            => mStates[type].vector2Value;
+        public Vector2 GetVector2(int inputAction)
+            => mStates[inputAction].vector2Value;
 
-        public float GetFloat(InputActionName type)
-            => mStates[type].floatValue;
+        public float GetFloat(int inputAction)
+            => mStates[inputAction].floatValue;
     }
 }
