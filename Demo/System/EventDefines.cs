@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-namespace PahlUnity
+namespace PahlUnity.Demo
 {
     public struct SaveUserPlayData : IEventParam
     {

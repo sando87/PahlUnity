@@ -18,7 +18,7 @@ namespace PahlUnity
         }
 
 
-        public void PlayAnim(AnimStateHash stateNameHash)
+        public void PlayAnim(int stateNameHash)
         {
             if (mAnimEventState != null)
             {
@@ -27,7 +27,7 @@ namespace PahlUnity
             }
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
-        public void PlayAnim(AnimStateHash stateNameHash, Action<int> onFire)
+        public void PlayAnim(int stateNameHash, Action<int> onFire)
         {
             if (mAnimEventState != null)
             {
@@ -37,7 +37,7 @@ namespace PahlUnity
             mAnimEventState.onFire = onFire;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
-        public AnimEventState PlayAnimWithEvent(AnimStateHash stateNameHash)
+        public AnimEventState PlayAnimWithEvent(int stateNameHash)
         {
             if (mAnimEventState != null)
             {
@@ -48,7 +48,7 @@ namespace PahlUnity
             return mAnimEventState;
         }
 
-        public async UniTask<bool> PlayAnimWaitFire(AnimStateHash stateNameHash)
+        public async UniTask<bool> PlayAnimWaitFire(int stateNameHash)
         {
             if (mAnimEventState != null)
             {
@@ -60,7 +60,7 @@ namespace PahlUnity
             return mAnimEventState.IsFired;
         }
 
-        public async UniTask PlayAnimWaitEnd(AnimStateHash stateNameHash)
+        public async UniTask PlayAnimWaitEnd(int stateNameHash)
         {
             if (mAnimEventState != null)
             {
@@ -160,10 +160,10 @@ namespace PahlUnity
         }
 
 
-        public void InvokeEventEnter(AnimStateHash stateNameHash)
+        public void InvokeEventEnter(int stateNameHash)
         {
         }
-        public void InvokeEventMiddle(AnimStateHash stateNameHash, int index)
+        public void InvokeEventMiddle(int stateNameHash, int index)
         {
             if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
             {
@@ -172,7 +172,7 @@ namespace PahlUnity
                 mAnimEventState.onFire?.Invoke(index);
             }
         }
-        public void InvokeEventLeave(AnimStateHash stateNameHash)
+        public void InvokeEventLeave(int stateNameHash)
         {
             if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
             {
@@ -183,13 +183,13 @@ namespace PahlUnity
 
     public class AnimEventState
     {
-        public AnimStateHash CurrentAnim = 0;
+        public int CurrentAnim = 0;
         public bool IsFired = false;
         public bool IsEnd = false;
         public int FireIndex = -1;
         public Action<int> onFire = null;
 
-        public AnimEventState(AnimStateHash animStateNameHash)
+        public AnimEventState(int animStateNameHash)
         {
             CurrentAnim = animStateNameHash;
             IsFired = false;
