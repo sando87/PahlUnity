@@ -9,6 +9,13 @@ namespace PahlUnity
     {
         [SerializeField] Transform _FillAmountBar = null;
 
+        private Camera mBillboardCamera = null;
+
+        void Awake()
+        {
+            mBillboardCamera = Camera.main;
+        }
+
         void Start()
         {
             gameObject.SetActive(false);
@@ -36,9 +43,22 @@ namespace PahlUnity
             _FillAmountBar.transform.localScale = new Vector3(rate, 1, 1);
         }
 
-        void Update()
+        void LateUpdate()
         {
-            transform.rotation = Quaternion.identity;
+            UpdateBillboardRotation();
+        }
+
+        void UpdateBillboardRotation()
+        {
+            if (mBillboardCamera == null)
+            {
+                mBillboardCamera = Camera.main;
+            }
+
+            if (mBillboardCamera == null)
+                return;
+
+            transform.rotation = mBillboardCamera.transform.rotation;
         }
     }
 }

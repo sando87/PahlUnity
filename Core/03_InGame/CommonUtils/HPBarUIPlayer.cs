@@ -14,6 +14,12 @@ namespace PahlUnity
 
         private Health mHealthStatus = null;
         private HealthInfo mPreviousState = new HealthInfo();
+        private Camera mBillboardCamera = null;
+
+        void Awake()
+        {
+            mBillboardCamera = Camera.main;
+        }
 
         public void SetHealthStatus(Health health)
         {
@@ -23,8 +29,12 @@ namespace PahlUnity
 
         void Update()
         {
-            transform.rotation = Quaternion.identity;
             UpdatePlayerHealth();
+        }
+
+        void LateUpdate()
+        {
+            UpdateBillboardRotation();
         }
 
         void UpdatePlayerHealth()
@@ -65,6 +75,19 @@ namespace PahlUnity
             if (_FillAmountShield == null) return;
             float rate = Mathf.Clamp(_rate, 0, 1);
             _FillAmountShield.transform.localScale = new Vector3(rate, 1, 1);
+        }
+
+        void UpdateBillboardRotation()
+        {
+            if (mBillboardCamera == null)
+            {
+                mBillboardCamera = Camera.main;
+            }
+
+            if (mBillboardCamera == null)
+                return;
+
+            transform.rotation = mBillboardCamera.transform.rotation;
         }
     }
 }
