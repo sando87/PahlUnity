@@ -12,11 +12,11 @@ namespace PahlUnity
     }
 
     [Serializable]
-    public class SpecValueInfo
+    public struct SpecValueInfo
     {
-        [SerializeField, SpecFieldSelector] private string _Key = "";
-        [SerializeField] private SpecModifierType _ModifierType = SpecModifierType.Base;
-        [SerializeField] private SpecValueType _ValueType = SpecValueType.Simple;
+        [SerializeField, SpecFieldSelector] private string _Key;
+        [SerializeField] private SpecModifierType _ModifierType;
+        [SerializeField] private SpecValueType _ValueType;
 
         bool IsNoneValueType => _ValueType == SpecValueType.Simple;
         [SerializeField, AllowNesting, ShowIf(nameof(IsNoneValueType))] private float _Value;
@@ -26,12 +26,12 @@ namespace PahlUnity
         [SerializeField, AllowNesting, ShowIf(nameof(IsMinMaxValueType))] private float _Max;
 
         bool IsCurveValueType => _ValueType == SpecValueType.Curve;
-        [SerializeField, AllowNesting, ShowIf(nameof(IsCurveValueType))] private AnimationCurve _Curve = null;
+        [SerializeField, AllowNesting, ShowIf(nameof(IsCurveValueType))] private AnimationCurve _Curve;
 
         bool IsCustomValueType => _ValueType == SpecValueType.Custom;
-        [SerializeField, AllowNesting, ShowIf(nameof(IsCustomValueType))] private string _CustomValue = null;
+        [SerializeField, AllowNesting, ShowIf(nameof(IsCustomValueType))] private string _CustomValue;
 
-        [SerializeField] private float _Step = 0f;
+        [SerializeField] private float _Step;
 
         public string KeyName => _Key;
         public SpecModifierType ModifierType => _ModifierType;
