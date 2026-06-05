@@ -39,7 +39,12 @@ namespace PahlUnity
 
         private void Update()
         {
-            Simulate(Time.deltaTime);
+            SimulateCC(Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            SimulateRB(Time.fixedDeltaTime);
         }
 
         public void Move(Vector3 worldVelocity)
@@ -112,9 +117,9 @@ namespace PahlUnity
             }
         }
 
-        private void Simulate(float deltaTime)
+        private void SimulateCC(float deltaTime)
         {
-            if (deltaTime <= 0f)
+            if (mCC == null || deltaTime <= 0f)
                 return;
 
             if (mLockMovement)
@@ -124,11 +129,23 @@ namespace PahlUnity
             UpdateDash(deltaTime);
 
             Vector3 frameVelocity = mVelocity + mDashVelocity;
-            if (mCC != null)
-                mCC.Move(frameVelocity * deltaTime);
-            else if (mRB != null)
-                mRB.linearVelocity = frameVelocity;
+            mCC.Move(frameVelocity * deltaTime);
         }
+        private void SimulateRB(float deltaTime)
+        {
+            if (mRB == null || deltaTime <= 0f)
+                return;
+
+            if (mLockMovement)
+                return;
+
+            ApplyGravity(deltaTime);
+            UpdateDash(deltaTime);
+
+            Vector3 frameVelocity = mVelocity + mDashVelocity;
+            mRB.linearVelocity = frameVelocity;
+        }
+
 
         private void ApplyGravity(float deltaTime)
         {
