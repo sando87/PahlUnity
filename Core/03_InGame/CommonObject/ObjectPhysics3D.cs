@@ -9,6 +9,7 @@ namespace PahlUnity
         [SerializeField] private float _StopJumpVelocity = 5f;
 
         private CharacterController mCC = null;
+        private Rigidbody mRB = null;
         private BaseObject mBase = null;
         private Vector3 mVelocity = Vector3.zero;
         private Vector3 mDashVelocity = Vector3.zero;
@@ -17,6 +18,7 @@ namespace PahlUnity
         private bool mLockMovement = false;
 
         public CharacterController Controller => mCC;
+        public Rigidbody Rigidbody => mRB;
         public bool IsGrounded => mCC != null && mCC.isGrounded;
         public Vector3 Position { get => transform.position; set => Teleport(value); }
         public Vector3 Velocity { get => mVelocity; set => mVelocity = value; }
@@ -32,6 +34,7 @@ namespace PahlUnity
         {
             mBase = this.ExGetBase();
             mCC = GetComponent<CharacterController>();
+            mRB = GetComponent<Rigidbody>();
         }
 
         private void Update()
@@ -96,15 +99,22 @@ namespace PahlUnity
 
         public void Teleport(Vector3 position)
         {
-            bool wasEnabled = mCC.enabled;
-            mCC.enabled = false;
-            transform.position = position;
-            mCC.enabled = wasEnabled;
+            if (mCC != null)
+            {
+                bool wasEnabled = mCC.enabled;
+                mCC.enabled = false;
+                transform.position = position;
+                mCC.enabled = wasEnabled;
+            }
+            else if (mRB != null)
+            {
+                mRB.MovePosition(position);
+            }
         }
 
         private void Simulate(float deltaTime)
         {
-            if (mCC == null || deltaTime <= 0f)
+            if (deltaTime <= 0f)
                 return;
 
             if (mLockMovement)
@@ -114,7 +124,10 @@ namespace PahlUnity
             UpdateDash(deltaTime);
 
             Vector3 frameVelocity = mVelocity + mDashVelocity;
-            mCC.Move(frameVelocity * deltaTime);
+            if (mCC != null)
+                mCC.Move(frameVelocity * deltaTime);
+            else if (mRB != null)
+                mRB.linearVelocity = frameVelocity;
         }
 
         private void ApplyGravity(float deltaTime)
