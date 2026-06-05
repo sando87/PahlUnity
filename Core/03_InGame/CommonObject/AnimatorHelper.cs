@@ -58,12 +58,13 @@ namespace PahlUnity
             return animEventState.IsFired;
         }
 
-        public async UniTask PlayAnimWaitEnd(int stateNameHash)
+        public async UniTask PlayAnimWaitEnd(int stateNameHash, Action<int> onFire = null)
         {
             if (mAnimEventState != null)
                 mAnimEventState.IsEnd = true;
 
             mAnimEventState = new AnimEventState(stateNameHash);
+            mAnimEventState.onFire = onFire;
             AnimEventState animEventState = mAnimEventState;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
             await UniTask.WaitUntil(() => animEventState.IsEnd,
