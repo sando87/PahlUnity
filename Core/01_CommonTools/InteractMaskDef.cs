@@ -26,20 +26,39 @@ namespace PahlUnity
         {
             string assetPath = AssetDatabase.GetAssetPath(this);
             string directory = Path.GetDirectoryName(assetPath);
-            GenerateInteractMaskDefinesFile(directory);
+            string projectRoot = GetProjectRootFromAssetPath(assetPath);
+            string namespaceName = GetNamespaceName(projectRoot);
+            GenerateInteractMaskDefinesFile(directory, projectRoot, namespaceName);
         }
 
-        static void GenerateInteractMaskDefinesFile(string directory)
+        static void GenerateInteractMaskDefinesFile(string directory, string searchRoot, string namespaceName)
         {
             string className = "InteractMask";
             string outputPath = Path.Combine(directory, $"{className}.cs");
 
-            List<string> names = CollectNames();
+            List<string> names = CollectNames(searchRoot);
+            if (names.Count == 0)
+            {
+                Debug.LogWarning(
+                    $"[{nameof(InteractMaskDef)}] No interact mask names found under '{searchRoot}'. " +
+                    $"Create or select an {nameof(InteractMaskDef)} asset under '{searchRoot}', add mask names to it, " +
+                    $"then click 'Generate Interact Mask Defines' again. " +
+                    $"A define file with only Nothing/Everything will be generated for now.");
+            }
+
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine($"public static class {className}");
-            builder.AppendLine("{");
-            builder.AppendLine("   public const uint Nothing = 0u;");
+            bool useNamespace = !string.IsNullOrWhiteSpace(namespaceName);
+            if (useNamespace)
+            {
+                builder.AppendLine($"namespace {namespaceName}");
+                builder.AppendLine("{");
+            }
+
+            string indent = useNamespace ? "    " : "";
+            builder.AppendLine($"{indent}public static class {className}");
+            builder.AppendLine($"{indent}{{");
+            builder.AppendLine($"{indent}   public const uint Nothing = 0u;");
 
             HashSet<string> identifierSet = new HashSet<string>();
             uint everything = 0u;
@@ -51,11 +70,16 @@ namespace PahlUnity
                 uint maskValue = GetMaskValue(i);
                 everything |= maskValue;
 
-                builder.AppendLine($"   public const uint {identifier} = 1u << {i};");
+                builder.AppendLine($"{indent}   public const uint {identifier} = 1u << {i};");
             }
 
-            builder.AppendLine($"   public const uint Everything = {FormatUIntLiteral(everything)};");
-            builder.AppendLine("}");
+            builder.AppendLine($"{indent}   public const uint Everything = {FormatUIntLiteral(everything)};");
+            builder.AppendLine($"{indent}}}");
+
+            if (useNamespace)
+            {
+                builder.AppendLine("}");
+            }
 
             File.WriteAllText(outputPath, builder.ToString(), Encoding.UTF8);
             AssetDatabase.Refresh();
@@ -73,8 +97,13 @@ namespace PahlUnity
 
         public static List<string> CollectNames()
         {
+            return CollectNames("Assets");
+        }
+
+        public static List<string> CollectNames(string searchRoot)
+        {
             string typeName = nameof(InteractMaskDef);
-            string[] guids = AssetDatabase.FindAssets($"t:{typeName}", new[] { "Assets" });
+            string[] guids = AssetDatabase.FindAssets($"t:{typeName}", new[] { searchRoot });
             List<string> assetPaths = new List<string>();
             for (int i = 0; i < guids.Length; i++)
             {
@@ -116,6 +145,63 @@ namespace PahlUnity
             }
 
             return names;
+        }
+
+        public static string GetProjectRoot(UnityEngine.Object context)
+        {
+            if (context == null)
+            {
+                return "Assets";
+            }
+
+            string assetPath = AssetDatabase.GetAssetPath(context);
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                if (context is Component component)
+                {
+                    assetPath = component.gameObject.scene.path;
+                }
+                else if (context is GameObject gameObject)
+                {
+                    assetPath = gameObject.scene.path;
+                }
+            }
+
+            return GetProjectRootFromAssetPath(assetPath);
+        }
+
+        public static string GetProjectRootFromAssetPath(string assetPath)
+        {
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                return "Assets";
+            }
+
+            string normalizedPath = assetPath.Replace('\\', '/');
+            string[] parts = normalizedPath.Split('/');
+            if (parts.Length < 2 || parts[0] != "Assets")
+            {
+                return "Assets";
+            }
+
+            return $"Assets/{parts[1]}";
+        }
+
+        static string GetNamespaceName(string projectRoot)
+        {
+            if (string.IsNullOrEmpty(projectRoot))
+            {
+                return "";
+            }
+
+            string normalizedPath = projectRoot.Replace('\\', '/');
+            string[] parts = normalizedPath.Split('/');
+            if (parts.Length < 2)
+            {
+                return "";
+            }
+
+            return ToIdentifier(parts[1]);
         }
 
         static string ToIdentifier(string value)
