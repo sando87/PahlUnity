@@ -19,9 +19,12 @@ namespace PahlUnity
     {
         private const string EmptyLabel = "<Empty>";
         private const string MissingLabel = "<Missing> ";
+        private const string EmptyDataMessage = "No SpecFieldDefinition data found for this ProjectRoot.";
         private const string SpecKeyNameProperty = "_Name";
+        private static readonly HashSet<string> sLoggedEmptyProjectRoots = new HashSet<string>();
 
         private readonly List<string> mOptions = new List<string>();
+        private string mProjectRoot = "Assets";
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -33,7 +36,7 @@ namespace PahlUnity
                 return;
             }
 
-            RefreshOptions();
+            RefreshOptions(property);
 
             string currentValue = targetProperty.stringValue;
             int currentIndex = GetCurrentIndex(currentValue);
@@ -68,43 +71,22 @@ namespace PahlUnity
             return property.FindPropertyRelative(SpecKeyNameProperty);
         }
 
-        private void RefreshOptions()
+        private void RefreshOptions(SerializedProperty property)
         {
             mOptions.Clear();
             mOptions.Add(EmptyLabel);
 
-            SpecFieldSelectorAttribute selectorAttribute = (SpecFieldSelectorAttribute)attribute;
-            string typeName = nameof(SpecFieldDefinition);
-            string[] guids = AssetDatabase.FindAssets($"t:{typeName}", new[] { "Assets" });
-            HashSet<string> fieldSet = new HashSet<string>();
-
-            for (int i = 0; i < guids.Length; i++)
+            mProjectRoot = SpecFieldDefinition.GetProjectRoot(property.serializedObject.targetObject);
+            List<string> fields = SpecFieldDefinition.CollectFields(mProjectRoot);
+            if (fields.Count == 0)
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
-                SpecFieldDefinition definition = AssetDatabase.LoadAssetAtPath<SpecFieldDefinition>(assetPath);
-                if (definition == null)
-                {
-                    continue;
-                }
+                LogEmptyDataGuide(mProjectRoot);
+                return;
+            }
 
-                IReadOnlyList<string> fields = definition.Fields;
-
-                for (int fieldIndex = 0; fieldIndex < fields.Count; fieldIndex++)
-                {
-                    string field = fields[fieldIndex];
-
-                    if (string.IsNullOrWhiteSpace(field))
-                    {
-                        continue;
-                    }
-
-                    string fieldName = field.Trim();
-
-                    if (fieldSet.Add(fieldName))
-                    {
-                        mOptions.Add(fieldName);
-                    }
-                }
+            for (int i = 0; i < fields.Count; i++)
+            {
+                mOptions.Add(fields[i]);
             }
         }
 
@@ -125,6 +107,19 @@ namespace PahlUnity
 
             mOptions.Add(MissingLabel + currentValue);
             return mOptions.Count - 1;
+        }
+
+        private void LogEmptyDataGuide(string projectRoot)
+        {
+            if (!sLoggedEmptyProjectRoots.Add(projectRoot))
+                return;
+
+            Debug.LogWarning(
+                $"[{nameof(SpecFieldSelectorAttribute)}] {EmptyDataMessage}\n" +
+                $"ProjectRoot: {projectRoot}\n" +
+                $"Guide: Create a '{nameof(SpecFieldDefinition)}' asset under '{projectRoot}' via " +
+                $"'Assets/Create/PahlUnity/Spec Field Definition', add field names to the asset, " +
+                $"then click 'Generate Spec Fields' on that asset.");
         }
     }
 #endif
