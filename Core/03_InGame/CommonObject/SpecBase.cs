@@ -83,13 +83,14 @@ namespace PahlUnity
                     addModifier += Modifier.GetAddModifier(key);
                 }
 
-                float multiplyModifier = 0;
+                float percentModifier = 0;
                 foreach (var Modifier in mModifiers)
                 {
-                    multiplyModifier += Modifier.GetMultiplyModifier(key);
+                    percentModifier += Modifier.GetPercentModifier(key);
                 }
 
-                float finalMultiplier = multiplyModifier > 0 ? 1f + multiplyModifier : (1 / (1f - multiplyModifier));
+                float multiplier = percentModifier / 100f;
+                float finalMultiplier = multiplier > 0 ? 1f + multiplier : (1 / (1f - multiplier));
 
                 return (value + addModifier) * finalMultiplier;
             }

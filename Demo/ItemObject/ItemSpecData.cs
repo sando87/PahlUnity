@@ -11,7 +11,7 @@ namespace PahlUnity.Demo
         [SerializeField] private string _ItemDesc = "";
         [SerializeField] private bool _IsStackable = false;
         [SerializeField] private int _MaxStackCount = 1;
-        [SerializeField] private EquipmentSlotType _EquipSlot = EquipmentSlotType.None;
+        [SerializeField] private EquipmentSlotType _EquipSlot = 0;
         [SerializeField] private Sprite _ItemIcon = null;
         [SerializeField] private List<SpecValueInfo> _Specs = new List<SpecValueInfo>();
 

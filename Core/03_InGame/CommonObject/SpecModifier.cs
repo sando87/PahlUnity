@@ -59,18 +59,18 @@ namespace PahlUnity
             return totalModifier;
         }
 
-        public float GetMultiplyModifier(int key)
+        public float GetPercentModifier(int key)
         {
-            float totalModifier = 0;
+            float totalPercent = 0;
             if (mSpecs.TryGetValue(key, out HashSet<SpecValue> specSet))
             {
                 foreach (var spec in specSet)
                 {
-                    if (spec.Info.ModifierType == SpecModifierType.Multiply)
-                        totalModifier += spec.CurrentValue;
+                    if (spec.Info.ModifierType == SpecModifierType.Percent)
+                        totalPercent += spec.CurrentValue;
                 }
             }
-            return totalModifier;
+            return totalPercent;
         }
     }
 

@@ -32,11 +32,11 @@ namespace PahlUnity
         bool IsCurveValueType => _ValueType == SpecValueType.Curve;
         [SerializeField] private AnimationCurve _Curve;
 
-        bool IsCustomValueType => _ValueType == SpecValueType.Custom;
-        [SerializeField] private string _CustomValue;
-
         bool IsListValueType => _ValueType == SpecValueType.List;
         [SerializeField] private List<float> _ListValues;
+
+        bool IsCustomValueType => _ValueType == SpecValueType.Custom;
+        [SerializeField] private string _CustomValue;
 
         [SerializeField] private float _Step;
 
@@ -76,6 +76,10 @@ namespace PahlUnity
             {
                 return _Curve.Evaluate(normalizedRange);
             }
+            else if (IsListValueType)
+            {
+                return _ListValues[Mathf.RoundToInt(normalizedRange * (_ListValues.Count - 1))];
+            }
             return 0f;
         }
         public float GetValueByCustom(Action<string> parser)
@@ -94,7 +98,7 @@ namespace PahlUnity
     {
         Base,
         Additive,
-        Multiply,
+        Percent,
     }
     public enum SpecValueType
     {

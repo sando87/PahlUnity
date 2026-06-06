@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 namespace PahlUnity
 {
-    public enum EquipmentSlotType
+    public readonly struct EquipmentSlotType
     {
-        None,
-        Weapon,
-        Helmet,
-        Armor,
-        Gloves,
-        Boots,
-        Ring,
-        Necklace,
+        public readonly int Value;
+
+        public EquipmentSlotType(int value)
+        {
+            Value = value;
+        }
+
+        public static implicit operator int(EquipmentSlotType id) => id.Value;
+        public static implicit operator EquipmentSlotType(int value) => new(value);
     }
 
     public interface IEquipItem
