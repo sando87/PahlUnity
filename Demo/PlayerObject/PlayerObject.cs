@@ -50,7 +50,7 @@ namespace PahlUnity.Demo
 
                 if (saveData.IsEquipped)
                 {
-                    mEquip.Equip(instData);
+                    mEquip.Equip(instData, 0);
                 }
                 else
                 {
