@@ -10,14 +10,14 @@ namespace PahlUnity.Demo
         [SerializeField] private string _SkillName = "";
         [SerializeField] private string _SkillDesc = "";
         [SerializeField] private Sprite _SkillIcon = null;
-        [SerializeField] private List<SpecValueInfo> _Specs = new List<SpecValueInfo>();
+        [SerializeField] private List<SpecFieldRaw> _Specs = new List<SpecFieldRaw>();
 
         public string SkillID => _SkillID;
         public string SkillName => _SkillName;
         public string SkillDesc => _SkillDesc;
         public Sprite SkillIcon => _SkillIcon;
 
-        public IReadOnlyList<SpecValueInfo> Specs => _Specs;
+        public IReadOnlyList<SpecFieldRaw> Specs => _Specs;
 
     }
 }

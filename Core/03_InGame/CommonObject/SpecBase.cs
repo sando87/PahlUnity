@@ -6,32 +6,24 @@ namespace PahlUnity
 {
     public class SpecBase : MonoBehaviour
     {
-        private Dictionary<int, SpecValue> mSpecs = new Dictionary<int, SpecValue>();
+        private readonly Dictionary<int, SpecFieldValue> mSpecs = new();
 
-        private List<SpecModifier> mModifiers = new List<SpecModifier>();
+        private readonly List<SpecModifier> mModifiers = new();
 
-        public void Init(IReadOnlyList<SpecValueInfo> specs, float normalizedRange)
+        public void AddSpecs(IReadOnlyList<SpecFieldRaw> specs, float normalizedRange)
         {
             foreach (var spec in specs)
             {
-                int key = spec.KeyName.ExGetStableHash32();
-                SpecValue specValue = new SpecValue();
-                specValue.Info = spec;
-                specValue.BaseValue = specValue.Info.GetValue(normalizedRange);
-                specValue.CurrentValue = specValue.BaseValue;
-                mSpecs[key] = specValue;
+                SpecFieldValue specValue = new(spec, normalizedRange);
+                mSpecs[spec.FieldKey] = specValue;
             }
         }
-        public void Init(IReadOnlyList<SpecValueInfo> specs, System.Random random)
+        public void AddSpecs(IReadOnlyList<SpecFieldRaw> specs, System.Random random)
         {
             foreach (var spec in specs)
             {
-                int key = spec.KeyName.ExGetStableHash32();
-                SpecValue specValue = new SpecValue();
-                specValue.Info = spec;
-                specValue.BaseValue = specValue.Info.GetValue(random);
-                specValue.CurrentValue = specValue.BaseValue;
-                mSpecs[key] = specValue;
+                SpecFieldValue specValue = new(spec, random);
+                mSpecs[spec.FieldKey] = specValue;
             }
         }
 
@@ -39,8 +31,8 @@ namespace PahlUnity
         {
             foreach (var kvp in mSpecs)
             {
-                SpecValue specValue = kvp.Value;
-                specValue.BaseValue = specValue.Info.GetValue(normalizedRange);
+                SpecFieldValue specValue = kvp.Value;
+                specValue.UpdateBaseValue(normalizedRange);
             }
         }
 
@@ -48,15 +40,15 @@ namespace PahlUnity
         {
             foreach (var kvp in mSpecs)
             {
-                SpecValue specValue = kvp.Value;
-                specValue.CurrentValue = specValue.BaseValue + (specValue.Info.Step * step);
+                SpecFieldValue specValue = kvp.Value;
+                specValue.UpdateCurrentValue(step);
             }
         }
         public void UpdateCurrentValueByStep(int key, int step)
         {
-            if (mSpecs.TryGetValue(key, out SpecValue specValue))
+            if (mSpecs.TryGetValue(key, out SpecFieldValue specValue))
             {
-                specValue.CurrentValue = specValue.BaseValue + (specValue.Info.Step * step);
+                specValue.UpdateCurrentValue(step);
             }
         }
 
@@ -73,20 +65,20 @@ namespace PahlUnity
 
         public float GetValue(int key)
         {
-            if (mSpecs.TryGetValue(key, out SpecValue spec))
+            if (mSpecs.TryGetValue(key, out SpecFieldValue spec))
             {
                 float value = spec.CurrentValue;
 
                 float addModifier = 0f;
-                foreach (var Modifier in mModifiers)
+                foreach (var modifier in mModifiers)
                 {
-                    addModifier += Modifier.GetAddModifier(key);
+                    addModifier += modifier.GetAddModifier(key);
                 }
 
                 float percentModifier = 0;
-                foreach (var Modifier in mModifiers)
+                foreach (var modifier in mModifiers)
                 {
-                    percentModifier += Modifier.GetPercentModifier(key);
+                    percentModifier += modifier.GetPercentModifier(key);
                 }
 
                 float multiplier = percentModifier / 100f;

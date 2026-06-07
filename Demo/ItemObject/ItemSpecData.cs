@@ -13,7 +13,7 @@ namespace PahlUnity.Demo
         [SerializeField] private int _MaxStackCount = 1;
         [SerializeField] private EquipmentSlotType _EquipSlot = 0;
         [SerializeField] private Sprite _ItemIcon = null;
-        [SerializeField] private List<SpecValueInfo> _Specs = new List<SpecValueInfo>();
+        [SerializeField] private List<SpecFieldRaw> _Specs = new List<SpecFieldRaw>();
 
         public string ItemID => _ItemID;
         public string ItemName => _ItemName;
@@ -23,7 +23,7 @@ namespace PahlUnity.Demo
         public int MaxStackCount => _MaxStackCount;
         public EquipmentSlotType EquipSlot => _EquipSlot;
 
-        public IReadOnlyList<SpecValueInfo> Specs => _Specs;
+        public IReadOnlyList<SpecFieldRaw> Specs => _Specs;
 
         public long ID => _ItemID.ExGetStableHash64();
         public int RowIndex { get; set; }

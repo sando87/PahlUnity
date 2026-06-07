@@ -17,7 +17,7 @@ namespace PahlUnity.Demo
 
             mSpecBase = GetComponent<SpecBase>();
 
-            mSpecBase.Init(mSkillInstData.SpecData.Specs, 0);
+            mSpecBase.AddSpecs(mSkillInstData.SpecData.Specs, 0);
 
             mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
         }

@@ -8,15 +8,8 @@ using UnityEditor;
 
 namespace PahlUnity
 {
-    public class SpecValue
-    {
-        public SpecValueInfo Info;
-        public float BaseValue;
-        public float CurrentValue;
-    }
-
     [Serializable]
-    public struct SpecValueInfo
+    public struct SpecFieldRaw
     {
         [SerializeField, SpecFieldSelector] private string _Key;
         [SerializeField] private SpecModifierType _ModifierType;
@@ -40,7 +33,7 @@ namespace PahlUnity
 
         [SerializeField] private float _Step;
 
-        public string KeyName => _Key;
+        public int FieldKey => StableHash.ToInt32(_Key);
         public SpecModifierType ModifierType => _ModifierType;
         public SpecValueType ValueType => _ValueType;
         public float Step => _Step;
@@ -110,7 +103,7 @@ namespace PahlUnity
     }
 
 #if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(SpecValueInfo))]
+    [CustomPropertyDrawer(typeof(SpecFieldRaw))]
     public class SpecValueInfoDrawer : PropertyDrawer
     {
         private const float VerticalSpacing = 2f;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PahlUnity.Demo
@@ -24,7 +25,15 @@ namespace PahlUnity.Demo
 
             mExp = mBaseObj.GetComp<PlayerGrowth>();
             mInven = new Inventory(20);
-            mEquip = new Equipment();
+
+            const int EquipSlotTypeWeapon = 0;
+            const int EquipSlotTypeAccessory = 1;
+            Dictionary<EquipmentSlotType, int> slotMaxCounts = new()
+            {
+                { EquipSlotTypeWeapon, 2 },
+                { EquipSlotTypeAccessory, 3 },
+            };
+            mEquip = new Equipment(slotMaxCounts);
         }
 
         public void Init(PlayerInstData instData)
@@ -66,7 +75,7 @@ namespace PahlUnity.Demo
             int currentLevel = mExp.CurrentLevel;
             float maxLevel = 99;
             float normalizedRange = currentLevel / maxLevel;
-            mSpecBase.Init(mPlayerInstData.SpecData.Specs, normalizedRange);
+            mSpecBase.AddSpecs(mPlayerInstData.SpecData.Specs, normalizedRange);
 
             mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxHP, mPlayerSaveData.PlayerStat.HealthPoint);
             mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxMP, mPlayerSaveData.PlayerStat.ManaPoint);

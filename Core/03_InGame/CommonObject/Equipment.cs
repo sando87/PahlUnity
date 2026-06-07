@@ -17,10 +17,8 @@ namespace PahlUnity
 
         private readonly Dictionary<EquipmentSlotType, List<IEquipItem>> mEquipments = new();
 
-        public void InitSlotMaxCounts(IReadOnlyDictionary<EquipmentSlotType, int> slotMaxCounts)
+        public Equipment(IReadOnlyDictionary<EquipmentSlotType, int> slotMaxCounts)
         {
-            mEquipments.Clear();
-
             if (slotMaxCounts == null)
                 return;
 
