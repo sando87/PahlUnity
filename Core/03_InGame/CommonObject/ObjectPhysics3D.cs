@@ -119,7 +119,7 @@ namespace PahlUnity
 
         private void SimulateCC(float deltaTime)
         {
-            if (mCC == null || deltaTime <= 0f)
+            if (mCC == null || !mCC.enabled || deltaTime <= 0f)
                 return;
 
             if (mLockMovement)
