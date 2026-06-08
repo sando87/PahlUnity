@@ -69,24 +69,33 @@ namespace PahlUnity
             {
                 float value = spec.CurrentValue;
 
-                float addModifier = 0f;
-                foreach (var modifier in mModifiers)
-                {
-                    addModifier += modifier.GetAddModifier(key);
-                }
-
-                float percentModifier = 0;
-                foreach (var modifier in mModifiers)
-                {
-                    percentModifier += modifier.GetPercentModifier(key);
-                }
-
+                float addModifier = GetAddModifier(key);
+                float percentModifier = GetPercentModifier(key);
                 float multiplier = percentModifier / 100f;
                 float finalMultiplier = multiplier > 0 ? 1f + multiplier : (1 / (1f - multiplier));
 
                 return (value + addModifier) * finalMultiplier;
             }
             return 0f;
+        }
+
+        public float GetAddModifier(int key)
+        {
+            float totalModifier = 0f;
+            foreach (var modifier in mModifiers)
+            {
+                totalModifier += modifier.GetAddModifier(key);
+            }
+            return totalModifier;
+        }
+        public float GetPercentModifier(int key)
+        {
+            float totalModifier = 0f;
+            foreach (var modifier in mModifiers)
+            {
+                totalModifier += modifier.GetPercentModifier(key);
+            }
+            return totalModifier;
         }
     }
 }
