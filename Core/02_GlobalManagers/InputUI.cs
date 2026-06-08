@@ -8,21 +8,25 @@ namespace PahlUnity
 {
     public class InputUI : MonoBehaviour, IInputHandler
     {
-        [SerializeField] string _InputActionUIMove = "UIMove";
-        [SerializeField] string _InputActionUIBack = "UIBack";
+        [SerializeField] string _InputActionUIMove = "Navigate";
+        [SerializeField] string _InputActionUISubmit = "Submit";
+        [SerializeField] string _InputActionUIBack = "Cancel";
         [SerializeField] UIPartsHandler[] _UIParts;
 
         public Action EventCancel { get; set; }
+        public Action<UIPartsHandler> EventSubmit { get; set; }
 
         public UIPartsHandler CurrentSelectedPart { get; private set; }
         public UIPartsHandler[] UIParts { get => _UIParts; }
 
         private int mInputActionUIMove = 0;
+        private int mInputActionUISubmit = 0;
         private int mInputActionUIBack = 0;
 
         void Awake()
         {
             mInputActionUIMove = InputManager.GetInputActionNameHash(_InputActionUIMove);
+            mInputActionUISubmit = InputManager.GetInputActionNameHash(_InputActionUISubmit);
             mInputActionUIBack = InputManager.GetInputActionNameHash(_InputActionUIBack);
 
             if (_UIParts == null || _UIParts.Length == 0)
@@ -36,7 +40,7 @@ namespace PahlUnity
 
         public void SelectUIPart(UIPartsHandler part)
         {
-            if (part != null && part.gameObject.activeInHierarchy)
+            if (IsSelectable(part))
             {
                 CurrentSelectedPart = part;
                 EventSystem.current.SetSelectedGameObject(part.gameObject);
@@ -53,6 +57,10 @@ namespace PahlUnity
                     Move(moveDir.normalized);
                 }
             }
+            else if (inputManager.JustPressed(mInputActionUISubmit))
+            {
+                Submit();
+            }
             else if (inputManager.JustPressed(mInputActionUIBack))
             {
                 EventCancel?.Invoke();
@@ -67,8 +75,7 @@ namespace PahlUnity
             GameObject current = EventSystem.current.currentSelectedGameObject;
             if (current == null)
             {
-                CurrentSelectedPart = _UIParts[0];
-                EventSystem.current.SetSelectedGameObject(_UIParts[0].gameObject);
+                SelectFirst();
                 return;
             }
 
@@ -81,7 +88,7 @@ namespace PahlUnity
             foreach (var btn in _UIParts)
             {
                 if (btn.gameObject == current) continue;
-                if (!btn.gameObject.activeInHierarchy) continue;
+                if (!IsSelectable(btn)) continue;
 
                 Vector3 dirToTarget = btn.transform.position - currentPos;
 
@@ -103,6 +110,44 @@ namespace PahlUnity
                 CurrentSelectedPart = best;
                 EventSystem.current.SetSelectedGameObject(best.gameObject);
             }
+        }
+
+        public void SelectFirst()
+        {
+            if (_UIParts == null || _UIParts.Length == 0)
+                return;
+
+            foreach (UIPartsHandler part in _UIParts)
+            {
+                if (IsSelectable(part))
+                {
+                    SelectUIPart(part);
+                    return;
+                }
+            }
+        }
+
+        private void Submit()
+        {
+            if (!IsSelectable(CurrentSelectedPart))
+            {
+                SelectFirst();
+            }
+
+            if (!IsSelectable(CurrentSelectedPart))
+                return;
+
+            EventSubmit?.Invoke(CurrentSelectedPart);
+            ExecuteEvents.Execute(CurrentSelectedPart.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        }
+
+        private bool IsSelectable(UIPartsHandler part)
+        {
+            if (part == null || !part.gameObject.activeInHierarchy)
+                return false;
+
+            Selectable selectable = part.GetComponent<Selectable>();
+            return selectable == null || selectable.IsInteractable();
         }
     }
 

@@ -403,15 +403,18 @@ namespace PahlUnity
         }
         public void SetHandlerInput(IInputHandler handler)
         {
-            if (mHandlerInput == null)
-            {
-                mHandlerInput = handler;
-                mHandlerInput.OnInputEnter(this);
-            }
-            else
+            if (mHandlerInput == handler)
+                return;
+
+            if (mHandlerInput != null)
             {
                 mHandlerInput.OnInputExit(this);
-                mHandlerInput = handler;
+            }
+
+            mHandlerInput = handler;
+
+            if (mHandlerInput != null)
+            {
                 mHandlerInput.OnInputEnter(this);
             }
         }
