@@ -125,6 +125,9 @@ namespace PahlUnity
             LOG.errorif(!IsValid(slot, index));
 
             IEquipItem item = mEquipments[slot][index];
+            if (item == null)
+                return false;
+
             mEquipments[slot][index] = null;
             OnUnequipped?.Invoke(item);
 

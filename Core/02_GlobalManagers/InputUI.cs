@@ -33,9 +33,14 @@ namespace PahlUnity
                 _UIParts = GetComponentsInChildren<UIPartsHandler>();
         }
 
-        public void UpdateUIParts()
+        public void UpdateUIParts(bool includeInactive = false)
         {
-            _UIParts = GetComponentsInChildren<UIPartsHandler>();
+            _UIParts = GetComponentsInChildren<UIPartsHandler>(includeInactive);
+
+            if (!IsSelectable(CurrentSelectedPart))
+            {
+                CurrentSelectedPart = null;
+            }
         }
 
         public void SelectUIPart(UIPartsHandler part)
@@ -80,6 +85,12 @@ namespace PahlUnity
             }
 
             RectTransform currentRect = current.GetComponent<RectTransform>();
+            if (currentRect == null)
+            {
+                SelectFirst();
+                return;
+            }
+
             Vector3 currentPos = currentRect.position;
 
             UIPartsHandler best = null;
@@ -87,8 +98,8 @@ namespace PahlUnity
 
             foreach (var btn in _UIParts)
             {
-                if (btn.gameObject == current) continue;
                 if (!IsSelectable(btn)) continue;
+                if (btn.gameObject == current) continue;
 
                 Vector3 dirToTarget = btn.transform.position - currentPos;
 
@@ -107,8 +118,7 @@ namespace PahlUnity
 
             if (best != null)
             {
-                CurrentSelectedPart = best;
-                EventSystem.current.SetSelectedGameObject(best.gameObject);
+                SelectUIPart(best);
             }
         }
 
@@ -138,7 +148,18 @@ namespace PahlUnity
                 return;
 
             EventSubmit?.Invoke(CurrentSelectedPart);
-            ExecuteEvents.Execute(CurrentSelectedPart.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+            // if (!IsSelectable(CurrentSelectedPart))
+            //     return;
+
+            // Button button = CurrentSelectedPart.GetComponent<Button>();
+            // if (button != null)
+            // {
+            //     button.onClick.Invoke();
+            //     return;
+            // }
+
+            // ISubmitHandler 인터페이스를 상속의 커스텀 클래스의 OnSubmit 메서드를 호출
+            // ExecuteEvents.Execute(CurrentSelectedPart.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
         }
 
         private bool IsSelectable(UIPartsHandler part)
