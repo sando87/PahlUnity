@@ -18,7 +18,7 @@ namespace PahlUnity.Demo
             mSpecBase = GetComponent<SpecBase>();
 
             System.Random random = new System.Random(mItemInfo.RandomSeed);
-            mSpecBase.AddSpecs(mItemInfo.SpecData.Specs, random);
+            mSpecBase.SetSpecs(mItemInfo.SpecData.Specs, random);
 
             mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
         }

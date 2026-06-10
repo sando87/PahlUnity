@@ -15,7 +15,7 @@ namespace PahlUnity.Demo
         void Awake()
         {
             mSpecBase = GetComponent<SpecBase>();
-            mSpecBase.AddSpecs(_SpecData.Specs, 0);
+            mSpecBase.SetSpecs(_SpecData.Specs, 0);
         }
     }
 }

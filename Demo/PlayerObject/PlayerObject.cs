@@ -75,7 +75,7 @@ namespace PahlUnity.Demo
             int currentLevel = mExp.CurrentLevel;
             float maxLevel = 99;
             float normalizedRange = currentLevel / maxLevel;
-            mSpecBase.AddSpecs(mPlayerInstData.SpecData.Specs, normalizedRange);
+            mSpecBase.SetSpecs(mPlayerInstData.SpecData.Specs, normalizedRange);
 
             mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxHP, mPlayerSaveData.PlayerStat.HealthPoint);
             mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxMP, mPlayerSaveData.PlayerStat.ManaPoint);

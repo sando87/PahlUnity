@@ -10,7 +10,7 @@ namespace PahlUnity
 
         private readonly List<SpecModifier> mModifiers = new();
 
-        public void AddSpecs(IReadOnlyList<SpecFieldRaw> specs, float normalizedRange)
+        public void SetSpecs(IReadOnlyList<SpecFieldRaw> specs, float normalizedRange)
         {
             foreach (var spec in specs)
             {
@@ -18,7 +18,7 @@ namespace PahlUnity
                 mSpecs[spec.FieldKey] = specValue;
             }
         }
-        public void AddSpecs(IReadOnlyList<SpecFieldRaw> specs, System.Random random)
+        public void SetSpecs(IReadOnlyList<SpecFieldRaw> specs, System.Random random)
         {
             foreach (var spec in specs)
             {
