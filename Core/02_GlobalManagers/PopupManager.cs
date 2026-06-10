@@ -31,7 +31,7 @@ namespace PahlUnity
             }
         }
 
-        public async UniTask<T> Open<T>() where T : PopupBase
+        public async UniTask<T> Open<T>(object param = null) where T : PopupBase
         {
             string popupKey = typeof(T).Name;
             LOG.errorif(mPopupPrefabs.ContainsKey(popupKey) == false, "popup prefab is not exist");
@@ -44,7 +44,7 @@ namespace PahlUnity
             }
             TopPopup = popup;
             popup.OnForeground();
-            await popup.Open();
+            await popup.Open(param);
             return popup as T;
         }
 

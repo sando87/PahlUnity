@@ -17,7 +17,7 @@ namespace PahlUnity
         // 전체화면 잠금, Dim과 같은 기능을 수행하는데 사용
         [SerializeField] Image TopOverlay = null;
 
-        public virtual async UniTask Open()
+        public virtual async UniTask Open(object param)
         {
             await UniTask.Yield();
         }
