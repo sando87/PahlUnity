@@ -17,76 +17,66 @@ namespace PahlUnity
         public event Action<Collider> OnInteractLeave3D;
         public event Action<BaseObject, uint> OnInteractSignal;
 
-        private Collider2D mCollider2D = null;
-        private Collider mCollider3D = null;
+        private ColliderDetector2D mCollider2D = null;
+        private ColliderDetector3D mCollider3D = null;
 
         void Awake()
         {
-            mCollider2D = GetComponent<Collider2D>();
-            mCollider3D = GetComponent<Collider>();
+            mCollider2D = GetComponent<ColliderDetector2D>();
+            if (mCollider2D != null)
+            {
+                mCollider2D.OnDetectEnter += OnDetectEnter2D;
+                mCollider2D.OnDetectExit += OnDetectLeave2D;
+            }
+
+            mCollider3D = GetComponent<ColliderDetector3D>();
+            if (mCollider3D != null)
+            {
+                mCollider3D.OnDetectEnter += OnDetectEnter3D;
+                mCollider3D.OnDetectExit += OnDetectLeave3D;
+            }
         }
 
-        #region  2D Collider
-        void OnCollisionEnter2D(Collision2D collision)
+        public void SetLayerMask(LayerMask layerMask)
         {
-            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
+            if (mCollider2D != null)
             {
-                OnInteractEnter2D?.Invoke(collision.collider);
+                mCollider2D.SetLayerMask(layerMask);
+            }
+            if (mCollider3D != null)
+            {
+                mCollider3D.SetLayerMask(layerMask);
             }
         }
-        void OnCollisionExit2D(Collision2D collision)
-        {
-            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
-            {
-                OnInteractLeave2D?.Invoke(collision.collider);
-            }
-        }
-        void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (IsInteractable(collision.GetComponent<InteractableCollider>()))
-            {
-                OnInteractEnter2D?.Invoke(collision);
-            }
-        }
-        void OnTriggerExit2D(Collider2D collision)
-        {
-            if (IsInteractable(collision.GetComponent<InteractableCollider>()))
-            {
-                OnInteractLeave2D?.Invoke(collision);
-            }
-        }
-        #endregion
 
-        #region 3D Collider
-        void OnCollisionEnter(Collision collision)
+        private void OnDetectEnter2D(Collider2D col)
         {
-            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
+            if (IsInteractable(col.GetComponent<InteractableCollider>()))
             {
-                OnInteractEnter3D?.Invoke(collision.collider);
+                OnInteractEnter2D?.Invoke(col);
             }
         }
-        void OnCollisionExit(Collision collision)
+        private void OnDetectLeave2D(Collider2D col)
         {
-            if (IsInteractable(collision.collider.GetComponent<InteractableCollider>()))
+            if (IsInteractable(col.GetComponent<InteractableCollider>()))
             {
-                OnInteractLeave3D?.Invoke(collision.collider);
+                OnInteractLeave2D?.Invoke(col);
             }
         }
-        void OnTriggerEnter(Collider other)
+        private void OnDetectEnter3D(Collider col)
         {
-            if (IsInteractable(other.GetComponent<InteractableCollider>()))
+            if (IsInteractable(col.GetComponent<InteractableCollider>()))
             {
-                OnInteractEnter3D?.Invoke(other);
+                OnInteractEnter3D?.Invoke(col);
             }
         }
-        void OnTriggerExit(Collider other)
+        private void OnDetectLeave3D(Collider col)
         {
-            if (IsInteractable(other.GetComponent<InteractableCollider>()))
+            if (IsInteractable(col.GetComponent<InteractableCollider>()))
             {
-                OnInteractLeave3D?.Invoke(other);
+                OnInteractLeave3D?.Invoke(col);
             }
         }
-        #endregion
 
         private bool IsInteractable(InteractableCollider other)
         {
