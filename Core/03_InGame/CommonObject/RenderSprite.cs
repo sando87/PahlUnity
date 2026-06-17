@@ -10,6 +10,7 @@ namespace PahlUnity
     {
         public override Color Color { get => mSpriteRenderer.color; set => mSpriteRenderer.color = value; }
         public override float Opacity { get => mSpriteRenderer.color.a; set => mSpriteRenderer.ExSetAlpha(value); }
+        public override bool FlipX { get => mSpriteRenderer.flipX; set => mSpriteRenderer.flipX = value; }
 
         SpriteRenderer mSpriteRenderer;
 

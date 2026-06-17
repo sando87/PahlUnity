@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace PahlUnity
         [SerializeField] BoxCollider2D _ThinPlatform = null;
 
         BoxCollider2D mCollider = null;
+
+        public event Action<bool> OnTurn;
 
         public Vector2 Center { get => transform.position.ExToVector2() + mCollider.offset; }
         public Vector2 Size { get => mCollider.size; }
@@ -46,9 +49,11 @@ namespace PahlUnity
         public void Turn(int worldDir)
         {
             if (worldDir == 0) return;
+            if (worldDir == FrontDirInt) return;
 
             Vector3 front = worldDir > 0 ? Vector3.forward : Vector3.back;
             transform.rotation = Quaternion.LookRotation(front, transform.up);
+            OnTurn?.Invoke(worldDir > 0);
         }
         public void Turn(float worldDir)
         {

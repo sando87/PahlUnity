@@ -109,5 +109,13 @@ namespace PahlUnity
                 renderObj.Opacity = opacity;
             }
         }
+
+        public void SetFlipX(bool flipX)
+        {
+            foreach (RenderBase renderObj in mRenderList)
+            {
+                renderObj.FlipX = flipX;
+            }
+        }
     }
 }
