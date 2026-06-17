@@ -7,189 +7,60 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        private Dictionary<int, StateMachineLayer> mLayers = new Dictionary<int, StateMachineLayer>();
+        List<FiniteStateBase> mAllStates = new();
+        FiniteStateBase mPreviousState = null;
+        FiniteStateBase mCurrentState = null;
+        bool mIsJustChanged = false;
 
-        void Awake()
+        public FiniteStateBase PreviousState { get { return mPreviousState; } }
+        public FiniteStateBase CurrentState { get { return mCurrentState; } }
+
+        public void AddState(FiniteStateBase state)
         {
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-            FiniteStateBase[] states = GetComponentsInChildren<FiniteStateBase>();
-            foreach (var state in states)
-            {
-                state.InitState(this);
-
-                if (!mLayers.ContainsKey(state.Layer))
-                {
-                    mLayers[state.Layer] = new StateMachineLayer();
-                }
-
-                mLayers[state.Layer].AllStates.Add(state);
-
-                if (state.StateType == FiniteStateType.Idle)
-                {
-                    mLayers[state.Layer].IdleState = state;
-                }
-            }
-        }
-
-        void Start()
-        {
-            foreach (var layerSet in mLayers)
-            {
-                int layer = layerSet.Key;
-                mLayers[layer].CurrentState = mLayers[layer].IdleState;
-                mLayers[layer].CurrentState.EnterState(null);
-            }
+            mAllStates.Add(state);
         }
 
         void Update()
         {
-            UpdateState();
-        }
-        void FixedUpdate()
-        {
-            FixedUpdateState();
+            if (mIsJustChanged)
+            {
+                // State막 바뀐 다음 상태에서는 UpdateState를 호출하지 않음
+                // EnterState() 함수와 UpdateState() 함수가 같은 프레임에 호출되면 오작동 발생 가능성 높음
+                mIsJustChanged = false;
+                return;
+            }
+            else
+            {
+                if (mCurrentState != null)
+                    mCurrentState.UpdateState();
+            }
         }
 
-        public bool TryChangeState(FiniteStateBase newState, object param = null, bool ignorePriority = false)
+        public bool TryChangeState(FiniteStateBase newState, bool forceChange = false)
         {
             // 현재 상태와 바꾸려는 상태가 동일하면 전환시키지 않음
-            StateMachineLayer currentLayer = mLayers[newState.Layer];
-            if (currentLayer.CurrentState == newState)
+            if (!forceChange && mCurrentState == newState)
                 return false;
 
-            // if (!ignorePriority)
-            // {
-            //     if (newState.Priority < currentLayer.CurrentState.Priority)
-            //         return;
-            // }
+            if (mPreviousState != null)
+                mPreviousState.LeaveState();
 
-            ChangeState(newState, param);
+            mCurrentState = newState;
+            mCurrentState.EnterState();
+
+            mPreviousState = mCurrentState;
+            mIsJustChanged = true;
             return true;
-        }
-
-        public void ForceChangeState(FiniteStateBase newState, object param = null)
-        {
-            // 강제로 상태 전환 로직 구현
-            ChangeState(newState, param);
-        }
-
-
-        private void ChangeState(FiniteStateBase newState, object param = null)
-        {
-            // 상태 전환 로직 구현
-            StateMachineLayer currentLayer = mLayers[newState.Layer];
-            currentLayer.CurrentState.LeaveState();
-            currentLayer.PreviousState = currentLayer.CurrentState;
-            currentLayer.CurrentState = newState;
-            currentLayer.CurrentState.IsJustEntered = true;
-            currentLayer.CurrentState.EnterState(param);
-        }
-
-        public bool TryChangeState<T>(object param = null, bool ignorePriority = false) where T : FiniteStateBase
-        {
-            FiniteStateBase state = FindState<T>();
-            if (state != null)
-            {
-                return TryChangeState(state, param, ignorePriority);
-            }
-            return false;
-        }
-        public void ForceChangeState<T>(object param = null) where T : FiniteStateBase
-        {
-            FiniteStateBase state = FindState<T>();
-            if (state != null)
-            {
-                ForceChangeState(state, param);
-            }
-        }
-
-        public void TryChangeStateToIdle(int layerIndex)
-        {
-            StateMachineLayer currentLayer = mLayers[layerIndex];
-            TryChangeState(currentLayer.IdleState, null, true);
         }
 
         public T FindState<T>() where T : FiniteStateBase
         {
-            return GetComponentInChildren<T>();
+            return mAllStates.Find(state => state is T) as T;
         }
-
-        public FiniteStateBase GetCurrentState(int layerIndex = 0)
+        public FiniteStateBase FindState(FiniteStateBase state)
         {
-            if (mLayers.ContainsKey(layerIndex))
-            {
-                return mLayers[layerIndex].CurrentState;
-            }
-            return null;
-        }
-        public FiniteStateType GetCurrentStateType(int layerIndex = 0)
-        {
-            if (mLayers.ContainsKey(layerIndex))
-            {
-                return mLayers[layerIndex].CurrentState.StateType;
-            }
-            return FiniteStateType.None;
-        }
-
-        public void HandleAllStateInput()
-        {
-            foreach (var layer in mLayers)
-            {
-                foreach (var state in layer.Value.AllStates)
-                {
-                    if (layer.Value.CurrentState != state)
-                        state.HandleInput();
-                }
-            }
-        }
-        public void UpdateState()
-        {
-            foreach (var layer in mLayers)
-            {
-                if (layer.Value.CurrentState != null)
-                {
-                    // 처음 딱 현재 State모션 진입했을때는 UpdateState호출 안해주기 위한 장치
-                    if (layer.Value.CurrentState.IsJustEntered)
-                    {
-                        layer.Value.CurrentState.IsJustEntered = false;
-                    }
-                    else
-                    {
-                        layer.Value.CurrentState.UpdateState();
-                    }
-                }
-            }
-        }
-        public void FixedUpdateState()
-        {
-            foreach (var layer in mLayers)
-            {
-                if (layer.Value.CurrentState != null)
-                {
-                    // 처음 딱 현재 State모션 진입했을때는 UpdateState호출 안해주기 위한 장치
-                    if (layer.Value.CurrentState.IsJustEntered)
-                    {
-                        layer.Value.CurrentState.IsJustEntered = false;
-                    }
-                    else
-                    {
-                        layer.Value.CurrentState.FixedUpdateState();
-                    }
-                }
-            }
+            return mAllStates.Find(s => s == state);
         }
     }
 
-    [System.Serializable]
-    public class StateMachineLayer
-    {
-        public List<FiniteStateBase> AllStates = new List<FiniteStateBase>();
-        public FiniteStateBase PreviousState = null;
-        public FiniteStateBase CurrentState = null;
-        public FiniteStateBase IdleState = null;
-    }
 }
