@@ -176,13 +176,13 @@ namespace PahlUnity
             return Physics.OverlapCapsuleNonAlloc(center - pointOffset, center + pointOffset, radius, mResults, _TargetLayerMask, QueryTriggerInteraction.Collide);
         }
 
-        public void SetLayerMask(LayerMask layerMask)
+        public void SetTargetLayerMask(LayerMask targetlayerMask)
         {
-            if (_TargetLayerMask == layerMask)
+            if (_TargetLayerMask == targetlayerMask)
                 return;
 
             ClearDetectedColliders(true);
-            _TargetLayerMask = layerMask;
+            _TargetLayerMask = targetlayerMask;
         }
 
         bool IsDetectable(Collider col)

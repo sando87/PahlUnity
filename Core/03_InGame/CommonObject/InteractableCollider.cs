@@ -37,15 +37,15 @@ namespace PahlUnity
             }
         }
 
-        public void SetLayerMask(LayerMask layerMask)
+        public void SetTargetLayerMask(LayerMask targetLayerMask)
         {
             if (mCollider2D != null)
             {
-                mCollider2D.SetLayerMask(layerMask);
+                mCollider2D.SetTargetLayerMask(targetLayerMask);
             }
             if (mCollider3D != null)
             {
-                mCollider3D.SetLayerMask(layerMask);
+                mCollider3D.SetTargetLayerMask(targetLayerMask);
             }
         }
 

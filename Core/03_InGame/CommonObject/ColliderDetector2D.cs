@@ -133,13 +133,13 @@ namespace PahlUnity
             return count;
         }
 
-        public void SetLayerMask(LayerMask layerMask)
+        public void SetTargetLayerMask(LayerMask targetlayerMask)
         {
-            if (_TargetLayerMask == layerMask)
+            if (_TargetLayerMask == targetlayerMask)
                 return;
 
             ClearDetectedColliders(true);
-            _TargetLayerMask = layerMask;
+            _TargetLayerMask = targetlayerMask;
             RefreshContactFilter();
         }
 
