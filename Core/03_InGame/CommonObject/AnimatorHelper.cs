@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using Unity.VisualScripting;
 
 namespace PahlUnity
 {
@@ -14,6 +15,9 @@ namespace PahlUnity
         int mAnimEventStateIDCounter = 0;
         int mCurrentAnimEventStateID = 0;
 
+        public int CurrentStateNameHash => mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        public int FireIndex { get; private set; } = -1;
+
         void Awake()
         {
             mAnimator = GetComponent<Animator>();
@@ -23,33 +27,42 @@ namespace PahlUnity
         public void PlayAnim(int stateNameHash)
         {
             if (mAnimEventState != null)
-                mAnimEventState.IsEnd = true;
+                mAnimEventState.Cancel();
 
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
         public void PlayAnim(int stateNameHash, Action<int> onFire)
         {
             if (mAnimEventState != null)
-                mAnimEventState.IsEnd = true;
+                mAnimEventState.Cancel();
 
             mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             mAnimEventState.onFire = onFire;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
+        public void PlayAnim(int stateNameHash, Action<bool> onEnd)
+        {
+            if (mAnimEventState != null)
+                mAnimEventState.Cancel();
+
+            mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
+            mAnimEventState.onEnd = onEnd;
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+        }
         public AnimEventState PlayAnimWithEvent(int stateNameHash)
         {
             if (mAnimEventState != null)
-                mAnimEventState.IsEnd = true;
+                mAnimEventState.Cancel();
 
             mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
             return mAnimEventState;
         }
 
-        public async UniTask<bool> PlayAnimWaitFire(int stateNameHash)
+        public async UniTask<AnimEventState> PlayAnimWaitFire(int stateNameHash)
         {
             if (mAnimEventState != null)
-                mAnimEventState.IsEnd = true;
+                mAnimEventState.Cancel();
 
             mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             AnimEventState animEventState = mAnimEventState;
@@ -57,13 +70,13 @@ namespace PahlUnity
             await UniTask.WaitUntil(() => animEventState.IsFired || animEventState.IsEnd,
                                         cancellationToken: animEventState.cancelToken.Token,
                                         cancelImmediately: true);
-            return animEventState.IsFired;
+            return animEventState;
         }
 
-        public async UniTask PlayAnimWaitEnd(int stateNameHash, Action<int> onFire = null)
+        public async UniTask<AnimEventState> PlayAnimWaitEnd(int stateNameHash, Action<int> onFire = null)
         {
             if (mAnimEventState != null)
-                mAnimEventState.IsEnd = true;
+                mAnimEventState.Cancel();
 
             mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             mAnimEventState.onFire = onFire;
@@ -72,15 +85,14 @@ namespace PahlUnity
             await UniTask.WaitUntil(() => animEventState.IsEnd,
                                         cancellationToken: animEventState.cancelToken.Token,
                                         cancelImmediately: true);
+            return animEventState;
         }
 
         public void CancelPreviousAnim()
         {
             if (mAnimEventState != null)
             {
-                mAnimEventState.IsEnd = true;
-                mAnimEventState.cancelToken.Cancel();
-                mAnimEventState.cancelToken.Dispose();
+                mAnimEventState.Cancel();
                 mAnimEventState = null;
             }
         }
@@ -176,6 +188,8 @@ namespace PahlUnity
 
         public void InvokeEventEnter(int stateNameHash)
         {
+            FireIndex = -1;
+
             if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
             {
                 mCurrentAnimEventStateID = mAnimEventState.AnimEventID;
@@ -183,6 +197,8 @@ namespace PahlUnity
         }
         public void InvokeEventMiddle(int stateNameHash, int index)
         {
+            FireIndex = index;
+
             if (mAnimEventState != null
             && mAnimEventState.CurrentAnim == stateNameHash
             && mAnimEventState.AnimEventID == mCurrentAnimEventStateID)
@@ -194,11 +210,14 @@ namespace PahlUnity
         }
         public void InvokeEventLeave(int stateNameHash)
         {
+            FireIndex = -1;
+
             if (mAnimEventState != null
             && mAnimEventState.CurrentAnim == stateNameHash
             && mAnimEventState.AnimEventID == mCurrentAnimEventStateID)
             {
                 mAnimEventState.IsEnd = true;
+                mAnimEventState.onEnd?.Invoke(false);
             }
         }
     }
@@ -208,9 +227,11 @@ namespace PahlUnity
         public int AnimEventID = 0;
         public int CurrentAnim = 0;
         public bool IsFired = false;
+        public bool IsCanceled = false;
         public bool IsEnd = false;
         public int FireIndex = -1;
         public Action<int> onFire = null;
+        public Action<bool> onEnd = null;
         public CancellationTokenSource cancelToken = null;
 
         public AnimEventState(int animEventID, int animStateNameHash)
@@ -218,9 +239,20 @@ namespace PahlUnity
             AnimEventID = animEventID;
             CurrentAnim = animStateNameHash;
             IsFired = false;
+            IsCanceled = false;
             IsEnd = false;
             FireIndex = -1;
             cancelToken = new CancellationTokenSource();
+        }
+
+        public void Cancel()
+        {
+            IsCanceled = true;
+            IsEnd = true;
+            onEnd?.Invoke(IsCanceled);
+            cancelToken.Cancel();
+            cancelToken.Dispose();
+            cancelToken = null;
         }
     }
 }

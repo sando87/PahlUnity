@@ -7,18 +7,12 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        List<FiniteStateBase> mAllStates = new();
         FiniteStateBase mPreviousState = null;
         FiniteStateBase mCurrentState = null;
         bool mIsJustChanged = false;
 
         public FiniteStateBase PreviousState { get { return mPreviousState; } }
         public FiniteStateBase CurrentState { get { return mCurrentState; } }
-
-        public void AddState(FiniteStateBase state)
-        {
-            mAllStates.Add(state);
-        }
 
         void Update()
         {
@@ -51,15 +45,6 @@ namespace PahlUnity
             mPreviousState = mCurrentState;
             mIsJustChanged = true;
             return true;
-        }
-
-        public T FindState<T>() where T : FiniteStateBase
-        {
-            return mAllStates.Find(state => state is T) as T;
-        }
-        public FiniteStateBase FindState(FiniteStateBase state)
-        {
-            return mAllStates.Find(s => s == state);
         }
     }
 
