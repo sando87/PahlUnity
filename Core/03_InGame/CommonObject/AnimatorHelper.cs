@@ -250,9 +250,12 @@ namespace PahlUnity
             IsCanceled = true;
             IsEnd = true;
             onEnd?.Invoke(IsCanceled);
-            cancelToken.Cancel();
-            cancelToken.Dispose();
-            cancelToken = null;
+            if (cancelToken != null)
+            {
+                cancelToken.Cancel();
+                cancelToken.Dispose();
+                cancelToken = null;
+            }
         }
     }
 }

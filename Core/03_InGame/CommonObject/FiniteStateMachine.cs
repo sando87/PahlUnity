@@ -7,6 +7,7 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
+        Dictionary<int, FiniteStateBase> mStates = new();
         FiniteStateBase mPreviousState = null;
         FiniteStateBase mCurrentState = null;
         bool mIsJustChanged = false;
@@ -45,6 +46,19 @@ namespace PahlUnity
             mPreviousState = mCurrentState;
             mIsJustChanged = true;
             return true;
+        }
+
+        public void AddState(int stateID, FiniteStateBase state)
+        {
+            mStates[stateID] = state;
+        }
+        public void RemoveState(int stateID)
+        {
+            mStates.Remove(stateID);
+        }
+        public FiniteStateBase GetState(int stateID)
+        {
+            return mStates[stateID];
         }
     }
 
