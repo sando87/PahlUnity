@@ -31,21 +31,13 @@ namespace PahlUnity
 
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
-        public void PlayAnim(int stateNameHash, Action<int> onFire)
+        public void PlayAnim(int stateNameHash, Action<int> onFire, Action<bool> onEnd)
         {
             if (mAnimEventState != null)
                 mAnimEventState.Cancel();
 
             mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             mAnimEventState.onFire = onFire;
-            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
-        }
-        public void PlayAnim(int stateNameHash, Action<bool> onEnd)
-        {
-            if (mAnimEventState != null)
-                mAnimEventState.Cancel();
-
-            mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash);
             mAnimEventState.onEnd = onEnd;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
@@ -88,11 +80,11 @@ namespace PahlUnity
             return animEventState;
         }
 
-        public void CancelPreviousAnim()
+        public void CancelAndThrowException()
         {
             if (mAnimEventState != null)
             {
-                mAnimEventState.Cancel();
+                mAnimEventState.Cancel(true);
                 mAnimEventState = null;
             }
         }
@@ -218,6 +210,7 @@ namespace PahlUnity
             {
                 mAnimEventState.IsEnd = true;
                 mAnimEventState.onEnd?.Invoke(false);
+                mAnimEventState = null;
             }
         }
     }
@@ -245,16 +238,19 @@ namespace PahlUnity
             cancelToken = new CancellationTokenSource();
         }
 
-        public void Cancel()
+        public void Cancel(bool throwCancelException = false)
         {
             IsCanceled = true;
             IsEnd = true;
             onEnd?.Invoke(IsCanceled);
-            if (cancelToken != null)
+            if (throwCancelException)
             {
-                cancelToken.Cancel();
-                cancelToken.Dispose();
-                cancelToken = null;
+                if (cancelToken != null)
+                {
+                    cancelToken.Cancel();
+                    cancelToken.Dispose();
+                    cancelToken = null;
+                }
             }
         }
     }
