@@ -7,9 +7,10 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        Dictionary<int, FiniteStateBase> mStates = new();
+        readonly List<FiniteStateBase> mStates = new();
         FiniteStateBase mPreviousState = null;
         FiniteStateBase mCurrentState = null;
+        FiniteStateBase mDefaultState = null;
         bool mIsJustChanged = false;
 
         public FiniteStateBase PreviousState { get { return mPreviousState; } }
@@ -26,8 +27,7 @@ namespace PahlUnity
             }
             else
             {
-                if (mCurrentState != null)
-                    mCurrentState.UpdateState();
+                mCurrentState?.UpdateState();
             }
         }
 
@@ -37,8 +37,7 @@ namespace PahlUnity
             if (!forceChange && mCurrentState == newState)
                 return false;
 
-            if (mPreviousState != null)
-                mPreviousState.LeaveState();
+            mPreviousState?.LeaveState();
 
             mCurrentState = newState;
             mCurrentState.EnterState();
@@ -48,17 +47,27 @@ namespace PahlUnity
             return true;
         }
 
-        public void AddState(int stateID, FiniteStateBase state)
+        public void ChangeDefaultState()
         {
-            mStates[stateID] = state;
+            LOG.errorif(mDefaultState == null, "Default state is not set");
+            TryChangeState(mDefaultState);
         }
-        public void RemoveState(int stateID)
+
+        public void SetDefaultState(FiniteStateBase state)
         {
-            mStates.Remove(stateID);
+            mDefaultState = state;
         }
-        public FiniteStateBase GetState(int stateID)
+        public void AddState(FiniteStateBase state)
         {
-            return mStates[stateID];
+            mStates.Add(state);
+        }
+        public void RemoveState(FiniteStateBase state)
+        {
+            mStates.Remove(state);
+        }
+        public FiniteStateBase FindState(FiniteStateBase state)
+        {
+            return mStates.Find(s => s == state);
         }
     }
 
