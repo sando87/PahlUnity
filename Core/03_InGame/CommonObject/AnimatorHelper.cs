@@ -41,6 +41,20 @@ namespace PahlUnity
             mAnimEventState.onEnd = onEnd;
             mAnimator.CrossFade(stateNameHash, 0, 0, 0);
         }
+        public void PlayAnim(int stateNameHash,
+                            int fireNameHash,
+                            Action<int> onFire,
+                            int endNameHash,
+                            Action<bool> onEnd)
+        {
+            if (mAnimEventState != null)
+                mAnimEventState.Cancel();
+
+            mAnimEventState = new AnimEventState(mAnimEventStateIDCounter++, stateNameHash, fireNameHash, endNameHash);
+            mAnimEventState.onFire = onFire;
+            mAnimEventState.onEnd = onEnd;
+            mAnimator.CrossFade(stateNameHash, 0, 0, 0);
+        }
         public AnimEventState PlayAnimWithEvent(int stateNameHash)
         {
             if (mAnimEventState != null)
@@ -78,6 +92,15 @@ namespace PahlUnity
                                         cancellationToken: animEventState.cancelToken.Token,
                                         cancelImmediately: true);
             return animEventState;
+        }
+
+        public void CancelPreviousAnim()
+        {
+            if (mAnimEventState != null)
+            {
+                mAnimEventState.Cancel();
+                mAnimEventState = null;
+            }
         }
 
         public void CancelAndThrowException()
@@ -182,7 +205,7 @@ namespace PahlUnity
         {
             FireIndex = -1;
 
-            if (mAnimEventState != null && mAnimEventState.CurrentAnim == stateNameHash)
+            if (mAnimEventState != null && mAnimEventState.StartStateNameHash == stateNameHash)
             {
                 mCurrentAnimEventStateID = mAnimEventState.AnimEventID;
             }
@@ -192,7 +215,7 @@ namespace PahlUnity
             FireIndex = index;
 
             if (mAnimEventState != null
-            && mAnimEventState.CurrentAnim == stateNameHash
+            && mAnimEventState.FireStateNameHash == stateNameHash
             && mAnimEventState.AnimEventID == mCurrentAnimEventStateID)
             {
                 mAnimEventState.IsFired = true;
@@ -205,7 +228,7 @@ namespace PahlUnity
             FireIndex = -1;
 
             if (mAnimEventState != null
-            && mAnimEventState.CurrentAnim == stateNameHash
+            && mAnimEventState.EndStateNameHash == stateNameHash
             && mAnimEventState.AnimEventID == mCurrentAnimEventStateID)
             {
                 mAnimEventState.IsEnd = true;
@@ -218,7 +241,9 @@ namespace PahlUnity
     public class AnimEventState
     {
         public int AnimEventID = 0;
-        public int CurrentAnim = 0;
+        public int StartStateNameHash = 0;
+        public int FireStateNameHash = 0;
+        public int EndStateNameHash = 0;
         public bool IsFired = false;
         public bool IsCanceled = false;
         public bool IsEnd = false;
@@ -230,7 +255,22 @@ namespace PahlUnity
         public AnimEventState(int animEventID, int animStateNameHash)
         {
             AnimEventID = animEventID;
-            CurrentAnim = animStateNameHash;
+            StartStateNameHash = animStateNameHash;
+            FireStateNameHash = animStateNameHash;
+            EndStateNameHash = animStateNameHash;
+            IsFired = false;
+            IsCanceled = false;
+            IsEnd = false;
+            FireIndex = -1;
+            cancelToken = new CancellationTokenSource();
+        }
+
+        public AnimEventState(int animEventID, int startStateNameHash, int fireStateNameHash, int endStateNameHash)
+        {
+            AnimEventID = animEventID;
+            StartStateNameHash = startStateNameHash;
+            FireStateNameHash = fireStateNameHash;
+            EndStateNameHash = endStateNameHash;
             IsFired = false;
             IsCanceled = false;
             IsEnd = false;
