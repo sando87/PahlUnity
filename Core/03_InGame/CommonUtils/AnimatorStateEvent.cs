@@ -14,7 +14,7 @@ namespace PahlUnity
                 mHelper = animator.GetComponent<AnimatorHelper>();
 
             if (mHelper != null)
-                mHelper.InvokeEventEnter(stateInfo.shortNameHash);
+                mHelper.InvokeEventEnter(stateInfo.shortNameHash, layerIndex);
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -22,7 +22,7 @@ namespace PahlUnity
             base.OnStateExit(animator, stateInfo, layerIndex);
 
             if (mHelper != null)
-                mHelper.InvokeEventLeave(stateInfo.shortNameHash);
+                mHelper.InvokeEventLeave(stateInfo.shortNameHash, layerIndex);
         }
 
     }
