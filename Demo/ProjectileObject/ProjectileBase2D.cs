@@ -113,7 +113,12 @@ namespace PahlUnity.Demo
         {
             if (Stats.FireAngle != 0)
             {
-                Vector2 dir = Quaternion.AngleAxis(Stats.FireAngle, transform.forward) * transform.right;
+                float facingSign = Mathf.Sign(transform.right.x);
+                if (facingSign == 0f)
+                    facingSign = 1f;
+
+                Vector2 dir = Quaternion.AngleAxis(Stats.FireAngle, Vector3.forward) * Vector2.right;
+                dir.x *= facingSign;
                 Vector2 vel = dir * Stats.MoveSpeed;
                 mPhy.VelocityX = vel.x;
                 mPhy.VelocityY = vel.y;
