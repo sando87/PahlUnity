@@ -15,5 +15,7 @@ namespace PahlUnity.Demo
         public float StartDelay;
         public float RotateSpeed;
         public bool AimToVelocity;
+        public bool EndOnHit;
+        public float DestroyDelay;
     }
 }

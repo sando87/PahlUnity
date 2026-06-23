@@ -54,6 +54,9 @@ namespace PahlUnity.Demo
             {
                 mHitColliders.Add(new HitColliderInfo { Collider = col, HitTime = Time.time });
                 OnHit?.Invoke(col);
+
+                if (Stats.EndOnHit)
+                    DoEndProjectile();
             };
 
             mInteractCollider.OnInteractLeave3D += (col) =>
@@ -149,11 +152,11 @@ namespace PahlUnity.Demo
             mInteractCollider.LockInteract = true;
             mHitColliders.Clear();
             enabled = false;
-        }
 
-        public void DestroyNow()
-        {
-            Destroy(gameObject);
+            if (Stats.DestroyDelay > 0)
+                mBaseObj.DestroyObj(Stats.DestroyDelay);
+            else if (Stats.DestroyDelay == 0)
+                mBaseObj.DestroyObj();
         }
 
         void HitEventEveryInterval()
