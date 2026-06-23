@@ -15,6 +15,7 @@ namespace PahlUnity
 
         public FiniteStateBase PreviousState { get { return mPreviousState; } }
         public FiniteStateBase CurrentState { get { return mCurrentState; } }
+        public bool IsDefaultState { get { return mCurrentState == mDefaultState; } }
 
         void Update()
         {
