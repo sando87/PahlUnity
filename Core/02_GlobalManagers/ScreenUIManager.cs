@@ -27,6 +27,8 @@ namespace PahlUnity
             {
                 mScreenUIPrefabs.Add(prefab.GetType().Name, prefab);
             }
+
+            CurrentScreenUI = GetComponentInChildren<ScreenUIBase>();
         }
 
         // 씬 전환이 순차적으로 이루어짐(현재UI 닫히는 연출이 끝나면 다음UI 열리는 연출이 시작됨)
