@@ -13,6 +13,13 @@ namespace PahlUnity
         public event Action EventUpdate;
         public event Action EventLeave;
 
+        public int StateID { get; private set; }
+
+        public FiniteStateBase(int stateID)
+        {
+            StateID = stateID;
+        }
+
         public virtual void EnterState()
         {
             EventEnter?.Invoke();

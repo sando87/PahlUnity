@@ -7,7 +7,7 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        readonly List<FiniteStateBase> mStates = new();
+        readonly Dictionary<int, FiniteStateBase> mStates = new();
         FiniteStateBase mPreviousState = null;
         FiniteStateBase mCurrentState = null;
         FiniteStateBase mDefaultState = null;
@@ -58,17 +58,17 @@ namespace PahlUnity
         {
             mDefaultState = state;
         }
-        public void AddState(FiniteStateBase state)
+        public void SetState(FiniteStateBase state)
         {
-            mStates.Add(state);
+            mStates.Add(state.StateID, state);
         }
         public void RemoveState(FiniteStateBase state)
         {
-            mStates.Remove(state);
+            mStates.Remove(state.StateID);
         }
-        public FiniteStateBase FindState(FiniteStateBase state)
+        public FiniteStateBase FindState(int stateID)
         {
-            return mStates.Find(s => s == state);
+            return mStates.ContainsKey(stateID) ? mStates[stateID] : null;
         }
     }
 
