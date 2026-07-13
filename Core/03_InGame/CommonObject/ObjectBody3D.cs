@@ -6,6 +6,8 @@ namespace PahlUnity
     {
         [SerializeField] Collider _BodyCollider = null;
         [SerializeField] BoxCollider _ThinPlatform = null;
+        [SerializeField] Transform _RightHand = null;
+        [SerializeField] Transform _LeftHand = null;
 
         BaseObject mBaseObj = null;
         Collider mCollider = null;
@@ -22,6 +24,9 @@ namespace PahlUnity
 
         public Bounds Bounds { get => mCollider.bounds; }
         public Vector3 FrontDirVec3 { get => transform.forward; }
+
+        public Transform RightHand => _RightHand;
+        public Transform LeftHand => _LeftHand;
 
         public bool LockBody { get => !mCollider.enabled; set => mCollider.enabled = !value; }
         public bool LockThinPlatform { get { return _ThinPlatform ? !_ThinPlatform.enabled : false; } set { if (_ThinPlatform) _ThinPlatform.enabled = !value; } }
