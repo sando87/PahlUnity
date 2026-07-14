@@ -7,13 +7,10 @@ namespace PahlUnity
 {
     public class FiniteStateMachine : MonoBehaviour
     {
-        readonly Dictionary<int, FiniteStateBase> mStates = new();
-        FiniteStateBase mPreviousState = null;
         FiniteStateBase mCurrentState = null;
         FiniteStateBase mDefaultState = null;
         bool mIsJustChanged = false;
 
-        public FiniteStateBase PreviousState { get { return mPreviousState; } }
         public FiniteStateBase CurrentState { get { return mCurrentState; } }
         public bool IsDefaultState { get { return mCurrentState == mDefaultState; } }
 
@@ -38,12 +35,10 @@ namespace PahlUnity
             if (!forceChange && mCurrentState == newState)
                 return false;
 
-            mPreviousState?.LeaveState();
-
+            mCurrentState?.LeaveState();
             mCurrentState = newState;
             mCurrentState.EnterState();
 
-            mPreviousState = mCurrentState;
             mIsJustChanged = true;
             return true;
         }
@@ -57,18 +52,6 @@ namespace PahlUnity
         public void SetDefaultState(FiniteStateBase state)
         {
             mDefaultState = state;
-        }
-        public void SetState(FiniteStateBase state)
-        {
-            mStates.Add(state.StateID, state);
-        }
-        public void RemoveState(FiniteStateBase state)
-        {
-            mStates.Remove(state.StateID);
-        }
-        public FiniteStateBase FindState(int stateID)
-        {
-            return mStates.ContainsKey(stateID) ? mStates[stateID] : null;
         }
     }
 
