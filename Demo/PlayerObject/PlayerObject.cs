@@ -11,19 +11,13 @@ namespace PahlUnity.Demo
 
         BaseObject mBaseObj = null;
 
-        SpecBase mSpecBase = null;
-
-        PlayerGrowth mExp = null;
         Inventory mInven = null;
         Equipment mEquip = null;
 
         void Awake()
         {
-            mBaseObj = GetComponentInParent<BaseObject>();
+            mBaseObj = this.ExGetBase();
 
-            mSpecBase = mBaseObj.GetComp<SpecBase>();
-
-            mExp = mBaseObj.GetComp<PlayerGrowth>();
             mInven = new Inventory(20);
 
             const int EquipSlotTypeWeapon = 0;
@@ -43,7 +37,7 @@ namespace PahlUnity.Demo
             InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
             saveData.Characters.TryGetValue(mPlayerInstData.InstanceID, out mPlayerSaveData);
 
-            mExp.Init(mPlayerSaveData.PlayerStat);
+            mBaseObj.GetComp<PlayerGrowth>().Init(mPlayerSaveData.PlayerStat);
 
             InitItems();
 
@@ -70,22 +64,20 @@ namespace PahlUnity.Demo
 
         void InitSpec()
         {
-            mSpecBase = GetComponent<SpecBase>();
-
-            int currentLevel = mExp.CurrentLevel;
+            int currentLevel = mBaseObj.GetComp<PlayerGrowth>().CurrentLevel;
             float maxLevel = 99;
             float normalizedRange = currentLevel / maxLevel;
-            mSpecBase.SetSpecs(mPlayerInstData.SpecData.Specs, normalizedRange);
+            mBaseObj.Spec.SetSpecs(mPlayerInstData.SpecData.Specs, normalizedRange);
 
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxHP, mPlayerSaveData.PlayerStat.HealthPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.MaxMP, mPlayerSaveData.PlayerStat.ManaPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.Attack, mPlayerSaveData.PlayerStat.AttackPoint);
-            mSpecBase.UpdateCurrentValueByStep(SpecFields.Defense, mPlayerSaveData.PlayerStat.DefensePoint);
+            mBaseObj.Spec.UpdateCurrentValueByStep(SpecFields.MaxHP, mPlayerSaveData.PlayerStat.HealthPoint);
+            mBaseObj.Spec.UpdateCurrentValueByStep(SpecFields.MaxMP, mPlayerSaveData.PlayerStat.ManaPoint);
+            mBaseObj.Spec.UpdateCurrentValueByStep(SpecFields.Attack, mPlayerSaveData.PlayerStat.AttackPoint);
+            mBaseObj.Spec.UpdateCurrentValueByStep(SpecFields.Defense, mPlayerSaveData.PlayerStat.DefensePoint);
 
             SpecModifier[] modifiers = GetComponentsInChildren<SpecModifier>();
             foreach (var modifier in modifiers)
             {
-                mSpecBase.AddModifier(modifier);
+                mBaseObj.Spec.AddModifier(modifier);
             }
         }
 

@@ -30,20 +30,12 @@ namespace PahlUnity.Demo
         }
 
         BaseObject mBaseObj = null;
-        ObjectPhysics2D mPhy = null;
-        ObjectBody2D mBody = null;
-        InputPlayer mPlayerInput = null;
-        SpecBase mSpec = null;
 
         bool mIsSecondJump = false;
 
         private void Awake()
         {
-            mBaseObj = GetComponentInParent<BaseObject>();
-            mPhy = mBaseObj.GetComp<ObjectPhysics2D>();
-            mBody = mBaseObj.GetComp<ObjectBody2D>();
-            mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBase>();
+            mBaseObj = this.ExGetBase();
         }
 
         private void Update()
@@ -59,35 +51,35 @@ namespace PahlUnity.Demo
             if (LockMove)
                 return;
 
-            float moveX = mPlayerInput.MoveX;
+            float moveX = mBaseObj.Input.MoveX;
             moveX = moveX > 0 ? 1 : moveX < 0 ? -1 : 0;
-            mPhy.VelocityX = moveX * mSpec[SpecFields.MoveSpeed];
+            mBaseObj.Physics2D.VelocityX = moveX * mBaseObj.Spec[SpecFields.MoveSpeed];
         }
         void Jump()
         {
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
-            && mPlayerInput.MoveY >= 0)
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
+            && mBaseObj.Input.MoveY >= 0)
             {
                 if (IsGrounded)
                 {
                     mIsSecondJump = false;
-                    mPhy.DoJump(_JumpForce);
+                    mBaseObj.Physics2D.DoJump(_JumpForce);
                 }
                 else
                 {
                     if (!mIsSecondJump)
                     {
                         mIsSecondJump = true;
-                        mPhy.DoJump(_JumpForce);
+                        mBaseObj.Physics2D.DoJump(_JumpForce);
                     }
                 }
             }
-            else if (mPlayerInput.JustReleased(InputActionNameHash.Jump))
+            else if (mBaseObj.Input.JustReleased(InputActionNameHash.Jump))
             {
-                mPhy.StopJump();
+                mBaseObj.Physics2D.StopJump();
             }
         }
         void DropDown()
@@ -95,12 +87,12 @@ namespace PahlUnity.Demo
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
-            && mPlayerInput.MoveY < 0
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
+            && mBaseObj.Input.MoveY < 0
             && IsGrounded)
             {
-                mBody.LockThinPlatform = true;
-                this.ExDelayedCoroutine(0.2f, () => mBody.LockThinPlatform = false);
+                mBaseObj.Body2D.LockThinPlatform = true;
+                this.ExDelayedCoroutine(0.2f, () => mBaseObj.Body2D.LockThinPlatform = false);
             }
         }
         void Dash()
@@ -108,20 +100,20 @@ namespace PahlUnity.Demo
             if (LockDash)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Dash))
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Dash))
             {
-                mPhy.AddForce(mBody.FrontDirVec2 * _DashForce, ForceMode2D.Impulse);
+                mBaseObj.Physics2D.AddForce(mBaseObj.Body2D.FrontDirVec2 * _DashForce, ForceMode2D.Impulse);
             }
         }
 
         private bool GetGroundState()
         {
             int layerMask = _LayersForGroundCheck.value;
-            Vector2 footPos = mBody.Foot;
+            Vector2 footPos = mBaseObj.Body2D.Foot;
 
             bool isOverlapped = Physics2D.OverlapCircle(footPos + new Vector2(0, 0.1f), 0.05f, layerMask);
 
-            Vector2 bodySize = mBody.Size;
+            Vector2 bodySize = mBaseObj.Body2D.Size;
             Rect box = new Rect();
             box.size = new Vector2(bodySize.x, 0.1f);
             box.center = footPos + new Vector2(0, 0.05f);

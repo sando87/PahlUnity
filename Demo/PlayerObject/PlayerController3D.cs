@@ -14,7 +14,7 @@ namespace PahlUnity.Demo
         [SerializeField] string _AnimParamIsGrounded = "IsGrounded";
         [SerializeField] string _AnimParamDash = "Dash";
 
-        public bool IsGrounded { get => mPhy != null && mPhy.IsGrounded; }
+        public bool IsGrounded { get => mBaseObj.Physics3D != null && mBaseObj.Physics3D.IsGrounded; }
 
         public bool LockMove { get; set; } = false;
         public bool LockJump { get; set; } = false;
@@ -26,11 +26,6 @@ namespace PahlUnity.Demo
         }
 
         BaseObject mBaseObj = null;
-        ObjectPhysics3D mPhy = null;
-        ObjectBody3D mBody = null;
-        InputPlayer mPlayerInput = null;
-        SpecBase mSpec = null;
-        AnimatorHelper mAnim = null;
 
         int mAnimParamMoveSpeed = 0;
         int mAnimParamIsGrounded = 0;
@@ -39,12 +34,7 @@ namespace PahlUnity.Demo
 
         private void Awake()
         {
-            mBaseObj = GetComponentInParent<BaseObject>();
-            mPhy = mBaseObj.GetComp<ObjectPhysics3D>();
-            mBody = mBaseObj.GetComp<ObjectBody3D>();
-            mPlayerInput = mBaseObj.GetComp<InputPlayer>();
-            mSpec = mBaseObj.GetComp<SpecBase>();
-            mAnim = mBaseObj.GetComp<AnimatorHelper>();
+            mBaseObj = this.ExGetBase();
 
             mAnimParamMoveSpeed = Animator.StringToHash(_AnimParamMoveSpeed);
             mAnimParamIsGrounded = Animator.StringToHash(_AnimParamIsGrounded);
@@ -58,27 +48,27 @@ namespace PahlUnity.Demo
             DropDown();
             Dash();
 
-            mAnim.SetParamBool(mAnimParamIsGrounded, IsGrounded);
+            mBaseObj.Anim.SetParamBool(mAnimParamIsGrounded, IsGrounded);
         }
 
         void DoMovement()
         {
             if (LockMove)
             {
-                mPhy.Move(Vector3.zero);
+                mBaseObj.Physics3D.Move(Vector3.zero);
                 return;
             }
 
             if (TryGetMoveInput(out Vector3 moveDir))
             {
-                mPhy.Move(moveDir, mSpec[SpecFields.MoveSpeed]);
-                mBody.Turn(moveDir);
-                mAnim.SetParamFloat(mAnimParamMoveSpeed, moveDir.magnitude);
+                mBaseObj.Physics3D.Move(moveDir, mBaseObj.Spec[SpecFields.MoveSpeed]);
+                mBaseObj.Body3D.Turn(moveDir);
+                mBaseObj.Anim.SetParamFloat(mAnimParamMoveSpeed, moveDir.magnitude);
             }
             else
             {
-                mPhy.StopMoving();
-                mAnim.SetParamFloat(mAnimParamMoveSpeed, 0);
+                mBaseObj.Physics3D.StopMoving();
+                mBaseObj.Anim.SetParamFloat(mAnimParamMoveSpeed, 0);
             }
         }
 
@@ -87,26 +77,26 @@ namespace PahlUnity.Demo
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
-            && mPlayerInput.MoveY >= 0)
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
+            && mBaseObj.Input.MoveY >= 0)
             {
                 if (IsGrounded)
                 {
                     mIsSecondJump = false;
-                    mPhy.DoJump(_JumpForce);
+                    mBaseObj.Physics3D.DoJump(_JumpForce);
                 }
                 else
                 {
                     if (!mIsSecondJump)
                     {
                         mIsSecondJump = true;
-                        mPhy.DoJump(_JumpForce);
+                        mBaseObj.Physics3D.DoJump(_JumpForce);
                     }
                 }
             }
-            else if (mPlayerInput.JustReleased(InputActionNameHash.Jump))
+            else if (mBaseObj.Input.JustReleased(InputActionNameHash.Jump))
             {
-                mPhy.StopJump();
+                mBaseObj.Physics3D.StopJump();
             }
         }
 
@@ -115,12 +105,12 @@ namespace PahlUnity.Demo
             if (LockJump)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Jump)
-            && mPlayerInput.MoveY < 0
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
+            && mBaseObj.Input.MoveY < 0
             && IsGrounded)
             {
-                mBody.LockThinPlatform = true;
-                this.ExDelayedCoroutine(0.2f, () => mBody.LockThinPlatform = false);
+                mBaseObj.Body3D.LockThinPlatform = true;
+                this.ExDelayedCoroutine(0.2f, () => mBaseObj.Body3D.LockThinPlatform = false);
             }
         }
 
@@ -129,17 +119,17 @@ namespace PahlUnity.Demo
             if (LockDash)
                 return;
 
-            if (mPlayerInput.JustPressed(InputActionNameHash.Dash))
+            if (mBaseObj.Input.JustPressed(InputActionNameHash.Dash))
             {
-                Vector3 dashDir = mBody.FrontDirVec3;
-                mPhy.DoDash(dashDir, _DashSpeed, _DashDuration);
-                mAnim.SetParamTrigger(mAnimParamDash);
+                Vector3 dashDir = mBaseObj.Body3D.FrontDirVec3;
+                mBaseObj.Physics3D.DoDash(dashDir, _DashSpeed, _DashDuration);
+                mBaseObj.Anim.SetParamTrigger(mAnimParamDash);
             }
         }
 
         bool TryGetMoveInput(out Vector3 moveDir)
         {
-            Vector2 moveInput = mPlayerInput.MoveXY;
+            Vector2 moveInput = mBaseObj.Input.MoveXY;
             if (moveInput.sqrMagnitude <= 0.0001f)
             {
                 moveDir = Vector3.zero;
