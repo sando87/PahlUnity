@@ -14,7 +14,9 @@ namespace PahlUnity
     {
         // popup 최상단에 배치된 sprite
         // 전체화면 잠금, Dim과 같은 기능을 수행하는데 사용
-        [SerializeField] Image TopOverlay = null;
+        [SerializeField] Image TopOverlayPrefab = null;
+
+        Image mTopOverlay = null;
 
         public virtual async UniTask Open()
         {
@@ -30,6 +32,8 @@ namespace PahlUnity
         {
             // FadeIn 시작시 어두운 화면이므로 UI는 잠근 상태로 시작
             LockUI();
+            TopOverlay.gameObject.SetActive(true);
+            TopOverlay.transform.SetAsLastSibling();
             TopOverlay.DOFade(0, duration).From(1)
             .OnComplete(() =>
             {
@@ -41,6 +45,8 @@ namespace PahlUnity
         {
             // FadeOut 동작 시작시 UI 잠금
             LockUI();
+            TopOverlay.gameObject.SetActive(true);
+            TopOverlay.transform.SetAsLastSibling();
             TopOverlay.DOFade(1, duration).From(0)
             .OnComplete(() =>
             {
@@ -51,6 +57,8 @@ namespace PahlUnity
 
         protected void LockUI()
         {
+            TopOverlay.gameObject.SetActive(true);
+            TopOverlay.transform.SetAsLastSibling();
             TopOverlay.raycastTarget = true;
         }
         protected void UnLockUI()
@@ -61,6 +69,8 @@ namespace PahlUnity
         // 전체 화면 어둡게 처리
         protected void DimToDark()
         {
+            TopOverlay.gameObject.SetActive(true);
+            TopOverlay.transform.SetAsLastSibling();
             TopOverlay.color = new Color(0, 0, 0, 0.9f);
             LockUI();
         }
@@ -68,6 +78,19 @@ namespace PahlUnity
         {
             TopOverlay.color = new Color(0, 0, 0, 0);
             UnLockUI();
+        }
+
+        Image TopOverlay
+        {
+            get
+            {
+                if (mTopOverlay == null)
+                {
+                    mTopOverlay = Instantiate(TopOverlayPrefab, transform);
+                    mTopOverlay.gameObject.SetActive(false);
+                }
+                return mTopOverlay;
+            }
         }
 
     }
