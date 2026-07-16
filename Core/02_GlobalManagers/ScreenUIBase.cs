@@ -26,22 +26,22 @@ namespace PahlUnity
             await UniTask.Yield();
         }
 
-        protected void FadeIn()
+        protected void FadeIn(float duration)
         {
             // FadeIn 시작시 어두운 화면이므로 UI는 잠근 상태로 시작
             LockUI();
-            TopOverlay.DOFade(0, 0.4f).From(1)
+            TopOverlay.DOFade(0, duration).From(1)
             .OnComplete(() =>
             {
                 // FadeIn 동작이 끝나면 UI는 잠금 해제
                 UnLockUI();
             });
         }
-        protected void FadeOut()
+        protected void FadeOut(float duration)
         {
             // FadeOut 동작 시작시 UI 잠금
             LockUI();
-            TopOverlay.DOFade(1, 0.4f).From(0)
+            TopOverlay.DOFade(1, duration).From(0)
             .OnComplete(() =>
             {
                 // FadeIn 동작이 끝나면 UI는 잠금 해제
