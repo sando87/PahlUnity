@@ -101,6 +101,9 @@ namespace PahlUnity
 
             foreach (Collider col in mDetectedColliders)
             {
+                if (col == null)
+                    continue;
+
                 if (!mCurrentColliders.Contains(col))
                 {
                     OnDetectExit?.Invoke(col);
