@@ -52,6 +52,14 @@ namespace PahlUnity
             }
         }
 
+        public void OnInputEnter(InputManager inputManager)
+        {
+            if (CurrentSelectedPart != null)
+            {
+                SelectUIPart(CurrentSelectedPart);
+            }
+        }
+
         public void OnInputUpdate(InputManager inputManager)
         {
             if (inputManager.JustPressed(mInputActionUIMove))
