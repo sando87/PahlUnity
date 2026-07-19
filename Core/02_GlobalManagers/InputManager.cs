@@ -426,8 +426,12 @@ namespace PahlUnity
             }
 
             mHandlerInputStack.Clear();
-            mHandlerInputStack.Push(handler);
-            handler.OnInputEnter(this);
+
+            if (handler != null)
+            {
+                mHandlerInputStack.Push(handler);
+                handler.OnInputEnter(this);
+            }
         }
     }
 }
