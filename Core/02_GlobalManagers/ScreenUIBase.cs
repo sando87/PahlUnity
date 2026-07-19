@@ -18,7 +18,7 @@ namespace PahlUnity
 
         Image mTopOverlay = null;
 
-        public virtual async UniTask Open()
+        public virtual async UniTask Open(object param)
         {
             await UniTask.Yield();
         }

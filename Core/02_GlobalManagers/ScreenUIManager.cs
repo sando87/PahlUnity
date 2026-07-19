@@ -66,7 +66,7 @@ namespace PahlUnity
         {
             ScreenUIBase prefab = mScreenUIPrefabs[key];
             CurrentScreenUI = Instantiate(prefab, _RootCanvas.transform);
-            await CurrentScreenUI.Open();
+            await CurrentScreenUI.Open(null);
         }
     }
 }
