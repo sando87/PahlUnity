@@ -95,7 +95,7 @@ namespace PahlUnity
         private InputActionMap _uiMap;
         private Dictionary<int, InputAction> mActionMap = new();
 
-        private IInputHandler mHandlerInput = null;
+        private Stack<IInputHandler> mHandlerInputStack = new();
 
         public static int GetInputActionNameHash(string actionName) => actionName.ExGetStableHash32();
 
@@ -114,9 +114,9 @@ namespace PahlUnity
         {
             IsAnyInputDetectedThisFrame = false;
 
-            if (mHandlerInput != null)
+            if (mHandlerInputStack.TryPeek(out IInputHandler handler))
             {
-                mHandlerInput.OnInputUpdate(this);
+                handler.OnInputUpdate(this);
             }
         }
 
@@ -397,26 +397,37 @@ namespace PahlUnity
         }
 
 
-        public IInputHandler GetHandlerInput()
+        public void PushHandlerInput(IInputHandler handler)
         {
-            return mHandlerInput;
+            if (mHandlerInputStack.TryPeek(out IInputHandler currentHandler))
+            {
+                currentHandler.OnInputEnter(this);
+            }
+
+            mHandlerInputStack.Push(handler);
+            handler.OnInputEnter(this);
+        }
+        public void PopHandlerInput()
+        {
+            if (mHandlerInputStack.TryPop(out IInputHandler poppedHandler))
+            {
+                poppedHandler.OnInputExit(this);
+                if (mHandlerInputStack.TryPeek(out IInputHandler currentHandler))
+                {
+                    currentHandler.OnInputEnter(this);
+                }
+            }
         }
         public void SetHandlerInput(IInputHandler handler)
         {
-            if (mHandlerInput == handler)
-                return;
-
-            if (mHandlerInput != null)
+            if (mHandlerInputStack.TryPeek(out IInputHandler currentHandler))
             {
-                mHandlerInput.OnInputExit(this);
+                currentHandler.OnInputExit(this);
             }
 
-            mHandlerInput = handler;
-
-            if (mHandlerInput != null)
-            {
-                mHandlerInput.OnInputEnter(this);
-            }
+            mHandlerInputStack.Clear();
+            mHandlerInputStack.Push(handler);
+            handler.OnInputEnter(this);
         }
     }
 }
