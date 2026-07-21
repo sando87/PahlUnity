@@ -21,10 +21,10 @@ namespace PahlUnity
         public Rigidbody Rigidbody => mRB;
         public bool IsGrounded => mCC != null && mCC.isGrounded;
         public Vector3 Position { get => transform.position; set => Teleport(value); }
-        public Vector3 Velocity { get => mVelocity; set => mVelocity = value; }
-        public float VelocityX { get => mVelocity.x; set => mVelocity.x = value; }
-        public float VelocityY { get => mVelocity.y; set => mVelocity.y = value; }
-        public float VelocityZ { get => mVelocity.z; set => mVelocity.z = value; }
+        public Vector3 Velocity { get => GetVelocity(); set => mVelocity = value; }
+        public float VelocityX { get => GetVelocity().x; set => mVelocity.x = value; }
+        public float VelocityY { get => GetVelocity().y; set => mVelocity.y = value; }
+        public float VelocityZ { get => GetVelocity().z; set => mVelocity.z = value; }
         public Vector3 DashVelocity => mDashVelocity;
         public bool IsDashing => mDashRemainTime > 0f;
         public bool LockGravity { get => mLockGravity; set => mLockGravity = value; }
@@ -169,6 +169,15 @@ namespace PahlUnity
             mDashRemainTime -= deltaTime;
             if (mDashRemainTime <= 0f)
                 StopDash();
+        }
+
+        private Vector3 GetVelocity()
+        {
+            if (mCC != null)
+                return mCC.velocity;
+            if (mRB != null)
+                return mRB.linearVelocity;
+            return Vector3.zero;
         }
     }
 }
