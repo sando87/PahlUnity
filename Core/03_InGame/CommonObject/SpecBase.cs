@@ -8,7 +8,7 @@ namespace PahlUnity
     {
         private readonly Dictionary<int, SpecFieldValue> mSpecs = new();
 
-        private readonly List<SpecModifier> mModifiers = new();
+        public List<SpecModifier> mModifiers = new();
 
         public void SetSpecs(IReadOnlyList<SpecFieldRaw> specs, float normalizedRange)
         {
@@ -67,16 +67,19 @@ namespace PahlUnity
         {
             if (mSpecs.TryGetValue(key, out SpecFieldValue spec))
             {
-                float value = spec.CurrentValue;
-
+                float baseValue = spec.CurrentValue;
                 float addModifier = GetAddModifier(key);
                 float percentModifier = GetPercentModifier(key);
                 float multiplier = percentModifier / 100f;
                 float finalMultiplier = multiplier > 0 ? 1f + multiplier : (1 / (1f - multiplier));
-
-                return (value + addModifier) * finalMultiplier;
+                return (baseValue + addModifier) * finalMultiplier;
             }
-            return 0f;
+            else
+            {
+                float addModifier = GetAddModifier(key);
+                float percentModifier = GetPercentModifier(key);
+                return addModifier > 0 ? addModifier : percentModifier > 0 ? percentModifier : 0f;
+            }
         }
 
         public float GetAddModifier(int key)

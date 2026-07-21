@@ -52,7 +52,7 @@ namespace PahlUnity
             {
                 foreach (var spec in specSet)
                 {
-                    if (spec.Info.ModifierType == SpecModifierType.Additive)
+                    if (spec.Info.ModifierType == SpecModifierType.Base)
                         totalModifier += spec.CurrentValue;
                 }
             }

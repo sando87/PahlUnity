@@ -90,7 +90,6 @@ namespace PahlUnity
     public enum SpecModifierType
     {
         Base,
-        Additive,
         Percent,
     }
     public enum SpecValueType
