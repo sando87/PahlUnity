@@ -18,6 +18,7 @@ namespace PahlUnity
         int mCurrentAnimEventStateID = 0;
 
         public int CurrentStateNameHash => mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+        public float CurrentNormalizedTime => mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         public int FireIndex { get; private set; } = -1;
 
         void Awake()
@@ -37,6 +38,20 @@ namespace PahlUnity
 
             AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
             {
+                onFire = onFire,
+                onEnd = onEnd,
+                Layer = layer
+            };
+            SetAnimStateEvent(animStateEvent);
+            mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+        }
+        public void PlayAnim(int stateNameHash, Action onLoopStart, Action<int> onFire, Action<bool> onEnd, int layer = 0)
+        {
+            CancelPreviousAnim(layer);
+
+            AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
+            {
+                onLoopStart = onLoopStart,
                 onFire = onFire,
                 onEnd = onEnd,
                 Layer = layer
@@ -241,6 +256,15 @@ namespace PahlUnity
                 mCurrentAnimEventStateID = mAnimStateEvents[layer].AnimEventID;
             }
         }
+        public void InvokeEventLoopStart(int stateNameHash, int layer)
+        {
+            if (mAnimStateEvents[layer] != null
+            && mAnimStateEvents[layer].FireStateNameHash == stateNameHash
+            && mAnimStateEvents[layer].AnimEventID == mCurrentAnimEventStateID)
+            {
+                mAnimStateEvents[layer].onLoopStart?.Invoke();
+            }
+        }
         public void InvokeEventMiddle(int stateNameHash, int index, int layer)
         {
             FireIndex = index;
@@ -283,6 +307,7 @@ namespace PahlUnity
         public int Layer = 0;
         public Action<int> onFire = null;
         public Action<bool> onEnd = null;
+        public Action onLoopStart = null;
         public CancellationTokenSource cancelToken = null;
 
         public AnimStateEvent(int animEventID, int animStateNameHash)
