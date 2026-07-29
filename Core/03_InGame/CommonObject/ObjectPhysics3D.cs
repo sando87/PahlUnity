@@ -11,6 +11,7 @@ namespace PahlUnity
         private CharacterController mCC = null;
         private Rigidbody mRB = null;
         private BaseObject mBase = null;
+        private Vector3 mAcceleration = Vector3.zero;
         private Vector3 mVelocity = Vector3.zero;
         private Vector3 mDashVelocity = Vector3.zero;
         private float mDashRemainTime = 0f;
@@ -25,6 +26,7 @@ namespace PahlUnity
         public float VelocityX { get => GetVelocity().x; set => mVelocity.x = value; }
         public float VelocityY { get => GetVelocity().y; set => mVelocity.y = value; }
         public float VelocityZ { get => GetVelocity().z; set => mVelocity.z = value; }
+        public Vector3 Acceleration { get => mAcceleration; set => mAcceleration = value; }
         public Vector3 DashVelocity => mDashVelocity;
         public bool IsDashing => mDashRemainTime > 0f;
         public bool LockGravity { get => mLockGravity; set => mLockGravity = value; }
@@ -126,6 +128,7 @@ namespace PahlUnity
                 return;
 
             ApplyGravity(deltaTime);
+            ApplyAcceleration(deltaTime);
             UpdateDash(deltaTime);
 
             Vector3 frameVelocity = mVelocity + mDashVelocity;
@@ -140,6 +143,7 @@ namespace PahlUnity
                 return;
 
             ApplyGravity(deltaTime);
+            ApplyAcceleration(deltaTime);
             UpdateDash(deltaTime);
 
             Vector3 frameVelocity = mVelocity + mDashVelocity;
@@ -159,6 +163,11 @@ namespace PahlUnity
                 mVelocity.y = _GroundStickVelocity;
 
             mVelocity += Physics.gravity * _GravityScale * deltaTime;
+        }
+
+        private void ApplyAcceleration(float deltaTime)
+        {
+            mVelocity += mAcceleration * deltaTime;
         }
 
         private void UpdateDash(float deltaTime)
