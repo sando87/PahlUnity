@@ -98,16 +98,24 @@ namespace PahlUnity
         {
             return UnityEngine.Random.value;
         }
+        public static Vector2 Random(Vector2 pos, float range)
+        {
+            Vector2 ret = pos;
+            ret.x += UnityEngine.Random.Range(-range, range);
+            ret.y += UnityEngine.Random.Range(-range, range);
+            return ret;
+        }
         public static Vector3 Random(Vector3 pos, float range)
         {
             Vector3 ret = pos;
             ret.x += UnityEngine.Random.Range(-range, range);
             ret.y += UnityEngine.Random.Range(-range, range);
+            ret.z += UnityEngine.Random.Range(-range, range);
             return ret;
         }
-        public static Vector3 Random(Rect rect)
+        public static Vector2 Random(Rect rect)
         {
-            Vector3 ret = rect.center;
+            Vector2 ret = rect.center;
             Vector2 halfSize = rect.size * 0.5f;
             ret.x += UnityEngine.Random.Range(-halfSize.x, halfSize.x);
             ret.y += UnityEngine.Random.Range(-halfSize.y, halfSize.y);
