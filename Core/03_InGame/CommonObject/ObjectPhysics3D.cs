@@ -22,6 +22,7 @@ namespace PahlUnity
         public Rigidbody Rigidbody => mRB;
         public bool IsGrounded => mCC != null && mCC.isGrounded;
         public Vector3 Position { get => transform.position; set => Teleport(value); }
+        public Vector3 VelocityPrev { get; private set; }
         public Vector3 Velocity { get => GetVelocity(); set => mVelocity = value; }
         public float VelocityX { get => GetVelocity().x; set => mVelocity.x = value; }
         public float VelocityY { get => GetVelocity().y; set => mVelocity.y = value; }
@@ -127,6 +128,7 @@ namespace PahlUnity
             if (mLockMovement)
                 return;
 
+            VelocityPrev = Velocity;
             ApplyGravity(deltaTime);
             ApplyAcceleration(deltaTime);
             UpdateDash(deltaTime);
@@ -142,6 +144,7 @@ namespace PahlUnity
             if (mLockMovement)
                 return;
 
+            VelocityPrev = Velocity;
             ApplyGravity(deltaTime);
             ApplyAcceleration(deltaTime);
             UpdateDash(deltaTime);
