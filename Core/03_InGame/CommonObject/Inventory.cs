@@ -82,6 +82,23 @@ namespace PahlUnity
             return removeCount;
         }
 
+        public int RemoveItem(IInvenItem item, int count = 1)
+        {
+            int itemSlotIndex = FindItemSlotIndex(item);
+            if (itemSlotIndex < 0)
+                return 0;
+
+            return RemoveItem(itemSlotIndex, count);
+        }
+
+        public void ClearAllItem()
+        {
+            foreach (InventorySlot slot in Slots)
+            {
+                slot.Clear();
+            }
+        }
+
         public bool MoveItem(int fromIndex, int toIndex)
         {
             LOG.errorif(fromIndex < 0 || fromIndex >= mSlots.Count || toIndex < 0 || toIndex >= mSlots.Count);
@@ -139,6 +156,24 @@ namespace PahlUnity
             }
 
             return null;
+        }
+
+        private int FindItemSlotIndex(IInvenItem item)
+        {
+            int idx = 0;
+            foreach (InventorySlot slot in mSlots)
+            {
+                if (!slot.IsEmpty && slot.Item == item)
+                {
+                    return idx;
+                }
+                else
+                {
+                    idx++;
+                }
+            }
+
+            return -1;
         }
     }
 }
