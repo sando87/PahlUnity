@@ -8,6 +8,7 @@ namespace PahlUnity
     public class HPBarUI : MonoBehaviour
     {
         [SerializeField] Transform _FillAmountBar = null;
+        [SerializeField] float _Duration = 5f;
 
         private Camera mBillboardCamera = null;
 
@@ -24,7 +25,8 @@ namespace PahlUnity
         public void OnDamaged(HealthInfo before, HealthInfo after)
         {
             gameObject.SetActive(true);
-            this.ExDelayedCoroutine(5, () => gameObject.SetActive(false));
+            if (_Duration > 0)
+                this.ExDelayedCoroutine(_Duration, () => gameObject.SetActive(false));
 
             float rate = after.CurrentHP / (float)after.MaxHealth;
             SetHealthBarRate(rate);

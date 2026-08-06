@@ -14,7 +14,7 @@ namespace PahlUnity
         public event Action<HealthInfo, HealthInfo> OnChanged;
         public event Action<HealthInfo, HealthInfo> OnDied;
 
-        public bool IsDead => mCurrentHP.ExFloorToInt() <= 0;
+        public bool IsDead => mCurrentHP <= 0.01f;
 
         public float HpRate => mMaxCurrentHP > 0 ? mCurrentHP / mMaxCurrentHP : 1;
         public float ManaRate => mMaxCurrentMana > 0 ? mCurrentMana / mMaxCurrentMana : 1;
