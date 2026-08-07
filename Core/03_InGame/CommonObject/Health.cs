@@ -8,11 +8,9 @@ namespace PahlUnity
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField] UnityEvent<HealthInfo, HealthInfo> _OnChanged;
-        [SerializeField] UnityEvent<HealthInfo, HealthInfo> _OnDied;
-
-        public event Action<HealthInfo, HealthInfo> OnChanged;
-        public event Action<HealthInfo, HealthInfo> OnDied;
+        public event Action<HealthInfo, HealthInfo> OnStateChanged;
+        public event Action<DamageInfo, BaseObject> OnDamaged;
+        public event Action<DamageInfo, BaseObject> OnDied;
 
         public bool IsDead => mCurrentHP <= 0.01f;
 
@@ -75,7 +73,7 @@ namespace PahlUnity
             }
 
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthChanged(before, after);
+            InvokeStateChanged(before, after);
         }
 
         public void SetNewHealth(float newHP, float newMana, float newShield)
@@ -91,31 +89,26 @@ namespace PahlUnity
             mCurrentShield.ExSetMaximum(mMaxCurrentShield);
             HealthInfo after = GetCurrentHealthInfo();
 
-            if (IsDead)
-            {
-                InvokeHealthDied(before, after);
-            }
-            else
-            {
-                InvokeHealthChanged(before, after);
-            }
+            InvokeStateChanged(before, after);
         }
-        public void GetDamaged(float damage)
+        public void GetDamaged(DamageInfo damage, BaseObject attacker)
         {
-            if (IsDead || damage <= 0) return;
+            if (IsDead || damage.Value <= 0) return;
 
             HealthInfo before = GetCurrentHealthInfo();
-            mCurrentHP -= damage;
+            mCurrentHP -= damage.Value;
             mCurrentHP.ExSetClamp(0, mMaxCurrentHP);
             HealthInfo after = GetCurrentHealthInfo();
 
             if (IsDead)
             {
-                InvokeHealthDied(before, after);
+                InvokeStateChanged(before, after);
+                InvokeDied(damage, attacker);
             }
             else
             {
-                InvokeHealthChanged(before, after);
+                InvokeStateChanged(before, after);
+                InvokeDamaged(damage, attacker);
             }
         }
         public void GetDied()
@@ -123,11 +116,13 @@ namespace PahlUnity
             if (IsDead) return;
 
             HealthInfo before = GetCurrentHealthInfo();
+            DamageInfo damage = new(mCurrentHP);
             mCurrentHP = 0;
             mCurrentShield = 0;
             mCurrentMana = 0;
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthDied(before, after);
+            InvokeStateChanged(before, after);
+            InvokeDied(damage, mBaseObj);
         }
         public void Heal(float amount)
         {
@@ -136,7 +131,7 @@ namespace PahlUnity
             mCurrentHP += amount;
             mCurrentHP.ExSetMaximum(mMaxCurrentHP);
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthChanged(before, after);
+            InvokeStateChanged(before, after);
         }
         public void UseMana(float amount)
         {
@@ -144,7 +139,7 @@ namespace PahlUnity
             mCurrentMana -= amount;
             mCurrentMana.ExSetMinimum(0);
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthChanged(before, after);
+            InvokeStateChanged(before, after);
         }
         public void RestoreMana(float amount)
         {
@@ -153,7 +148,7 @@ namespace PahlUnity
             mCurrentMana += amount;
             mCurrentMana.ExSetMaximum(mMaxCurrentMana);
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthChanged(before, after);
+            InvokeStateChanged(before, after);
         }
         public void RestoreShield(float amount)
         {
@@ -162,19 +157,20 @@ namespace PahlUnity
             mCurrentShield += amount;
             mCurrentShield.ExSetMaximum(mMaxCurrentShield);
             HealthInfo after = GetCurrentHealthInfo();
-            InvokeHealthChanged(before, after);
+            InvokeStateChanged(before, after);
         }
 
-        void InvokeHealthChanged(HealthInfo before, HealthInfo after)
+        void InvokeStateChanged(HealthInfo before, HealthInfo after)
         {
-            _OnChanged.Invoke(before, after);
-            OnChanged?.Invoke(before, after);
+            OnStateChanged?.Invoke(before, after);
         }
-
-        void InvokeHealthDied(HealthInfo before, HealthInfo after)
+        void InvokeDamaged(DamageInfo damage, BaseObject attacker)
         {
-            _OnDied.Invoke(before, after);
-            OnDied?.Invoke(before, after);
+            OnDamaged?.Invoke(damage, attacker);
+        }
+        void InvokeDied(DamageInfo damage, BaseObject attacker)
+        {
+            OnDied?.Invoke(damage, attacker);
         }
 
         public HealthInfo GetCurrentHealthInfo()
@@ -217,5 +213,13 @@ namespace PahlUnity
                 CurrentMana.ExIsEquals(other.CurrentMana) &&
                 CurrentShield.ExIsEquals(other.CurrentShield);
         }
+    }
+
+    public struct DamageInfo
+    {
+        public float Value;
+
+        public DamageInfo(float _val) { Value = _val; }
+
     }
 }

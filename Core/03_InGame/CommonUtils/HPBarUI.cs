@@ -22,7 +22,7 @@ namespace PahlUnity
             gameObject.SetActive(false);
         }
 
-        public void OnDamaged(HealthInfo before, HealthInfo after)
+        public void OnStateChanged(HealthInfo before, HealthInfo after)
         {
             gameObject.SetActive(true);
             if (_Duration > 0)
