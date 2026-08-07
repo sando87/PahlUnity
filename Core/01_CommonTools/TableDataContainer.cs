@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PahlUnity
@@ -52,6 +54,18 @@ namespace PahlUnity
         {
             int randIndex = UnityEngine.Random.Range(0, mInfos.Length);
             return mInfos[randIndex];
+        }
+        public T GetRandomItem(Func<T, bool> cond)
+        {
+            List<T> temp = TemporaryList<T>.GetTempList();
+            for (int i = 0; i < mInfos.Length; ++i)
+            {
+                if (cond(mInfos[i]))
+                    temp.Add(mInfos[i]);
+            }
+            T ret = temp.ExGetRandom();
+            temp.Clear();
+            return ret;
         }
         public T GetInfo(long id)
         {
