@@ -15,11 +15,31 @@ namespace PahlUnity
             set => mMeshRenderer.material.color = new Color(mMeshRenderer.material.color.r, mMeshRenderer.material.color.g, mMeshRenderer.material.color.b, value);
         }
 
-        MeshRenderer mMeshRenderer;
+        public override float Emission
+        {
+            get
+            {
+                return mEmission;
+            }
+            set
+            {
+                mEmission = value;
+                UpdateEmission();
+            }
+        }
+
+        SkinnedMeshRenderer mMeshRenderer;
+        float mEmission = 0;
 
         void Awake()
         {
-            mMeshRenderer = GetComponent<MeshRenderer>();
+            mMeshRenderer = GetComponent<SkinnedMeshRenderer>();
+        }
+
+        void UpdateEmission()
+        {
+            Color color = new Color(mEmission, mEmission, mEmission, 1f);
+            mMeshRenderer.material.SetColor("_EmissionColor", color);
         }
 
     }

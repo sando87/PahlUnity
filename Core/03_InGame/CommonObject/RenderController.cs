@@ -117,5 +117,22 @@ namespace PahlUnity
                 renderObj.FlipX = flipX;
             }
         }
+
+        public void SetEmission(float emission)
+        {
+            foreach (RenderBase renderObj in mRenderList)
+            {
+                renderObj.Emission = emission;
+            }
+        }
+
+        public void DoTwinkle(float duration)
+        {
+            SetEmission(0.5f);
+            this.ExDelayedCoroutine(duration, () =>
+            {
+                SetEmission(0);
+            });
+        }
     }
 }
