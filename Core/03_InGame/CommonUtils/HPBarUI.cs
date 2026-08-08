@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,9 +35,14 @@ namespace PahlUnity
 
         public void OnDied()
         {
+            gameObject.SetActive(true);
             SetHealthBarRate(0);
+            _FillAmountBar.gameObject.SetActive(false);
+
             StopAllCoroutines();
-            gameObject.SetActive(false);
+            transform.DOScale(1.5f, 0.1f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
+            // this.ExDelayedCoroutine(1f, () => transform.DOScaleX(0, 1f).SetEase(Ease.InBack));
+            this.ExDelayedCoroutine(1f, () => gameObject.SetActive(false));
         }
 
         void SetHealthBarRate(float _rate)

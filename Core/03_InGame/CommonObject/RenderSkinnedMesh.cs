@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
-    public class RenderMesh : RenderBase
+    public class RenderSkinnedMesh : RenderBase
     {
         public override Color Color { get => mMeshRenderer.material.color; set => mMeshRenderer.material.color = value; }
         public override float Opacity
@@ -28,12 +28,12 @@ namespace PahlUnity
             }
         }
 
-        MeshRenderer mMeshRenderer;
+        SkinnedMeshRenderer mMeshRenderer;
         float mEmission = 0;
 
         void Awake()
         {
-            mMeshRenderer = GetComponent<MeshRenderer>();
+            mMeshRenderer = GetComponent<SkinnedMeshRenderer>();
         }
 
         void UpdateEmission()
