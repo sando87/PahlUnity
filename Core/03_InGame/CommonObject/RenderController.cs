@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -22,6 +23,18 @@ namespace PahlUnity
         void Awake()
         {
             mRenderList.AddRange(GetComponentsInChildren<RenderBase>());
+        }
+
+        public bool GetShowState()
+        {
+            return mRenderList.Count > 0 ? mRenderList[^1].IsShow : false;
+        }
+        public void SetShowState(bool isShow)
+        {
+            foreach (RenderBase renderObj in mRenderList)
+            {
+                renderObj.IsShow = isShow;
+            }
         }
 
         public Color GetColor()
@@ -133,6 +146,25 @@ namespace PahlUnity
             {
                 SetEmission(0);
             });
+        }
+
+        public void DoFlicker(float duraion, float interval = 0.2f)
+        {
+            StartCoroutine(CoFlicker(duraion, interval));
+        }
+
+        IEnumerator CoFlicker(float duraion, float interval)
+        {
+            float time = 0;
+            bool isShow = false;
+            while (time < duraion)
+            {
+                SetShowState(isShow);
+                yield return newWaitForSeconds.Cache(interval);
+                time += interval;
+                isShow = !isShow;
+            }
+            SetShowState(true);
         }
     }
 }

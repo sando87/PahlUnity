@@ -8,6 +8,7 @@ namespace PahlUnity
 {
     public class RenderBase : MonoBehaviour
     {
+        public virtual bool IsShow { get; set; } = true;
         public virtual Color Color { get; set; } = Color.white;
         public virtual float Opacity { get; set; } = 1.0f;
         public virtual bool FlipX { get; set; } = false;

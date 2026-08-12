@@ -8,6 +8,8 @@ namespace PahlUnity
 {
     public class RenderMesh : RenderBase
     {
+        public override bool IsShow { get => mMeshRenderer.enabled; set => mMeshRenderer.enabled = value; }
+
         public override Color Color { get => mMeshRenderer.material.color; set => mMeshRenderer.material.color = value; }
         public override float Opacity
         {
