@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,9 @@ namespace PahlUnity
 {
     public class Health : MonoBehaviour
     {
+        [SerializeField, Foldout("Events")] UnityEvent<DamageInfo, BaseObject> _OnDamaged;
+        [SerializeField, Foldout("Events")] UnityEvent<DamageInfo, BaseObject> _OnDied;
+
         public event Action<HealthInfo, HealthInfo> OnStateChanged;
         public event Action<DamageInfo, BaseObject> OnDamaged;
         public event Action<DamageInfo, BaseObject> OnDied;
@@ -100,15 +104,12 @@ namespace PahlUnity
             mCurrentHP.ExSetClamp(0, mMaxCurrentHP);
             HealthInfo after = GetCurrentHealthInfo();
 
+            InvokeStateChanged(before, after);
+            InvokeDamaged(damage, attacker);
+
             if (IsDead)
             {
-                InvokeStateChanged(before, after);
                 InvokeDied(damage, attacker);
-            }
-            else
-            {
-                InvokeStateChanged(before, after);
-                InvokeDamaged(damage, attacker);
             }
         }
         public void GetDied()
@@ -166,10 +167,12 @@ namespace PahlUnity
         }
         void InvokeDamaged(DamageInfo damage, BaseObject attacker)
         {
+            _OnDamaged?.Invoke(damage, attacker);
             OnDamaged?.Invoke(damage, attacker);
         }
         void InvokeDied(DamageInfo damage, BaseObject attacker)
         {
+            _OnDied?.Invoke(damage, attacker);
             OnDied?.Invoke(damage, attacker);
         }
 

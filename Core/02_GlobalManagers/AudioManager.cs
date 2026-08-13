@@ -65,6 +65,13 @@ namespace PahlUnity
         public bool IsPlayingBGM { get; private set; } = false;
         public bool IsInitialized { get; private set; } = false;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            Init();
+        }
+
         public void Init()
         {
             if (IsInitialized)
@@ -101,7 +108,7 @@ namespace PahlUnity
 
         // 짧은 효과음 재생을 요청한다.
         // 이미 재생중인 경우 해당 클립을 멈추고 다시 재생한다.
-        public void PlayAudioClipData(AudioClipEx data, Transform loopObj = null)
+        public void PlaySFXClipEx(AudioClipEx data, Transform loopObj = null)
         {
             string key = data.ID;
             AudioClip clip = data.clips[UnityEngine.Random.Range(0, data.clips.Length)];

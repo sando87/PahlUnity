@@ -20,6 +20,7 @@ namespace PahlUnity
         public int CurrentStateNameHash => mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
         public float CurrentNormalizedTime => mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         public int FireIndex { get; private set; } = -1;
+        public event Action<bool> OnFootstep;
 
         void Awake()
         {
@@ -242,6 +243,15 @@ namespace PahlUnity
         {
             int curStateHashName = mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             InvokeEventMiddle(curStateHashName, 0, 0);
+        }
+
+        public void FootR()
+        {
+            OnFootstep?.Invoke(true);
+        }
+        public void FootL()
+        {
+            OnFootstep?.Invoke(false);
         }
 
 

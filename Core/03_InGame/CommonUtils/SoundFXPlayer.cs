@@ -23,11 +23,11 @@ public class SoundFXPlayer : MonoBehaviour
 
     public void PlaySFX(AudioClipEx clipEx)
     {
-        AudioManager.Instance.PlayAudioClipData(clipEx);
+        AudioManager.Instance.PlaySFXClipEx(clipEx);
     }
     public void PlaySFXLoop(AudioClipEx clipEx)
     {
-        AudioManager.Instance.PlayAudioClipData(clipEx, transform);
+        AudioManager.Instance.PlaySFXClipEx(clipEx, transform);
     }
     public void StopSFXLoop(AudioClipEx clipEx)
     {
