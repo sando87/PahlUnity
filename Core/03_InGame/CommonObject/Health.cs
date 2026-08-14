@@ -9,12 +9,12 @@ namespace PahlUnity
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField, Foldout("Events")] UnityEvent<DamageInfo, BaseObject> _OnDamaged;
-        [SerializeField, Foldout("Events")] UnityEvent<DamageInfo, BaseObject> _OnDied;
+        [SerializeField, Foldout("Events")] UnityEvent<IDamageInfo, BaseObject> _OnDamaged;
+        [SerializeField, Foldout("Events")] UnityEvent<BaseObject> _OnDied;
 
         public event Action<HealthInfo, HealthInfo> OnStateChanged;
-        public event Action<DamageInfo, BaseObject> OnDamaged;
-        public event Action<DamageInfo, BaseObject> OnDied;
+        public event Action<IDamageInfo, BaseObject> OnDamaged;
+        public event Action<BaseObject> OnDied;
 
         public bool IsDead => mCurrentHP <= 0.01f;
 
@@ -95,7 +95,7 @@ namespace PahlUnity
 
             InvokeStateChanged(before, after);
         }
-        public void GetDamaged(DamageInfo damage, BaseObject attacker)
+        public void GetDamaged(IDamageInfo damage, BaseObject attacker)
         {
             if (IsDead || damage.Value <= 0) return;
 
@@ -109,7 +109,7 @@ namespace PahlUnity
 
             if (IsDead)
             {
-                InvokeDied(damage, attacker);
+                InvokeDied(attacker);
             }
         }
         public void GetDied()
@@ -117,13 +117,12 @@ namespace PahlUnity
             if (IsDead) return;
 
             HealthInfo before = GetCurrentHealthInfo();
-            DamageInfo damage = new(mCurrentHP);
             mCurrentHP = 0;
             mCurrentShield = 0;
             mCurrentMana = 0;
             HealthInfo after = GetCurrentHealthInfo();
             InvokeStateChanged(before, after);
-            InvokeDied(damage, mBaseObj);
+            InvokeDied(mBaseObj);
         }
         public void Heal(float amount)
         {
@@ -165,15 +164,15 @@ namespace PahlUnity
         {
             OnStateChanged?.Invoke(before, after);
         }
-        void InvokeDamaged(DamageInfo damage, BaseObject attacker)
+        void InvokeDamaged(IDamageInfo damage, BaseObject attacker)
         {
             _OnDamaged?.Invoke(damage, attacker);
             OnDamaged?.Invoke(damage, attacker);
         }
-        void InvokeDied(DamageInfo damage, BaseObject attacker)
+        void InvokeDied(BaseObject attacker)
         {
-            _OnDied?.Invoke(damage, attacker);
-            OnDied?.Invoke(damage, attacker);
+            _OnDied?.Invoke(attacker);
+            OnDied?.Invoke(attacker);
         }
 
         public HealthInfo GetCurrentHealthInfo()
@@ -218,11 +217,8 @@ namespace PahlUnity
         }
     }
 
-    public struct DamageInfo
+    public interface IDamageInfo
     {
-        public float Value;
-
-        public DamageInfo(float _val) { Value = _val; }
-
+        public float Value { get; }
     }
 }
