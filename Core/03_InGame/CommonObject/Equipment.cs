@@ -181,5 +181,21 @@ namespace PahlUnity
             return index >= 0 && index < items.Count;
         }
 
+        public void ExpandMaxSlotCount(EquipmentSlotType slotType, int expandCount)
+        {
+            if (!mEquipments.ContainsKey(slotType))
+            {
+                mEquipments[slotType] = new List<IEquipItem>(expandCount);
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < expandCount; i++)
+                {
+                    mEquipments[slotType].Add(null);
+                }
+            }
+        }
+
     }
 }

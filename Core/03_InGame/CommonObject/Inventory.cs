@@ -158,6 +158,20 @@ namespace PahlUnity
             return null;
         }
 
+        public int CountItemSlot()
+        {
+            int count = 0;
+            foreach (InventorySlot slot in mSlots)
+            {
+                if (slot.IsEmpty)
+                    continue;
+
+                count++;
+            }
+
+            return count;
+        }
+
         private int FindItemSlotIndex(IInvenItem item)
         {
             int idx = 0;
