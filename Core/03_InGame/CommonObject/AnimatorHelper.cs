@@ -238,6 +238,11 @@ namespace PahlUnity
             int curStateHashName = mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             InvokeEventMiddle(curStateHashName, 2, 0);
         }
+        public void Hit3()
+        {
+            int curStateHashName = mAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            InvokeEventMiddle(curStateHashName, 3, 0);
+        }
 
         public void Shoot()
         {
