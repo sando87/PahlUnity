@@ -35,12 +35,9 @@ namespace PahlUnity
         void OnEnable()
         {
             if (_DisableAlways)
-                return;
-
-            if (mGuiStyle == null)
             {
-                mGuiStyle = new GUIStyle(GUI.skin.button);
-                mGuiStyle.fontSize = 30;
+                mIsShow = true;
+                return;
             }
 
             StartCoroutine(OnOffPanel());
@@ -69,6 +66,12 @@ namespace PahlUnity
         void OnGUI()
         {
             if (!mIsShow) return;
+
+            if (mGuiStyle == null)
+            {
+                mGuiStyle = new GUIStyle(GUI.skin.button);
+                mGuiStyle.fontSize = 30;
+            }
 
             GUILayout.BeginVertical();
 
