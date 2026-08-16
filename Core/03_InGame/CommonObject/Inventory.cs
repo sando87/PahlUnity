@@ -23,6 +23,14 @@ namespace PahlUnity
             }
         }
 
+        public InventorySlot GetItem(int slotIndex)
+        {
+            if (slotIndex >= mSlots.Count)
+                return null;
+
+            return mSlots[slotIndex];
+        }
+
         public int AddItem(IInvenItem item, int count = 1)
         {
             LOG.errorif(item == null || count <= 0);
