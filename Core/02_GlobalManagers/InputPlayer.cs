@@ -17,6 +17,8 @@ namespace PahlUnity
 
         public bool IsLoseControl => mInputManager == null;
 
+        public bool Lock { get; set; }
+
         void Awake()
         {
             mInputActionMove = InputManager.GetInputActionNameHash(_InputActionMove);

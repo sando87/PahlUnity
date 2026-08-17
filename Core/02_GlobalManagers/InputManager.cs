@@ -20,6 +20,7 @@ namespace PahlUnity
     }
     public interface IInputHandler
     {
+        public bool Lock { get; set; }
         void OnInputEnter(InputManager inputManager) { }
         void OnInputExit(InputManager inputManager) { }
         void OnInputUpdate(InputManager inputManager);
@@ -116,7 +117,8 @@ namespace PahlUnity
 
             if (mHandlerInputStack.TryPeek(out IInputHandler handler))
             {
-                handler.OnInputUpdate(this);
+                if (!handler.Lock)
+                    handler.OnInputUpdate(this);
             }
         }
 
@@ -401,7 +403,7 @@ namespace PahlUnity
         {
             if (mHandlerInputStack.TryPeek(out IInputHandler currentHandler))
             {
-                currentHandler.OnInputEnter(this);
+                currentHandler.OnInputExit(this);
             }
 
             mHandlerInputStack.Push(handler);

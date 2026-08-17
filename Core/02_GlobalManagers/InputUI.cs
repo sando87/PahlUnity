@@ -23,6 +23,8 @@ namespace PahlUnity
         private int mInputActionUISubmit = 0;
         private int mInputActionUIBack = 0;
 
+        public bool Lock { get; set; }
+
         void Awake()
         {
             mInputActionUIMove = InputManager.GetInputActionNameHash(_InputActionUIMove);
