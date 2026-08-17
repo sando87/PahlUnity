@@ -8,24 +8,26 @@ namespace PahlUnity
     {
         [SerializeField] NumberSprites NumberPrefab;
 
-        ObjectBody2D mBaseBody = null;
+        ObjectBody3D mBaseBody = null;
 
         void Awake()
         {
-            mBaseBody = this.ExGetCompInBase<ObjectBody2D>();
+            mBaseBody = this.ExGetCompInBase<ObjectBody3D>();
         }
 
-        public void ShowNumberEffect(HealthInfo before, HealthInfo after)
+        public void ShowNumberEffect(IDamageInfo damageInfo, BaseObject attacker)
         {
-            float deltaHP = after.CurrentHP - before.CurrentHP;
+            float deltaHP = damageInfo.Value;
             ShowNumberEffect(deltaHP);
         }
 
         public void ShowNumberEffect(float number)
         {
-            Vector2 startPos = mBaseBody.Head + new Vector2(0, 0.5f);
+            Vector3 startPos = mBaseBody.Head;
             NumberSprites effect = Instantiate(NumberPrefab, startPos, Quaternion.identity);
-            effect.SetNumber(number.ExFloorToInt());
+            int val = Mathf.RoundToInt(number);
+            val.ExSetMinimum(1);
+            effect.SetNumber(val);
             effect.transform.DOMoveY(startPos.y + 0.5f, 0.5f).SetEase(Ease.OutQuad)
                 .OnComplete(() => effect.FadeOut());
             Destroy(effect.gameObject, 3);
