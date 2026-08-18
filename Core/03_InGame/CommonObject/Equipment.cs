@@ -42,6 +42,11 @@ namespace PahlUnity
             return mEquipments.TryGetValue(item.SlotType, out List<IEquipItem> items) && items.Contains(item);
         }
 
+        public bool IsValidSlot(EquipmentSlotType slot, int index)
+        {
+            return IsValid(slot, index);
+        }
+
         public IEquipItem GetEquipment(EquipmentSlotType slot, int index)
         {
             LOG.errorif(!IsValid(slot, index));
