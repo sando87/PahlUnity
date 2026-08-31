@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PahlUnity.Demo
 {
     [CreateAssetMenu(fileName = "SkillSpecData", menuName = "Demo/SkillSpecData")]
-    public class SkillSpecData : ScriptableObject
+    public class SkillSpecData : ScriptableObject, ISpecContainer
     {
         [SerializeField] private string _SkillName = "";
         [SerializeField] private string _SkillDesc = "";

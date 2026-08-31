@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PahlUnity.Demo
 {
     [CreateAssetMenu(fileName = "EnemySpecData", menuName = "Demo/EnemySpecData")]
-    public class EnemySpecData : ScriptableObject
+    public class EnemySpecData : ScriptableObject, ISpecContainer
     {
         [SerializeField] private string _EnemyName = "";
         [SerializeField] private string _EnemyDesc = "";

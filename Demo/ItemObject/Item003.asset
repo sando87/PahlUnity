@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c7b1c567a6c6347b16830867665bfb, type: 3}
   m_Name: Item003
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.ItemSpecData
-  _ItemID: Item003
   _ItemName: ItemName
   _ItemDesc: ItemDesc
+  _IsStackable: 0
+  _MaxStackCount: 1
   _ItemIcon: {fileID: -3338749442709606003, guid: 13b8859b2964d084eadd92893211dcb7, type: 3}
   _Specs:
   - _Key: MaxHP
-    _ModifierType: 2
+    _ModifierType: 0
     _ValueType: 0
     _Value: 10
     _Min: 0
@@ -29,5 +30,6 @@ MonoBehaviour:
       m_PreInfinity: 0
       m_PostInfinity: 0
       m_RotationOrder: 0
+    _ListValues: []
     _CustomValue: 
     _Step: 0

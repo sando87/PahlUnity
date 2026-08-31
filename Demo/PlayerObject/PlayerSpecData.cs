@@ -4,7 +4,7 @@ using UnityEngine;
 namespace PahlUnity.Demo
 {
     [CreateAssetMenu(fileName = "PlayerSpecData", menuName = "Demo/PlayerSpecData")]
-    public class PlayerSpecData : ScriptableObject
+    public class PlayerSpecData : ScriptableObject, ISpecContainer
     {
         [SerializeField] private string _PlayerName = "";
         [SerializeField] private string _PlayerDesc = "";

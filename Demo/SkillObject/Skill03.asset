@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a542772c7243e49981e0386a606b65, type: 3}
   m_Name: Skill03
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.SkillSpecData
-  _SkillID: Skill03
   _SkillName: SkillName
   _SkillDesc: SkillDesc
   _SkillIcon: {fileID: -3338749442709606003, guid: 13b8859b2964d084eadd92893211dcb7, type: 3}
   _Specs:
   - _Key: MaxHP
-    _ModifierType: 2
+    _ModifierType: 0
     _ValueType: 1
     _Value: 0.2
     _Min: 0.2
@@ -29,5 +28,6 @@ MonoBehaviour:
       m_PreInfinity: 0
       m_PostInfinity: 0
       m_RotationOrder: 0
+    _ListValues: []
     _CustomValue: 
     _Step: 0.1
