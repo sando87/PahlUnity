@@ -45,7 +45,6 @@ namespace PahlUnity.Demo
         {
             DoMovement();
             Jump();
-            DropDown();
             Dash();
 
             mBaseObj.Anim.SetParamBool(mAnimParamIsGrounded, IsGrounded);
@@ -97,20 +96,6 @@ namespace PahlUnity.Demo
             else if (mBaseObj.Input.JustReleased(InputActionNameHash.Jump))
             {
                 mBaseObj.Physics3D.StopJump();
-            }
-        }
-
-        void DropDown()
-        {
-            if (LockJump)
-                return;
-
-            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
-            && mBaseObj.Input.MoveY < 0
-            && IsGrounded)
-            {
-                mBaseObj.Body3D.LockThinPlatform = true;
-                this.ExDelayedCoroutine(0.2f, () => mBaseObj.Body3D.LockThinPlatform = false);
             }
         }
 

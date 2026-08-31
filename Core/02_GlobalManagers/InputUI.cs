@@ -11,13 +11,13 @@ namespace PahlUnity
         [SerializeField] string _InputActionUIMove = "Navigate";
         [SerializeField] string _InputActionUISubmit = "Submit";
         [SerializeField] string _InputActionUIBack = "Cancel";
-        [SerializeField] UIPartsHandler[] _UIParts;
+        [SerializeField] InputUIButton[] _UIParts;
 
         public Action EventCancel { get; set; }
-        public Action<UIPartsHandler> EventSubmit { get; set; }
+        public Action<InputUIButton> EventSubmit { get; set; }
 
-        public UIPartsHandler CurrentSelectedPart { get; private set; }
-        public UIPartsHandler[] UIParts { get => _UIParts; }
+        public InputUIButton CurrentSelectedPart { get; private set; }
+        public InputUIButton[] UIParts { get => _UIParts; }
 
         private int mInputActionUIMove = 0;
         private int mInputActionUISubmit = 0;
@@ -32,12 +32,12 @@ namespace PahlUnity
             mInputActionUIBack = InputManager.GetInputActionNameHash(_InputActionUIBack);
 
             if (_UIParts == null || _UIParts.Length == 0)
-                _UIParts = GetComponentsInChildren<UIPartsHandler>();
+                _UIParts = GetComponentsInChildren<InputUIButton>();
         }
 
         public void UpdateUIParts(bool includeInactive = false)
         {
-            _UIParts = GetComponentsInChildren<UIPartsHandler>(includeInactive);
+            _UIParts = GetComponentsInChildren<InputUIButton>(includeInactive);
 
             if (!IsSelectable(CurrentSelectedPart))
             {
@@ -45,7 +45,7 @@ namespace PahlUnity
             }
         }
 
-        public void SelectUIPart(UIPartsHandler part)
+        public void SelectUIPart(InputUIButton part)
         {
             if (IsSelectable(part))
             {
@@ -103,7 +103,7 @@ namespace PahlUnity
 
             Vector3 currentPos = currentRect.position;
 
-            UIPartsHandler best = null;
+            InputUIButton best = null;
             float bestScore = float.MaxValue;
 
             foreach (var btn in _UIParts)
@@ -137,7 +137,7 @@ namespace PahlUnity
             if (_UIParts == null || _UIParts.Length == 0)
                 return;
 
-            foreach (UIPartsHandler part in _UIParts)
+            foreach (InputUIButton part in _UIParts)
             {
                 if (IsSelectable(part))
                 {
@@ -172,7 +172,7 @@ namespace PahlUnity
             // ExecuteEvents.Execute(CurrentSelectedPart.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
         }
 
-        private bool IsSelectable(UIPartsHandler part)
+        private bool IsSelectable(InputUIButton part)
         {
             if (part == null || !part.gameObject.activeInHierarchy)
                 return false;

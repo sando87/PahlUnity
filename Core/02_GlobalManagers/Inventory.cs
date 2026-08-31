@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace PahlUnity
 {
+    public interface IInvenItem
+    {
+        int ResourceID { get; }
+        bool IsStackable { get; }
+        int MaxStackCount { get; }
+    }
+
     public class Inventory
     {
         private readonly List<InventorySlot> mSlots;

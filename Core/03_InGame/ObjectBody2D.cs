@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectBody2D : MonoBehaviour
+    public class ObjectBody2D : ObjectBodyBase
     {
         [SerializeField] BoxCollider2D _ThinPlatform = null;
 
@@ -13,21 +13,21 @@ namespace PahlUnity
 
         public event Action<bool> OnTurn;
 
-        public Vector2 Center { get => transform.position.ExToVector2() + mCollider.offset; }
-        public Vector2 Size { get => mCollider.size; }
-        public Vector2 Foot { get => Center - (transform.up * Size * 0.5f); }
-        public Vector2 Head { get => Center + (transform.up * Size * 0.5f); }
-        public Vector2 Front { get => Center + (transform.right * Size * 0.5f); }
-        public Vector2 Back { get => Center - (transform.right * Size * 0.5f); }
+        public override Vector3 Center { get => transform.position.ExToVector2() + mCollider.offset; }
+        public override Vector3 Size { get => mCollider.size; }
+        public override Vector3 Foot { get => Center - (Size.y * 0.5f * transform.up); }
+        public override Vector3 Head { get => Center + (Size.y * 0.5f * transform.up); }
+        public override Vector3 Front { get => Center + (Size.x * 0.5f * transform.right); }
+        public override Vector3 Back { get => Center - (Size.x * 0.5f * transform.right); }
 
-        public Vector2 FootFront { get => Center + new Vector2(Size.x * 0.5f * FrontDirInt, -Size.y * 0.5f); }
-        public Vector2 FootBack { get => Center + new Vector2(-Size.x * 0.5f * FrontDirInt, -Size.y * 0.5f); }
+        public override Vector3 FootFront { get => Center + new Vector3(Size.x * 0.5f * FrontDirInt, -Size.y * 0.5f, 0); }
+        public override Vector3 FootBack { get => Center + new Vector3(-Size.x * 0.5f * FrontDirInt, -Size.y * 0.5f, 0); }
 
         public Rect Rect { get => mCollider.ExToRect(); }
         public Vector2 FrontDirVec2 { get => transform.right; }
         public int FrontDirInt { get => transform.right.x > 0 ? 1 : -1; }
 
-        public bool LockBody { get => !mCollider.enabled; set => mCollider.enabled = !value; }
+        public override bool LockBody { get => !mCollider.enabled; set => mCollider.enabled = !value; }
         public bool LockThinPlatform { get { return _ThinPlatform ? !_ThinPlatform.enabled : false; } set { if (_ThinPlatform) _ThinPlatform.enabled = !value; } }
 
         void Awake()

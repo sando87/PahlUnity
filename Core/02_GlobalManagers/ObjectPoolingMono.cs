@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectPooler : MonoBehaviour
+    public class ObjectPoolingMono : MonoBehaviour
     {
         public void InstantiateVFX(GameObject poolingObj)
         {

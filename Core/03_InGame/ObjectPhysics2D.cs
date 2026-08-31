@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectPhysics2D : MonoBehaviour
+    public class ObjectPhysics2D : ObjectPhysicsBase
     {
         public float VelocityX { get { return mRB2D.linearVelocity.x; } set { mRB2D.linearVelocity = new Vector2(value, mRB2D.linearVelocity.y); } }
         public float VelocityY { get { return mRB2D.linearVelocity.y; } set { mRB2D.linearVelocity = new Vector2(mRB2D.linearVelocity.x, value); } }
-        public Vector2 Velocity { get { return mRB2D.linearVelocity; } set { mRB2D.linearVelocity = value; } }
-        public bool LockGravity { get => mRB2D.gravityScale == 0; set => mRB2D.gravityScale = value ? 0 : mOriGravityScale; }
-        public bool LockMovement { get => mRB2D.bodyType != RigidbodyType2D.Dynamic; set => mRB2D.bodyType = value ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic; }
+        public override Vector3 Velocity { get { return mRB2D.linearVelocity; } set { mRB2D.linearVelocity = value; } }
+        public override bool LockGravity { get => mRB2D.gravityScale == 0; set => mRB2D.gravityScale = value ? 0 : mOriGravityScale; }
+        public override bool LockMovement { get => mRB2D.bodyType != RigidbodyType2D.Dynamic; set => mRB2D.bodyType = value ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic; }
 
         private BaseObject mBase = null;
         private Rigidbody2D mRB2D = null;

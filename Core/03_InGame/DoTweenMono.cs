@@ -4,7 +4,7 @@ using NaughtyAttributes;
 
 namespace PahlUnity
 {
-    public class DoTweenComponent : MonoBehaviour
+    public class DoTweenMono : MonoBehaviour
     {
         public enum TweenType
         {

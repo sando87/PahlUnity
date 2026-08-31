@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace PahlUnity
 {
-    public class DelayComponent : MonoBehaviour
+    public class DelayMono : MonoBehaviour
     {
         [SerializeField] float _DelaySeconds = 1;
         [SerializeField] bool _StartOnEnable = true;

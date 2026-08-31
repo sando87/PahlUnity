@@ -17,19 +17,19 @@ namespace PahlUnity
         public event Action<Collider> OnInteractLeave3D;
         public event Action<BaseObject, uint> OnInteractSignal;
 
-        private ColliderDetector2D mCollider2D = null;
-        private ColliderDetector3D mCollider3D = null;
+        private InteractDetector2D mCollider2D = null;
+        private InteractDetector3D mCollider3D = null;
 
         void Awake()
         {
-            mCollider2D = GetComponent<ColliderDetector2D>();
+            mCollider2D = GetComponent<InteractDetector2D>();
             if (mCollider2D != null)
             {
                 mCollider2D.OnDetectEnter += OnDetectEnter2D;
                 mCollider2D.OnDetectExit += OnDetectLeave2D;
             }
 
-            mCollider3D = GetComponent<ColliderDetector3D>();
+            mCollider3D = GetComponent<InteractDetector3D>();
             if (mCollider3D != null)
             {
                 mCollider3D.OnDetectEnter += OnDetectEnter3D;

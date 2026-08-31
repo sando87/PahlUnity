@@ -7,7 +7,7 @@ using UnityEngine;
 namespace PahlUnity
 {
     [RequireComponent(typeof(Collider))]
-    public class ColliderDetector3D : MonoBehaviour
+    public class InteractDetector3D : MonoBehaviour
     {
         public enum DetectionMethod
         {

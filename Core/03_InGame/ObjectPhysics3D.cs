@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PahlUnity
 {
-    public class ObjectPhysics3D : MonoBehaviour
+    public class ObjectPhysics3D : ObjectPhysicsBase
     {
         [SerializeField] private float _GravityScale = 1f;
         [SerializeField] private float _GroundStickVelocity = -2f;
@@ -23,15 +23,15 @@ namespace PahlUnity
         public bool IsGrounded => mCC != null && mCC.isGrounded;
         public Vector3 Position { get => transform.position; set => Teleport(value); }
         public Vector3 VelocityPrev { get; private set; }
-        public Vector3 Velocity { get => GetVelocity(); set => mVelocity = value; }
+        public override Vector3 Velocity { get => GetVelocity(); set => mVelocity = value; }
         public float VelocityX { get => GetVelocity().x; set => mVelocity.x = value; }
         public float VelocityY { get => GetVelocity().y; set => mVelocity.y = value; }
         public float VelocityZ { get => GetVelocity().z; set => mVelocity.z = value; }
         public Vector3 Acceleration { get => mAcceleration; set => mAcceleration = value; }
         public Vector3 DashVelocity => mDashVelocity;
         public bool IsDashing => mDashRemainTime > 0f;
-        public bool LockGravity { get => mLockGravity; set => mLockGravity = value; }
-        public bool LockMovement { get => mLockMovement; set => mLockMovement = value; }
+        public override bool LockGravity { get => mLockGravity; set => mLockGravity = value; }
+        public override bool LockMovement { get => mLockMovement; set => mLockMovement = value; }
 
         private void Awake()
         {

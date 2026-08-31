@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SoundFXPlayer : MonoBehaviour
+public class AudioPlayerMono : MonoBehaviour
 {
     [SerializeField] bool _AutoPlayOnEnabled = false;
     [SerializeField] AudioClip _Clip = null;

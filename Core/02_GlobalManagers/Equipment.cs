@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace PahlUnity
 {
+    public interface IEquipItem
+    {
+        EquipmentSlotType SlotType { get; }
+    }
+
     /// <summary>
     /// 장비 타입별로 장착 가능한 아이템 슬롯 개수를 초기에 한번 세팅 후 관리하는 기능
     /// 장비 타입별 다수의 아이템 슬롯 관리 기능을 제공

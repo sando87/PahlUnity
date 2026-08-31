@@ -8,11 +8,11 @@ using UnityEngine.UI;
 
 namespace PahlUnity
 {
-    public class UIPartsHandler : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler// , ICancelHandler
+    public class InputUIButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler// , ICancelHandler
     {
-        public Action<UIPartsHandler> EventSelect { get; set; }
-        public Action<UIPartsHandler> EventDeselect { get; set; }
-        public Action<UIPartsHandler> EventSubmit { get; set; }
+        public Action<InputUIButton> EventSelect { get; set; }
+        public Action<InputUIButton> EventDeselect { get; set; }
+        public Action<InputUIButton> EventSubmit { get; set; }
         // public Action<UIPartsHandler> EventCancel { get; set; }
 
         public void OnSelect(BaseEventData eventData)

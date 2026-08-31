@@ -39,9 +39,4 @@ namespace PahlUnity
         public static implicit operator int(EquipmentSlotType id) => id.Value;
         public static implicit operator EquipmentSlotType(int value) => new(value);
     }
-
-    public interface IEquipItem
-    {
-        EquipmentSlotType SlotType { get; }
-    }
 }

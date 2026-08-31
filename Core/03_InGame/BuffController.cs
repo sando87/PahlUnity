@@ -6,6 +6,11 @@ using UnityEngine.InputSystem;
 
 namespace PahlUnity
 {
+    public interface IBuff
+    {
+        public float Duration { get; }
+    }
+
     public class BuffInfo
     {
         public IBuff Buff;
