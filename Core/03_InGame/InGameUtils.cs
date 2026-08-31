@@ -44,6 +44,14 @@ namespace PahlUnity
             }
             return null;
         }
+        static public bool ExHasInteractProperty(this Collider col, uint interactMask)
+        {
+            InteractableCollider interactable = col.GetComponent<InteractableCollider>();
+            if (interactable == null)
+                return false;
+
+            return (interactable.MyProperty & interactMask) != 0;
+        }
 
         public static int ExFloorToInt(this float val)
         {
