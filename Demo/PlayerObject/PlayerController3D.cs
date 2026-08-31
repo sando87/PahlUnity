@@ -1,114 +1,204 @@
 using UnityEngine;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace PahlUnity.Demo
 {
-    /// <summary>
-    /// 플레이어 캐릭터의 입력을 받아서 이동, 점프, 대쉬 등을 처리하는 컨트롤러 클래스
-    /// </summary>
-    public class PlayerController3D : MonoBehaviour
+    public enum PlayerActionState
     {
-        [SerializeField] float _JumpForce = 12f;
+        Normal, Dash, Hit, Death
+    }
+    public class PlayerController : MonoBehaviour
+    {
         [SerializeField] float _DashSpeed = 15f;
         [SerializeField] float _DashDuration = 0.2f;
-        [SerializeField] string _AnimParamMoveSpeed = "MoveSpeed";
-        [SerializeField] string _AnimParamIsGrounded = "IsGrounded";
-        [SerializeField] string _AnimParamDash = "Dash";
+        [SerializeField] float _DashCooltime = 1.0f;
+        [SerializeField] float _TurnSpeed = 720f;
+        [SerializeField] UnityEvent _OnDash = null;
 
         public bool IsGrounded { get => mBaseObj.Physics3D != null && mBaseObj.Physics3D.IsGrounded; }
 
         public bool LockMove { get; set; } = false;
-        public bool LockJump { get; set; } = false;
-        public bool LockDash { get; set; } = false;
-        public bool LockAll
-        {
-            get { return LockMove && LockJump && LockDash; }
-            set { LockMove = value; LockJump = value; LockDash = value; }
-        }
 
         BaseObject mBaseObj = null;
+        float mDashTime = 0;
+        Dictionary<PlayerActionState, FiniteStateBase> mStates = new();
 
-        int mAnimParamMoveSpeed = 0;
-        int mAnimParamIsGrounded = 0;
-        int mAnimParamDash = 0;
-        bool mIsSecondJump = false;
+        private void OnValidate()
+        {
+            _DashSpeed = Mathf.Max(0f, _DashSpeed);
+            _DashDuration = Mathf.Max(0f, _DashDuration);
+            _TurnSpeed = Mathf.Max(0f, _TurnSpeed);
+        }
 
         private void Awake()
         {
-            mBaseObj = this.ExGetBase();
+            mBaseObj = GetComponentInParent<BaseObject>();
 
-            mAnimParamMoveSpeed = Animator.StringToHash(_AnimParamMoveSpeed);
-            mAnimParamIsGrounded = Animator.StringToHash(_AnimParamIsGrounded);
-            mAnimParamDash = Animator.StringToHash(_AnimParamDash);
+            BindStates();
         }
 
-        private void Update()
+        void Start()
         {
-            DoMovement();
-            Jump();
-            Dash();
+            mBaseObj.Health.OnDamaged += OnDamaged;
+            mBaseObj.Health.OnDied += OnDied;
 
-            mBaseObj.Anim.SetParamBool(mAnimParamIsGrounded, IsGrounded);
+            mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
         }
 
-        void DoMovement()
+        void BindStates()
+        {
+            FiniteStateBase normalState = new();
+            normalState.EventUpdate += UpdateNormalState;
+            mBaseObj.FSM.SetDefaultState(normalState);
+            mStates.Add(PlayerActionState.Normal, normalState);
+
+            FiniteStateBase dashState = new();
+            dashState.EventEnter += EnterDashState;
+            dashState.EventLeave += LeaveDashState;
+            mStates.Add(PlayerActionState.Dash, dashState);
+
+            FiniteStateBase damagedState = new();
+            damagedState.EventEnter += EnterDamagedState;
+            mStates.Add(PlayerActionState.Hit, damagedState);
+
+            FiniteStateBase deathState = new();
+            deathState.EventEnter += EnterDeathState;
+            mStates.Add(PlayerActionState.Death, deathState);
+        }
+
+        FiniteStateBase GetState(PlayerActionState state)
+        {
+            return mStates[state];
+        }
+        public bool IsCurrentState(PlayerActionState state)
+        {
+            return mStates[state] == mBaseObj.FSM.CurrentState;
+        }
+
+        void UpdateNormalState()
+        {
+            if (TryDash())
+                return;
+
+            DoMovement();
+        }
+
+        void EnterDashState()
+        {
+            mDashTime = Time.time;
+            StopMovingForAction();
+            Vector3 dashDir = new(mBaseObj.Input.MoveX, 0f, mBaseObj.Input.MoveY);
+            dashDir = dashDir.magnitude > 0.0001f ? dashDir.normalized : mBaseObj.Body3D.FrontDirVec3;
+            mBaseObj.Body3D.Turn(dashDir);
+            mBaseObj.Physics3D.DoDash(dashDir, _DashSpeed, _DashDuration);
+            _OnDash?.Invoke();
+            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Death, null, (isCanceled) =>
+            {
+                if (!isCanceled)
+                {
+                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
+                }
+            });
+        }
+
+        void LeaveDashState()
+        {
+            mBaseObj.Physics3D.StopDash();
+        }
+
+        void EnterDamagedState()
+        {
+            StopMovingForAction();
+
+            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Hit, null, (isCanceled) =>
+            {
+                if (!isCanceled)
+                {
+                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
+                }
+            });
+        }
+
+        void EnterDeathState()
+        {
+            mBaseObj.Anim.CancelAndThrowException(0);
+            StopMovingForAction();
+            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Death);
+            mBaseObj.Body3D.LockBody = true;
+        }
+
+
+        public void DoMovement()
         {
             if (LockMove)
-            {
-                mBaseObj.Physics3D.Move(Vector3.zero);
                 return;
-            }
 
             if (TryGetMoveInput(out Vector3 moveDir))
             {
-                mBaseObj.Physics3D.Move(moveDir, mBaseObj.Spec[SpecFields.MoveSpeed]);
-                mBaseObj.Body3D.Turn(moveDir);
-                mBaseObj.Anim.SetParamFloat(mAnimParamMoveSpeed, moveDir.magnitude);
+                float moveSpeed = mBaseObj.Spec[SpecFields.MoveSpeed];
+                mBaseObj.Physics3D.Move(moveDir, moveSpeed);
+                Turn(moveDir);
+                mBaseObj.Anim.SetParamBool(AnimatorParams.IsMoving, true);
             }
             else
             {
-                mBaseObj.Physics3D.StopMoving();
-                mBaseObj.Anim.SetParamFloat(mAnimParamMoveSpeed, 0);
+                StopMovingForAction();
             }
         }
 
-        void Jump()
+        public bool TryDash()
         {
-            if (LockJump)
-                return;
-
-            if (mBaseObj.Input.JustPressed(InputActionNameHash.Jump)
-            && mBaseObj.Input.MoveY >= 0)
-            {
-                if (IsGrounded)
-                {
-                    mIsSecondJump = false;
-                    mBaseObj.Physics3D.DoJump(_JumpForce);
-                }
-                else
-                {
-                    if (!mIsSecondJump)
-                    {
-                        mIsSecondJump = true;
-                        mBaseObj.Physics3D.DoJump(_JumpForce);
-                    }
-                }
-            }
-            else if (mBaseObj.Input.JustReleased(InputActionNameHash.Jump))
-            {
-                mBaseObj.Physics3D.StopJump();
-            }
-        }
-
-        void Dash()
-        {
-            if (LockDash)
-                return;
+            if (IsCurrentState(PlayerActionState.Hit)
+            || IsCurrentState(PlayerActionState.Death))
+                return false;
 
             if (mBaseObj.Input.JustPressed(InputActionNameHash.Dash))
             {
-                Vector3 dashDir = mBaseObj.Body3D.FrontDirVec3;
-                mBaseObj.Physics3D.DoDash(dashDir, _DashSpeed, _DashDuration);
-                mBaseObj.Anim.SetParamTrigger(mAnimParamDash);
+                float dashCooltime = _DashCooltime;
+                if (MyUtils.IsCooltimeOver(mDashTime, dashCooltime))
+                {
+                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Dash));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        void OnDied(BaseObject attacker)
+        {
+            mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Death));
+        }
+
+        void OnDamaged(IDamageInfo damage, BaseObject attacker)
+        {
+            if (damage is DamageInfo damageInfo)
+            {
+                if (damageInfo.IsPowerAttack)
+                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Hit), true);
+            }
+        }
+
+        public void StopMovingForAction()
+        {
+            mBaseObj.Physics3D.StopMoving();
+            mBaseObj.Physics3D.StopDash();
+            mBaseObj.Anim.SetParamBool(AnimatorParams.IsMoving, false);
+        }
+
+        void Turn(Vector3 moveDir)
+        {
+            if (moveDir.sqrMagnitude <= 0.0001f)
+                return;
+
+            if (_TurnSpeed <= 0f)
+            {
+                mBaseObj.Body3D.Turn(moveDir);
+            }
+            else
+            {
+                mBaseObj.Body3D.Turn(moveDir, _TurnSpeed * Time.deltaTime);
             }
         }
 

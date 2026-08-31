@@ -1,34 +1,57 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PahlUnity.Demo
 {
     public class ItemInstInfo : IInvenItem, IEquipItem
     {
-        private ItemSpecData mSpecData;
+        private ItemSpecData mSpecRawData;
         private int mResourceID;
         private long mInstanceID;
+        private int mLevel;
 
-        public ItemInstInfo(ItemSpecData specData)
+        private IReadOnlyList<SpecFieldValue> mSpecFieldValues = null;
+
+        public ItemInstInfo(ItemSpecData specData, int level = 1)
         {
-            mSpecData = specData;
-            mResourceID = mSpecData.ItemID.ExGetStableHash32();
+            mSpecRawData = specData;
+            mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
             mInstanceID = DateTime.Now.Ticks;
+            mLevel = level;
         }
-        public ItemInstInfo(ItemSpecData specData, long instanceID)
+        public ItemInstInfo(ItemSpecData specData, long instanceID, int level = 1)
         {
-            mSpecData = specData;
-            mResourceID = mSpecData.ItemID.ExGetStableHash32();
+            mSpecRawData = specData;
+            mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
             mInstanceID = instanceID;
+            mLevel = level;
         }
 
         public int ResourceID => mResourceID;
         public long InstanceID => mInstanceID;
-        public bool IsStackable => mSpecData.IsStackable;
-        public int MaxStackCount => mSpecData.MaxStackCount;
+        public int Level => mLevel;
+        public bool IsStackable => mSpecRawData.IsStackable;
+        public int MaxStackCount => mSpecRawData.MaxStackCount;
         public int RandomSeed => (int)mInstanceID;
-        public ItemSpecData SpecData => mSpecData;
+        public ItemSpecData SpecData => mSpecRawData;
 
-        public EquipmentSlotType SlotType => mSpecData.EquipSlot;
+        public EquipmentSlotType SlotType => mSpecRawData.EquipSlot;
+
+        public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()
+        {
+            if (mSpecFieldValues != null)
+                return mSpecFieldValues;
+
+            List<SpecFieldValue> specs = new();
+            System.Random random = new(RandomSeed);
+            foreach (var spec in mSpecRawData.Specs)
+            {
+                specs.Add(new SpecFieldValue(spec, random));
+            }
+
+            mSpecFieldValues = specs;
+            return mSpecFieldValues;
+        }
     }
 }

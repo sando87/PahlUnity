@@ -6,20 +6,18 @@ namespace PahlUnity.Demo
     public class SkillObject : MonoBehaviour
     {
         private SkillInstData mSkillInstData;
-        private SkillSaveData mSaveData;
 
         private SpecBase mSpecBase;
 
-        public void Init(SkillInstData instData, SkillSaveData saveData)
+        public void Init(SkillInstData instData)
         {
             mSkillInstData = instData;
-            mSaveData = saveData;
 
             mSpecBase = GetComponent<SpecBase>();
 
             mSpecBase.SetSpecs(mSkillInstData.SpecData.Specs, 0);
 
-            mSpecBase.UpdateAllValuesByStep(mSaveData.LevelIndex);
+            mSpecBase.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
 
         void Start()

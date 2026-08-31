@@ -10,9 +10,10 @@ namespace PahlUnity.Demo
         PlayerData mPlayerSaveData;
 
         BaseObject mBaseObj = null;
+        PlayerItemInteractor mItemInteractor = null;
 
         Inventory mInven = null;
-        Equipment mEquip = null;
+        EquipmentMono mEquip = null;
 
         void Awake()
         {
@@ -20,14 +21,26 @@ namespace PahlUnity.Demo
 
             mInven = new Inventory(20);
 
-            const int EquipSlotTypeWeapon = 0;
-            const int EquipSlotTypeAccessory = 1;
+            mEquip = mBaseObj.GetComp<EquipmentMono>();
+        }
+
+        void Start()
+        {
+            InputManager.Instance.SetHandlerInput(mBaseObj.Input);
+
             Dictionary<EquipmentSlotType, int> slotMaxCounts = new()
             {
-                { EquipSlotTypeWeapon, 2 },
-                { EquipSlotTypeAccessory, 3 },
+                { (int)EquipSlotType.Weapon, 2 },
+                { (int)EquipSlotType.Accessory, 3 },
             };
-            mEquip = new Equipment(slotMaxCounts);
+            mEquip.Init(slotMaxCounts);
+
+            InitSpec();
+
+            mBaseObj.Health.SetMaxStats(mBaseObj.Spec[SpecFields.MaxHP], 0, 0, false);
+
+            mItemInteractor = mBaseObj.GetComp<PlayerItemInteractor>();
+            mItemInteractor.OnTryPickupItem = OnTryPickupItem;
         }
 
         public void Init(PlayerInstData instData)
@@ -53,7 +66,7 @@ namespace PahlUnity.Demo
 
                 if (saveData.IsEquipped)
                 {
-                    mEquip.Equip(instData, 0);
+                    mEquip.TryEquip(instData, 0);
                 }
                 else
                 {
@@ -79,6 +92,12 @@ namespace PahlUnity.Demo
             {
                 mBaseObj.Spec.AddModifier(modifier);
             }
+        }
+
+
+        bool OnTryPickupItem(ItemObject item)
+        {
+            return false;
         }
 
     }

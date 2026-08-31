@@ -1,29 +1,54 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PahlUnity.Demo
 {
     public class PlayerInstData
     {
-        private PlayerSpecData mSpecData;
+        private PlayerSpecData mSpecRawData;
         private int mResourceID;
         private long mInstanceID;
+        private int mLevel;
 
-        public PlayerInstData(PlayerSpecData specData)
+        private IReadOnlyList<SpecFieldValue> mSpecFieldValues = null;
+
+        public PlayerInstData(PlayerSpecData specData, int level = 1)
         {
-            mSpecData = specData;
-            mResourceID = mSpecData.PlayerID.ExGetStableHash32();
+            mSpecRawData = specData;
+            mResourceID = mSpecRawData.PlayerID.ExGetStableHash32();
             mInstanceID = DateTime.Now.Ticks;
+            mLevel = level;
         }
-        public PlayerInstData(PlayerSpecData specData, long instanceID)
+        public PlayerInstData(PlayerSpecData specData, long instanceID, int level = 1)
         {
-            mSpecData = specData;
-            mResourceID = mSpecData.PlayerID.ExGetStableHash32();
+            mSpecRawData = specData;
+            mResourceID = mSpecRawData.PlayerID.ExGetStableHash32();
             mInstanceID = instanceID;
+            mLevel = level;
         }
 
         public int ResourceID => mResourceID;
         public long InstanceID => mInstanceID;
-        public PlayerSpecData SpecData => mSpecData;
+        public int RandomSeed => (int)mInstanceID;
+        public int Level => mLevel;
+        public int LevelIndex => mLevel - 1;
+        public PlayerSpecData SpecData => mSpecRawData;
+
+        public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()
+        {
+            if (mSpecFieldValues != null)
+                return mSpecFieldValues;
+
+            List<SpecFieldValue> specs = new();
+            System.Random random = new(RandomSeed);
+            foreach (var spec in mSpecRawData.Specs)
+            {
+                specs.Add(new SpecFieldValue(spec, random));
+            }
+
+            mSpecFieldValues = specs;
+            return mSpecFieldValues;
+        }
     }
 }

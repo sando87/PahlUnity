@@ -4,26 +4,26 @@ using UnityEngine;
 
 namespace PahlUnity.Demo
 {
-    public class SkillInstData
+    public class EnemyInstData
     {
-        private SkillSpecData mSpecRawData;
+        private EnemySpecData mSpecRawData;
         private int mResourceID;
         private long mInstanceID;
         private int mLevel;
 
         private IReadOnlyList<SpecFieldValue> mSpecFieldValues = null;
 
-        public SkillInstData(SkillSpecData specData, int level = 1)
+        public EnemyInstData(EnemySpecData specData, int level = 1)
         {
             mSpecRawData = specData;
-            mResourceID = mSpecRawData.SkillID.ExGetStableHash32();
+            mResourceID = mSpecRawData.EnemyID.ExGetStableHash32();
             mInstanceID = DateTime.Now.Ticks;
             mLevel = level;
         }
-        public SkillInstData(SkillSpecData specData, long instanceID, int level = 1)
+        public EnemyInstData(EnemySpecData specData, long instanceID, int level = 1)
         {
             mSpecRawData = specData;
-            mResourceID = mSpecRawData.SkillID.ExGetStableHash32();
+            mResourceID = mSpecRawData.EnemyID.ExGetStableHash32();
             mInstanceID = instanceID;
             mLevel = level;
         }
@@ -33,7 +33,7 @@ namespace PahlUnity.Demo
         public int RandomSeed => (int)mInstanceID;
         public int Level => mLevel;
         public int LevelIndex => mLevel - 1;
-        public SkillSpecData SpecData => mSpecRawData;
+        public EnemySpecData SpecData => mSpecRawData;
 
         public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()
         {

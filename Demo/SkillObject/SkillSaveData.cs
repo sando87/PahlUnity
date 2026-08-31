@@ -15,12 +15,5 @@ namespace PahlUnity.Demo
 
         [JsonIgnore]
         public int LevelIndex { get => Level - 1; }
-
-        public SkillSaveData(string _resourceID)
-        {
-            this.ResourceID = _resourceID;
-            this.Level = 1;
-            this.SubStep = 0;
-        }
     }
 }

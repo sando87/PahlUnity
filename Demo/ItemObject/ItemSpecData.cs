@@ -6,7 +6,6 @@ namespace PahlUnity.Demo
     [CreateAssetMenu(fileName = "ItemSpecData", menuName = "Demo/ItemSpecData")]
     public class ItemSpecData : ScriptableObject, ITableRecord
     {
-        [SerializeField] private string _ItemID = "";
         [SerializeField] private string _ItemName = "";
         [SerializeField] private string _ItemDesc = "";
         [SerializeField] private bool _IsStackable = false;
@@ -15,7 +14,7 @@ namespace PahlUnity.Demo
         [SerializeField] private Sprite _ItemIcon = null;
         [SerializeField] private List<SpecFieldRaw> _Specs = new List<SpecFieldRaw>();
 
-        public string ItemID => _ItemID;
+        public string ItemID => name; // asset name as item id
         public string ItemName => _ItemName;
         public string ItemDesc => _ItemDesc;
         public Sprite ItemIcon => _ItemIcon;
@@ -25,7 +24,7 @@ namespace PahlUnity.Demo
 
         public IReadOnlyList<SpecFieldRaw> Specs => _Specs;
 
-        public long ID => _ItemID.ExGetStableHash64();
+        public long ID => ItemID.ExGetStableHash64();
         public int RowIndex { get; set; }
     }
 }
