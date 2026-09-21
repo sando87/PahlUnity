@@ -68,10 +68,10 @@ namespace PahlUnity.Demo
 
     public static class SceneType
     {
-        public static readonly string LogoScene = "LogoScene";
-        public static readonly string Loading = "Loading";
-        public static readonly string MainTitle = "MainTitle";
-        public static readonly string InGame = "InGame";
+        public static readonly string LogoScene = "00_CompanyLogo";
+        public static readonly string Loading = "01_GameLoading";
+        public static readonly string MainTitle = "02_MainTitle";
+        public static readonly string InGame = "03_InGame";
     }
 
     public class LayerID
