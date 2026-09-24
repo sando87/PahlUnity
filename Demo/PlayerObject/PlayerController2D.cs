@@ -39,6 +39,7 @@ namespace PahlUnity.Demo
         [SerializeField] private float _DashDistance = 5;
 
         BaseObject mBaseObj = null;
+        RenderController mRender = null;
         ObjectPhysics2D mPhy = null;
         ObjectBody2D mBody = null;
         InputPlayer mPlayerInput = null;
@@ -67,6 +68,7 @@ namespace PahlUnity.Demo
         void Awake()
         {
             mBaseObj = this.ExGetBase();
+            mRender = mBaseObj.GetComp<RenderController>();
             mPhy = mBaseObj.GetComp<ObjectPhysics2D>();
             mBody = mBaseObj.GetComp<ObjectBody2D>();
             mPlayerInput = mBaseObj.GetComp<InputPlayer>();
@@ -83,6 +85,11 @@ namespace PahlUnity.Demo
             mTerrainContactFilter = CreateContactFilter(mTerrainLayerMask);
             mThinPlatformContactFilter = CreateContactFilter(mThinPlatformLayerMask);
             mGroundContactFilter = CreateContactFilter(mGroundLayerMask);
+
+            mBody.OnTurn += (isRight) =>
+            {
+                mRender.SetFlipX(!isRight);
+            };
 
             mHealth.OnDied += (_) =>
             {
@@ -209,7 +216,7 @@ namespace PahlUnity.Demo
         {
             mDashStartTime = Time.time;
             mPhy.LockGravity = false;
-            mAnim.SetParamBool(AnimatorParams.EndLoopState, true);
+            mAnim.SetParamBool(AnimatorParams.LockNormal, false);
         }
 
         void EnterDamagedState()
@@ -288,7 +295,7 @@ namespace PahlUnity.Demo
             mPhy.LockGravity = true;
             mPhy.Velocity = new Vector2(mBody.FrontDirInt * dashSpeed, 0f);
 
-            mAnim.SetParamBool(AnimatorParams.EndLoopState, false);
+            mAnim.SetParamBool(AnimatorParams.LockNormal, true);
             mAnim.PlayAnim(AnimStateNameHash.Dash);
             await UniTask.Delay((int)(dashDuration * 1000f));
 
@@ -425,7 +432,7 @@ namespace PahlUnity.Demo
 
         bool TryEnterDashState()
         {
-            if (!mPlayerInput.JustPressed(InputActionNameHash.Sprint))
+            if (!mPlayerInput.JustPressed(InputActionNameHash.Dash))
                 return false;
 
             if (!MyUtils.IsCooltimeOver(mDashStartTime, _DashCooldown) || mIsDroppingDown)

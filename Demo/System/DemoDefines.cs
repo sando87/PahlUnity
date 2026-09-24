@@ -7,9 +7,6 @@ namespace PahlUnity.Demo
 {
     public static class SystemConstant
     {
-        public const int GoldGrowthStep = 2;
-        public const int HPRegenGrowthStep = 1;
-        public const int NeedGoldForFirstAttackUp = 10;
     }
 
     public static class AnimStateNameHash
@@ -33,7 +30,6 @@ namespace PahlUnity.Demo
         public static readonly int Dash = InputManager.GetInputActionNameHash("Dash");
         public static readonly int Interact = InputManager.GetInputActionNameHash("Interact");
         public static readonly int Jump = InputManager.GetInputActionNameHash("Jump");
-        public static readonly int Sprint = InputManager.GetInputActionNameHash("Sprint");
 
         // public static readonly int UIMove = InputManager.GetInputActionNameHash("UIMove");
         // public static readonly int UIBack = InputManager.GetInputActionNameHash("UIBack");
@@ -58,12 +54,11 @@ namespace PahlUnity.Demo
         public static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");
         public static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
         public static readonly int DoNextCombo = Animator.StringToHash("DoNextCombo");
-        public static readonly int StopLoop = Animator.StringToHash("StopLoop");
-        public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
         public static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
         public static readonly int IsMoving = Animator.StringToHash("IsMoving");
         public static readonly int IsWallAttached = Animator.StringToHash("IsWallAttached");
-        public static readonly int EndLoopState = Animator.StringToHash("EndLoopState");
+        public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
+        public static readonly int LockNormal = Animator.StringToHash("LockNormal");
     }
 
     public static class SceneType
