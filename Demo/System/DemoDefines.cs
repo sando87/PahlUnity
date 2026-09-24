@@ -76,15 +76,12 @@ namespace PahlUnity.Demo
 
     public class LayerID
     {
-        public static readonly int Terrain = LayerMask.NameToLayer("Terrain");
         public static readonly int Player = LayerMask.NameToLayer("Player");
         public static readonly int Enemy = LayerMask.NameToLayer("Enemy");
         public static readonly int Props = LayerMask.NameToLayer("Props");
-        public static readonly int Neutral = LayerMask.NameToLayer("Neutral");
-        public static readonly int PlatformPlayer = LayerMask.NameToLayer("PlatformPlayer");
-        public static readonly int PlayerObject = LayerMask.NameToLayer("PlayerObject");
-        public static readonly int PlatformEnemy = LayerMask.NameToLayer("PlatformEnemy");
-        public static readonly int Platform = LayerMask.NameToLayer("Platform");
+        public static readonly int Terrain = LayerMask.NameToLayer("Terrain");
+        public static readonly int PlayerAttack = LayerMask.NameToLayer("PlayerAttack");
+        public static readonly int EnemyAttack = LayerMask.NameToLayer("EnemyAttack");
         public static readonly int ThinPlatform = LayerMask.NameToLayer("ThinPlatform");
         public static readonly int StandableOnThin = LayerMask.NameToLayer("StandableOnThin");
     }
