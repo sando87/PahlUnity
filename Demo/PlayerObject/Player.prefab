@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 961901316551750006}
   - component: {fileID: 3053560954115820419}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: footOnThin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1534881988997334674}
   - component: {fileID: 3034489263692067513}
   - component: {fileID: 2259747789581064587}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: render
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 6488697550588288640}
   - component: {fileID: 8087676877447434997}
   - component: {fileID: 3688689534359495790}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 614041091653834740}
   - component: {fileID: 7256204766305889863}
   - component: {fileID: 2094533432202418670}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 2540200354553032319}
   - component: {fileID: 6939143993260173457}
   - component: {fileID: 8953146856441145807}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8785663149568534261}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: firepoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 3089512612628829368}
   - component: {fileID: 5458843668528486821}
   - component: {fileID: 6410568853349192858}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
