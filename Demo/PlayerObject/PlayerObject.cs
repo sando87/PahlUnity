@@ -6,6 +6,8 @@ namespace PahlUnity.Demo
 {
     public class PlayerObject : MonoBehaviour
     {
+        [SerializeField] private PlayerSpecData _PlayerSpecData = null;
+
         PlayerInstData mPlayerInstData;
         PlayerData mPlayerSaveData;
 
@@ -35,6 +37,8 @@ namespace PahlUnity.Demo
             };
             mEquip.Init(slotMaxCounts);
 
+            Init();
+
             InitSpec();
 
             mBaseObj.Health.SetMaxStats(mBaseObj.Spec[SpecFields.MaxHP], 0, 0, false);
@@ -43,9 +47,9 @@ namespace PahlUnity.Demo
             mItemInteractor.OnTryPickupItem = OnTryPickupItem;
         }
 
-        public void Init(PlayerInstData instData)
+        public void Init()
         {
-            mPlayerInstData = instData;
+            mPlayerInstData = new PlayerInstData(_PlayerSpecData);
 
             InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
             saveData.Characters.TryGetValue(mPlayerInstData.InstanceID, out mPlayerSaveData);
