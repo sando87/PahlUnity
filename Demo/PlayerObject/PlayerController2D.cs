@@ -148,7 +148,7 @@ namespace PahlUnity.Demo
             return mFSM.CurrentState == mStates[state];
         }
 
-        public bool HandleDash()
+        public bool DoDashOnInput()
         {
             if (!mBaseObj.Input.JustPressed(InputActionNameHash.Dash))
                 return false;
@@ -177,7 +177,7 @@ namespace PahlUnity.Demo
             }
         }
 
-        public void HandleJump()
+        public void DoJumpOnInput()
         {
             if (!mBaseObj.Input.JustPressed(InputActionNameHash.Jump) || mBaseObj.Input.MoveY < -0.5f)
                 return;
@@ -204,7 +204,7 @@ namespace PahlUnity.Demo
             }
         }
 
-        public void HandleWallAttach()
+        public void DoAttachjWallOnInput()
         {
             bool canAttachWall = !mIsGrounded
                               && mBaseObj.Physics2D.VelocityY <= -_WallAttachMinFallSpeed
@@ -224,7 +224,7 @@ namespace PahlUnity.Demo
             mBaseObj.Physics2D.VelocityY = -_WallSlideSpeed;
         }
 
-        public void HandleDropDown()
+        public void DoDropDownOnInput()
         {
             if (!mBaseObj.Input.JustPressed(InputActionNameHash.Jump) || mBaseObj.Input.MoveY >= -0.5f)
                 return;

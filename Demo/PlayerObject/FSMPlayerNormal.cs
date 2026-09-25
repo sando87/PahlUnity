@@ -18,14 +18,14 @@ namespace PahlUnity.Demo
             if (!mPlayerCtrl.EnableWallAttach)
                 mPlayerCtrl.SetWallAttached(false);
 
-            mPlayerCtrl.HandleDropDown();
+            mPlayerCtrl.DoDropDownOnInput();
 
-            if (mPlayerCtrl.HandleDash())
+            if (mPlayerCtrl.DoDashOnInput())
                 return;
 
-            mPlayerCtrl.HandleJump();
+            mPlayerCtrl.DoJumpOnInput();
             if (mPlayerCtrl.EnableWallAttach)
-                mPlayerCtrl.HandleWallAttach();
+                mPlayerCtrl.DoAttachjWallOnInput();
             mPlayerCtrl.DoMoveOnInput();
         }
 
