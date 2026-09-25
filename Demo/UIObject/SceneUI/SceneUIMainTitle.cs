@@ -1,8 +1,8 @@
+using System.Collections;
+using Cysharp.Threading.Tasks;
+using PahlUnity;
 using UnityEngine;
 using UnityEngine.UI;
-using PahlUnity;
-using Cysharp.Threading.Tasks;
-using System.Collections;
 
 namespace PahlUnity.Demo
 {
@@ -30,7 +30,7 @@ namespace PahlUnity.Demo
             FadeOut(0.5f);
             this.ExDelayedCoroutine(0.5f, () =>
             {
-                SceneSwitchManager.Instance.ChangeSceneAsync(SceneType.InGame).Forget();
+                InGameManager.Instance.StartGame();
             });
         }
         async public void OnBtnOption(InputUIButton btn)

@@ -325,6 +325,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "System",
+                    "type": "Button",
+                    "id": "410c76af-598f-4c74-9deb-6b52ab9802dc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Point",
                     "type": "PassThrough",
                     "id": "32b35790-4ed0-4e9a-aa41-69ac6d629449",
@@ -650,6 +659,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3088d2af-368e-4062-97bc-fcd5c6d3290f",
+                    "path": "*/{Menu}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
+                    "action": "System",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe972ec3-92af-43d4-b01f-ecd7d0a19db5",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "System",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

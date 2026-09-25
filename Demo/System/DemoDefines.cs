@@ -25,6 +25,7 @@ namespace PahlUnity.Demo
         public static readonly int Navigate = InputManager.GetInputActionNameHash("Navigate");
         public static readonly int Submit = InputManager.GetInputActionNameHash("Submit");
         public static readonly int Cancel = InputManager.GetInputActionNameHash("Cancel");
+        public static readonly int System = InputManager.GetInputActionNameHash("System");
         public static readonly int Move = InputManager.GetInputActionNameHash("Move");
         public static readonly int Attack = InputManager.GetInputActionNameHash("Attack");
         public static readonly int Dash = InputManager.GetInputActionNameHash("Dash");
