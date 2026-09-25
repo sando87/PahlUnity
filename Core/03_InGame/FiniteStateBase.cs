@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Events;
-
 
 namespace PahlUnity
 {
-    public class FiniteStateBase
+    public class FiniteStateBase : MonoBehaviour
     {
         public event Action EventEnter;
         public event Action EventUpdate;

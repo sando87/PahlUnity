@@ -564,6 +564,10 @@ Transform:
   m_Children:
   - {fileID: 3813999526296663391}
   - {fileID: 4211538231673325756}
+  - {fileID: 812345670000000002}
+  - {fileID: 812345670000000012}
+  - {fileID: 812345670000000022}
+  - {fileID: 812345670000000032}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8976143022281565683
@@ -630,21 +634,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a934b32f6cdce4f8ae98b3c2bf1acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerController2D
-  _JumpForce: 12
-  _EnableWallAttach: 0
-  _WallSlideSpeed: 1.5
-  _WallAttachMinFallSpeed: 0.5
-  _WallAttachBlockAfterJump: 0.25
-  _WallJumpForce: {x: 8, y: 12}
-  _DashCooldown: 0.3
-  _DropDownSpeed: 3
-  _DropDownMinDuration: 0.35
-  _DropDownMaxDuration: 0.8
-  _GroundCheckSize: {x: 0.42, y: 0.08}
-  _WallCheckSize: {x: 0.08, y: 1.3}
-  _CheckDistance: 0.04
-  _DashSpeed: 5
-  _DashDistance: 5
 --- !u!114 &8197349638662196130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,3 +693,194 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.SpecBase
   mModifiers: []
+--- !u!1 &812345670000000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812345670000000002}
+  - component: {fileID: 812345670000000003}
+  m_Layer: 6
+  m_Name: FSMPlayerNormal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &812345670000000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1639914491777645587}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &812345670000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c3e1b94d2f4a6e8c0b1d5f7a9e3c21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.FSMPlayerNormal
+  _JumpForce: 12
+  _EnableWallAttach: 0
+  _WallSlideSpeed: 1.5
+  _WallAttachMinFallSpeed: 0.5
+  _WallAttachBlockAfterJump: 0.25
+  _WallJumpForce: {x: 8, y: 12}
+  _DropDownSpeed: 3
+  _DropDownMinDuration: 0.35
+  _DropDownMaxDuration: 0.8
+  _GroundCheckSize: {x: 0.42, y: 0.08}
+  _WallCheckSize: {x: 0.08, y: 1.3}
+  _CheckDistance: 0.04
+--- !u!1 &812345670000000011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812345670000000012}
+  - component: {fileID: 812345670000000013}
+  m_Layer: 6
+  m_Name: FSMPlayerDash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &812345670000000012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1639914491777645587}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &812345670000000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d4f2c05e3a4b7f9d1c2e6a8b0f4d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.FSMPlayerDash
+  _DashCooldown: 0.3
+  _DashSpeed: 5
+  _DashDistance: 5
+--- !u!1 &812345670000000021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812345670000000022}
+  - component: {fileID: 812345670000000023}
+  m_Layer: 6
+  m_Name: FSMPlayerHit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &812345670000000022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000021}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1639914491777645587}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &812345670000000023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e5a3d16f4b4c809e2d3f7b9c1a5e43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.FSMPlayerHit
+--- !u!1 &812345670000000031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812345670000000032}
+  - component: {fileID: 812345670000000033}
+  m_Layer: 6
+  m_Name: FSMPlayerDeath
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &812345670000000032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000031}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1639914491777645587}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &812345670000000033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812345670000000031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf6b4e2705c4d91af3e408cad2b6f54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.FSMPlayerDeath
