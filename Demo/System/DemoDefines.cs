@@ -103,6 +103,14 @@ namespace PahlUnity.Demo
         public Dictionary<long, PlayerData> Characters = new Dictionary<long, PlayerData>();
     }
 
+    [System.Serializable]
+    public class UserSettingData : SaveDataBase
+    {
+        public float BGMVolume = 1.0f;
+        public float SFXVolume = 1.0f;
+        public bool IsVSync = true;
+    }
+
     public struct DamageInfo : IDamageInfo
     {
         float IDamageInfo.Value => Value;

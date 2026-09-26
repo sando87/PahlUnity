@@ -19,27 +19,35 @@ namespace PahlUnity.Demo
 
         public LocalizationManager ManagerA => _ManagerA;
 
-        IEnumerator Start()
+        void Start()
+        {
+            StartLoading().Forget();
+        }
+
+        async UniTask StartLoading()
         {
             FadeIn(0.5f);
 
             _LoadingText.text = "Loading.";
             _FillImage.fillAmount = 0;
-            yield return newWaitForSeconds.Cache(0.2f);
+            await UniTask.Delay(200);
             _LoadingText.text = "Loading..";
             _FillImage.fillAmount = 0.33f;
-            yield return newWaitForSeconds.Cache(0.2f);
+            await UniTask.Delay(200);
             _LoadingText.text = "Loading...";
             _FillImage.fillAmount = 0.66f;
-            yield return newWaitForSeconds.Cache(0.2f);
+            await UniTask.Delay(200);
             _LoadingText.text = "Done!!";
             _FillImage.fillAmount = 1;
-            yield return newWaitForSeconds.Cache(0.2f);
+            await UniTask.Delay(200);
 
-            // InitializeGameSystem().Forget();
+            await GameSettingInfo.LoadAsync();
+            GameSettingInfo.ApplySettingsToSystem();
+
+            // await InitializeGameSystem();
 
             FadeOut(0.5f);
-            yield return newWaitForSeconds.Cache(0.5f);
+            await UniTask.Delay(500);
             SceneSwitchManager.Instance.ChangeSceneAsync(SceneType.MainTitle).Forget();
         }
 

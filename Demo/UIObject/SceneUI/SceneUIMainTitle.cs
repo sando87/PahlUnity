@@ -30,7 +30,7 @@ namespace PahlUnity.Demo
             FadeOut(0.5f);
             this.ExDelayedCoroutine(0.5f, () =>
             {
-                InGameManager.Instance.StartGame();
+                InGameManager.Instance.StartGame().Forget();
             });
         }
         async public void OnBtnOption(InputUIButton btn)
