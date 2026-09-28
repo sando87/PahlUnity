@@ -25,47 +25,61 @@ namespace PahlUnity.Demo
         protected PlayerController2D mPlayerCtrl = null;
 
         protected int mAnimStateNameHash = 0;
-        protected FiniteStateBase mAttackState = null;
+
+        private bool mIsAttacking = false;
 
         protected override void Awake()
         {
             base.Awake();
             mPlayerCtrl = mBaseObject.GetComp<PlayerController2D>();
             mAnimStateNameHash = Animator.StringToHash(_AnimStateName);
-
-            mAttackState = this.AddComponent<FiniteStateBase>();
-            mAttackState.EventEnter += OnEnterAttackState;
-            mAttackState.EventLeave += OnLeaveAttackState;
         }
 
-        public override void OnInputDown()
+        public override void OnInputPressing()
         {
-            base.OnInputDown();
+            base.OnInputPressing();
 
-            if (IsCanAttack())
+            if (mIsAttacking)
             {
-                mBaseObject.FSM.TryChangeState(mAttackState);
+                if (!IsCanAttack())
+                {
+                    StopAttackState();
+                }
+            }
+            else
+            {
+                if (IsCanAttack())
+                {
+                    StartAttackState();
+                }
+            }
+        }
+
+        public override void OnInputUp()
+        {
+            base.OnInputUp();
+
+            if (mIsAttacking)
+            {
+                StopAttackState();
             }
         }
 
         bool IsCanAttack()
         {
-            if (!mPlayerCtrl.IsCurrentState(PlayerState.Normal))
-                return false;
+            if (mPlayerCtrl.IsCurrentState(PlayerState.Normal))
+                return true;
 
-            return true;
+            return false;
         }
 
-        void OnEnterAttackState()
+        void StartAttackState()
         {
-            // mBaseObject.Physics2D.StopMoving();
+            mIsAttacking = true;
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, true);
             mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, GetAttackSpeedMultiplier());
             mBaseObject.Anim.SetLayerWeight(1, 1);
-            mBaseObject.Anim.PlayAnim(mAnimStateNameHash, OnFireAttackState, () =>
-            {
-                mBaseObject.FSM.ChangeDefaultState();
-            }, 1);
+            mBaseObject.Anim.PlayAnim(mAnimStateNameHash, OnFireAttackState, null, 1);
 
             _OnStart.Invoke();
         }
@@ -74,9 +88,9 @@ namespace PahlUnity.Demo
             CreateProjectiles();
             _OnFire.Invoke(idx);
         }
-        void OnLeaveAttackState()
+        void StopAttackState()
         {
-            // mBaseObject.Physics2D.StopMoving();
+            mIsAttacking = false;
             mBaseObject.Anim.SetLayerWeight(1, 0);
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, false);
             mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, 1);
