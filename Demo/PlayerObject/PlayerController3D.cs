@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections.Generic;
 
 namespace PahlUnity.Demo
 {
@@ -93,12 +93,9 @@ namespace PahlUnity.Demo
             mBaseObj.Body3D.Turn(dashDir);
             mBaseObj.Physics3D.DoDash(dashDir, _DashSpeed, _DashDuration);
             _OnDash?.Invoke();
-            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Death, null, (isCanceled) =>
+            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Dash, null, () =>
             {
-                if (!isCanceled)
-                {
-                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
-                }
+                mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
             });
         }
 
@@ -111,18 +108,14 @@ namespace PahlUnity.Demo
         {
             StopMovingForAction();
 
-            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Hit, null, (isCanceled) =>
+            mBaseObj.Anim.PlayAnim(AnimStateNameHash.Hit, null, () =>
             {
-                if (!isCanceled)
-                {
-                    mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
-                }
+                mBaseObj.FSM.TryChangeState(GetState(PlayerActionState.Normal));
             });
         }
 
         void EnterDeathState()
         {
-            mBaseObj.Anim.CancelAndThrowException(0);
             StopMovingForAction();
             mBaseObj.Anim.PlayAnim(AnimStateNameHash.Death);
             mBaseObj.Body3D.LockBody = true;

@@ -16,21 +16,13 @@ namespace PahlUnity.Demo
         public override void EnterState()
         {
             base.EnterState();
-            mBase.Anim.CancelPreviousAnim(0);
-            mBase.Anim.CancelPreviousAnim(1);
             mBase.Physics2D.LockGravity = false;
             mBase.Physics2D.VelocityX = 0f;
-            mBase.Anim.SetParamBool(AnimatorParams.DoNextCombo, false);
-            RunDamagedAsync().Forget();
+            mBase.Anim.PlayAnim(AnimStateNameHash.Hit, null, OnEndAnimHit, 0);
         }
 
-        async UniTaskVoid RunDamagedAsync()
+        void OnEndAnimHit()
         {
-            if (mBase.FSM.CurrentState != this)
-                return;
-
-            await mBase.Anim.PlayAnimWaitEnd(AnimStateNameHash.Hit);
-
             mPlayerCtrl.ChangeState(PlayerState.Normal);
         }
     }

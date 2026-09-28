@@ -62,10 +62,9 @@ namespace PahlUnity.Demo
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, true);
             mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, GetAttackSpeedMultiplier());
             mBaseObject.Anim.SetLayerWeight(1, 1);
-            mBaseObject.Anim.PlayAnim(mAnimStateNameHash, OnFireAttackState, (isCanceled) =>
+            mBaseObject.Anim.PlayAnim(mAnimStateNameHash, OnFireAttackState, () =>
             {
-                if (!isCanceled)
-                    mBaseObject.FSM.ChangeDefaultState();
+                mBaseObject.FSM.ChangeDefaultState();
             }, 1);
 
             _OnStart.Invoke();

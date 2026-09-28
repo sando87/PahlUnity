@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using Cysharp.Threading.Tasks;
-using System;
-using System.Threading;
-using Unity.VisualScripting;
 
 namespace PahlUnity
 {
@@ -33,7 +33,7 @@ namespace PahlUnity
 
             mAnimator.CrossFade(stateNameHash, 0, layer, 0);
         }
-        public void PlayAnim(int stateNameHash, Action<int> onFire, Action<bool> onEnd, int layer = 0)
+        public void PlayAnim(int stateNameHash, Action<int> onFire, Action onEnd, int layer = 0)
         {
             CancelPreviousAnim(layer);
 
@@ -46,38 +46,38 @@ namespace PahlUnity
             SetAnimStateEvent(animStateEvent);
             mAnimator.CrossFade(stateNameHash, 0, layer, 0);
         }
-        public void PlayAnim(int stateNameHash, Action onLoopStart, Action<int> onFire, Action<bool> onEnd, int layer = 0)
-        {
-            CancelPreviousAnim(layer);
+        // public void PlayAnim(int stateNameHash, Action onLoopStart, Action<int> onFire, Action<bool> onEnd, int layer = 0)
+        // {
+        //     CancelPreviousAnim(layer);
 
-            AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
-            {
-                onLoopStart = onLoopStart,
-                onFire = onFire,
-                onEnd = onEnd,
-                Layer = layer
-            };
-            SetAnimStateEvent(animStateEvent);
-            mAnimator.CrossFade(stateNameHash, 0, layer, 0);
-        }
-        public void PlayAnim(int stateNameHash,
-                            int fireNameHash,
-                            Action<int> onFire,
-                            int endNameHash,
-                            Action<bool> onEnd,
-                            int layer = 0)
-        {
-            CancelPreviousAnim(layer);
+        //     AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
+        //     {
+        //         onLoopStart = onLoopStart,
+        //         onFire = onFire,
+        //         onEnd = onEnd,
+        //         Layer = layer
+        //     };
+        //     SetAnimStateEvent(animStateEvent);
+        //     mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+        // }
+        // public void PlayAnim(int stateNameHash,
+        //                     int fireNameHash,
+        //                     Action<int> onFire,
+        //                     int endNameHash,
+        //                     Action<bool> onEnd,
+        //                     int layer = 0)
+        // {
+        //     CancelPreviousAnim(layer);
 
-            AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash, fireNameHash, endNameHash)
-            {
-                onFire = onFire,
-                onEnd = onEnd,
-                Layer = layer
-            };
-            SetAnimStateEvent(animStateEvent);
-            mAnimator.CrossFade(stateNameHash, 0, layer, 0);
-        }
+        //     AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash, fireNameHash, endNameHash)
+        //     {
+        //         onFire = onFire,
+        //         onEnd = onEnd,
+        //         Layer = layer
+        //     };
+        //     SetAnimStateEvent(animStateEvent);
+        //     mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+        // }
         public AnimStateEvent PlayAnimWithEvent(int stateNameHash, int layer = 0)
         {
             CancelPreviousAnim(layer);
@@ -91,56 +91,56 @@ namespace PahlUnity
             return animStateEvent;
         }
 
-        public async UniTask<AnimStateEvent> PlayAnimWaitFire(int stateNameHash, int layer = 0)
-        {
-            CancelPreviousAnim(layer);
+        // public async UniTask<AnimStateEvent> PlayAnimWaitFire(int stateNameHash, int layer = 0)
+        // {
+        //     CancelPreviousAnim(layer);
 
-            AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
-            {
-                Layer = layer
-            };
-            SetAnimStateEvent(animStateEvent);
-            mAnimator.CrossFade(stateNameHash, 0, layer, 0);
-            await UniTask.WaitUntil(() => animStateEvent.IsFired || animStateEvent.IsEnd,
-                                        cancellationToken: animStateEvent.cancelToken.Token,
-                                        cancelImmediately: true);
-            return animStateEvent;
-        }
+        //     AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
+        //     {
+        //         Layer = layer
+        //     };
+        //     SetAnimStateEvent(animStateEvent);
+        //     mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+        //     await UniTask.WaitUntil(() => animStateEvent.IsFired || animStateEvent.IsEnd,
+        //                                 cancellationToken: animStateEvent.cancelToken.Token,
+        //                                 cancelImmediately: true);
+        //     return animStateEvent;
+        // }
 
-        public async UniTask<AnimStateEvent> PlayAnimWaitEnd(int stateNameHash, Action<int> onFire = null, int layer = 0)
-        {
-            CancelPreviousAnim(layer);
+        // public async UniTask<AnimStateEvent> PlayAnimWaitEnd(int stateNameHash, Action<int> onFire = null, int layer = 0)
+        // {
+        //     CancelPreviousAnim(layer);
 
-            AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
-            {
-                onFire = onFire,
-                Layer = layer
-            };
-            SetAnimStateEvent(animStateEvent);
-            mAnimator.CrossFade(stateNameHash, 0, layer, 0);
-            await UniTask.WaitUntil(() => animStateEvent.IsEnd,
-                                        cancellationToken: animStateEvent.cancelToken.Token,
-                                        cancelImmediately: true);
-            return animStateEvent;
-        }
+        //     AnimStateEvent animStateEvent = new(mAnimEventStateIDCounter++, stateNameHash)
+        //     {
+        //         onFire = onFire,
+        //         Layer = layer
+        //     };
+        //     SetAnimStateEvent(animStateEvent);
+        //     mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+        //     await UniTask.WaitUntil(() => animStateEvent.IsEnd,
+        //                                 cancellationToken: animStateEvent.cancelToken.Token,
+        //                                 cancelImmediately: true);
+        //     return animStateEvent;
+        // }
 
         public void CancelPreviousAnim(int layer)
         {
             if (mAnimStateEvents[layer] != null)
             {
-                mAnimStateEvents[layer].Cancel();
+                mAnimStateEvents[layer].IsCanceled = true;
                 mAnimStateEvents[layer] = null;
             }
         }
 
-        public void CancelAndThrowException(int layer)
-        {
-            if (mAnimStateEvents[layer] != null)
-            {
-                mAnimStateEvents[layer].Cancel(true);
-                mAnimStateEvents[layer] = null;
-            }
-        }
+        // public void CancelAndThrowException(int layer)
+        // {
+        //     if (mAnimStateEvents[layer] != null)
+        //     {
+        //         mAnimStateEvents[layer].Cancel(true);
+        //         mAnimStateEvents[layer] = null;
+        //     }
+        // }
 
         public void SetAnimStateEvent(AnimStateEvent animEventState)
         {
@@ -265,27 +265,27 @@ namespace PahlUnity
             FireIndex = -1;
 
             if (mAnimStateEvents[layer] != null
-            && mAnimStateEvents[layer].StartStateNameHash == stateNameHash
+            && mAnimStateEvents[layer].AnimStateNameHash == stateNameHash
             && mAnimStateEvents[layer].Layer == layer)
             {
                 mCurrentAnimEventStateID = mAnimStateEvents[layer].AnimEventID;
             }
         }
-        public void InvokeEventLoopStart(int stateNameHash, int layer)
-        {
-            if (mAnimStateEvents[layer] != null
-            && mAnimStateEvents[layer].FireStateNameHash == stateNameHash
-            && mAnimStateEvents[layer].AnimEventID == mCurrentAnimEventStateID)
-            {
-                mAnimStateEvents[layer].onLoopStart?.Invoke();
-            }
-        }
+        // public void InvokeEventLoopStart(int stateNameHash, int layer)
+        // {
+        //     if (mAnimStateEvents[layer] != null
+        //     && mAnimStateEvents[layer].FireStateNameHash == stateNameHash
+        //     && mAnimStateEvents[layer].AnimEventID == mCurrentAnimEventStateID)
+        //     {
+        //         mAnimStateEvents[layer].onLoopStart?.Invoke();
+        //     }
+        // }
         public void InvokeEventMiddle(int stateNameHash, int index, int layer)
         {
             FireIndex = index;
 
             if (mAnimStateEvents[layer] != null
-            && mAnimStateEvents[layer].FireStateNameHash == stateNameHash
+            && mAnimStateEvents[layer].AnimStateNameHash == stateNameHash
             && mAnimStateEvents[layer].AnimEventID == mCurrentAnimEventStateID)
             {
                 mAnimStateEvents[layer].IsFired = true;
@@ -298,12 +298,12 @@ namespace PahlUnity
             FireIndex = -1;
 
             if (mAnimStateEvents[layer] != null
-            && mAnimStateEvents[layer].EndStateNameHash == stateNameHash
+            && mAnimStateEvents[layer].AnimStateNameHash == stateNameHash
             && mAnimStateEvents[layer].AnimEventID == mCurrentAnimEventStateID
             && mAnimStateEvents[layer].Layer == layer)
             {
                 mAnimStateEvents[layer].IsEnd = true;
-                mAnimStateEvents[layer].onEnd?.Invoke(false);
+                mAnimStateEvents[layer].onEnd?.Invoke();
                 mAnimStateEvents[layer] = null;
             }
         }
@@ -312,61 +312,63 @@ namespace PahlUnity
     public class AnimStateEvent
     {
         public int AnimEventID = 0;
-        public int StartStateNameHash = 0;
-        public int FireStateNameHash = 0;
-        public int EndStateNameHash = 0;
+        public int AnimStateNameHash = 0;
+        // public int StartStateNameHash = 0;
+        // public int FireStateNameHash = 0;
+        // public int EndStateNameHash = 0;
         public bool IsFired = false;
         public bool IsCanceled = false;
         public bool IsEnd = false;
         public int FireIndex = -1;
         public int Layer = 0;
         public Action<int> onFire = null;
-        public Action<bool> onEnd = null;
-        public Action onLoopStart = null;
-        public CancellationTokenSource cancelToken = null;
+        public Action onEnd = null;
+        // public Action onLoopStart = null;
+        // public CancellationTokenSource cancelToken = null;
 
         public AnimStateEvent(int animEventID, int animStateNameHash)
         {
             AnimEventID = animEventID;
-            StartStateNameHash = animStateNameHash;
-            FireStateNameHash = animStateNameHash;
-            EndStateNameHash = animStateNameHash;
+            AnimStateNameHash = animStateNameHash;
+            // StartStateNameHash = animStateNameHash;
+            // FireStateNameHash = animStateNameHash;
+            // EndStateNameHash = animStateNameHash;
             IsFired = false;
             IsCanceled = false;
             IsEnd = false;
             FireIndex = -1;
             Layer = 0;
-            cancelToken = new CancellationTokenSource();
+            // cancelToken = new CancellationTokenSource();
         }
 
-        public AnimStateEvent(int animEventID, int startStateNameHash, int fireStateNameHash, int endStateNameHash)
-        {
-            AnimEventID = animEventID;
-            StartStateNameHash = startStateNameHash;
-            FireStateNameHash = fireStateNameHash;
-            EndStateNameHash = endStateNameHash;
-            IsFired = false;
-            IsCanceled = false;
-            IsEnd = false;
-            FireIndex = -1;
-            Layer = 0;
-            cancelToken = new CancellationTokenSource();
-        }
+        // public AnimStateEvent(int animEventID, int startStateNameHash, int fireStateNameHash, int endStateNameHash)
+        // {
+        //     AnimEventID = animEventID;
+        //     StartStateNameHash = startStateNameHash;
+        //     FireStateNameHash = fireStateNameHash;
+        //     EndStateNameHash = endStateNameHash;
+        //     IsFired = false;
+        //     IsCanceled = false;
+        //     IsEnd = false;
+        //     FireIndex = -1;
+        //     Layer = 0;
+        //     cancelToken = new CancellationTokenSource();
+        // }
 
-        public void Cancel(bool throwCancelException = false)
-        {
-            IsCanceled = true;
-            IsEnd = true;
-            onEnd?.Invoke(IsCanceled);
-            if (throwCancelException)
-            {
-                if (cancelToken != null)
-                {
-                    cancelToken.Cancel();
-                    cancelToken.Dispose();
-                    cancelToken = null;
-                }
-            }
-        }
+        // public void Cancel(bool throwCancelException = false)
+        // {
+        //     IsCanceled = true;
+        //     IsEnd = true;
+        //     onEnd?.Invoke(IsCanceled);
+        //     if (throwCancelException)
+        //     {
+        //         if (cancelToken != null)
+        //         {
+        //             cancelToken.Cancel();
+        //             cancelToken.Dispose();
+        //             cancelToken = null;
+        //         }
+        //     }
+        // }
     }
 }

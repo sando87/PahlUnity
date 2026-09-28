@@ -22,8 +22,6 @@ namespace PahlUnity.Demo
         public override void EnterState()
         {
             base.EnterState();
-            mBase.Anim.CancelPreviousAnim(0);
-            mBase.Anim.CancelPreviousAnim(1);
             RunDashAsync().Forget();
         }
 
