@@ -143,7 +143,7 @@ namespace PahlUnity.Demo
             return mFSM.TryChangeState(mStates[state], forceChange);
         }
 
-        bool IsCurrentState(PlayerState state)
+        public bool IsCurrentState(PlayerState state)
         {
             return mFSM.CurrentState == mStates[state];
         }

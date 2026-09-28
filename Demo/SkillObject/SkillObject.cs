@@ -3,29 +3,63 @@ using UnityEngine;
 
 namespace PahlUnity.Demo
 {
+    public enum SkillInputState { None, JustDown, Pressing, JustUp }
+
     public class SkillObject : MonoBehaviour
     {
-        private SkillInstData mSkillInstData;
+        [SerializeField] SkillSpecData _SkillSpecData = null;
 
-        private SpecBase mSpecBase;
+        protected BaseObject mBaseObject;
+        protected SpecBase mSpecBase;
+        protected SkillInstData mSkillInstData;
 
-        public void Init(SkillInstData instData)
+        protected bool IsEquipped { get; private set; } = false;
+        protected SkillInputState InputState { get; private set; } = SkillInputState.None;
+
+        protected virtual void Awake()
         {
-            mSkillInstData = instData;
-
+            mBaseObject = this.ExGetBase();
             mSpecBase = GetComponent<SpecBase>();
+        }
+
+        protected virtual void Start()
+        {
+            Init();
+
+            Debug.Log(mSpecBase[SpecFields.MaxHP]);
+            Debug.Log(mSpecBase[SpecFields.MaxMP]);
+            Debug.Log(mSpecBase[SpecFields.MoveSpeed]);
+            Debug.Log(mSpecBase[SpecFields.AttackSpeed]);
+        }
+
+        void Init()
+        {
+            mSkillInstData = new SkillInstData(_SkillSpecData);
 
             mSpecBase.SetSpecs(mSkillInstData.SpecData.Specs, 0);
 
             mSpecBase.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
 
-        void Start()
+        public virtual void OnEquip()
         {
-            Debug.Log(mSpecBase[SpecFields.MaxHP]);
-            Debug.Log(mSpecBase[SpecFields.MaxMP]);
-            Debug.Log(mSpecBase[SpecFields.MoveSpeed]);
-            Debug.Log(mSpecBase[SpecFields.AttackSpeed]);
+            IsEquipped = true;
+        }
+        public virtual void OnUnequip()
+        {
+            IsEquipped = false;
+        }
+        public virtual void OnInputDown()
+        {
+            InputState = SkillInputState.JustDown;
+        }
+        public virtual void OnInputPressing()
+        {
+            InputState = SkillInputState.Pressing;
+        }
+        public virtual void OnInputUp()
+        {
+            InputState = SkillInputState.JustUp;
         }
     }
 }
