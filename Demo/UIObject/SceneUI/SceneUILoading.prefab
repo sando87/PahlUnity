@@ -63,6 +63,11 @@ MonoBehaviour:
   TopOverlayPrefab: {fileID: 7399722067042557046, guid: 28dccd64f9d9f0e4fbb7d2b8b5c37033, type: 3}
   _LoadingText: {fileID: 1562095202699887332}
   _FillImage: {fileID: 5903141910624733204}
+  _ManagerA: {fileID: 0}
+  _ItemSpecDatas:
+  - {fileID: 11400000, guid: b57e8061a24fc3949a2201f39aeb6ade, type: 2}
+  - {fileID: 11400000, guid: eb38b5a059cdb3742afea02b7e4a9fe1, type: 2}
+  - {fileID: 11400000, guid: 64fa9c558dad71d438c404a8bfc21334, type: 2}
 --- !u!1 &6293321767771351334
 GameObject:
   m_ObjectHideFlags: 0

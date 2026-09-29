@@ -5,9 +5,18 @@ using System;
 
 namespace PahlUnity.Demo
 {
+    [System.Serializable]
+    public class EquipSlotConfig
+    {
+        public EquipSlotType SlotType;
+        public int SlotCount;
+    }
+
     [RequireComponent(typeof(SpecModifier))]
     public class EquipmentMono : MonoBehaviour
     {
+        [SerializeField] EquipSlotConfig[] _EquipSlotConfig;
+
         Equipment mEquipment = null;
         SpecModifier mSpecModifier = null;
 
@@ -19,6 +28,13 @@ namespace PahlUnity.Demo
         void Awake()
         {
             mSpecModifier = GetComponent<SpecModifier>();
+
+            Dictionary<EquipmentSlotType, int> slotMaxCounts = new();
+            foreach (var config in _EquipSlotConfig)
+            {
+                slotMaxCounts.Add((int)config.SlotType, config.SlotCount);
+            }
+            Init(slotMaxCounts);
         }
         public void Init(Dictionary<EquipmentSlotType, int> slotMaxCounts)
         {

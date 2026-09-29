@@ -94,7 +94,13 @@ namespace PahlUnity.Demo
     {
         None,
         Weapon,
-        Accessory,
+        Armor,
+        Gloves,
+        Shoes,
+        Belt,
+        Helmet,
+        Ring,
+        Necklace,
     }
 
     [System.Serializable]

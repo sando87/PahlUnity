@@ -9,34 +9,35 @@ namespace PahlUnity.Demo
         private ItemSpecData mSpecRawData;
         private int mResourceID;
         private long mInstanceID;
-        private int mLevel;
+        private ItemSaveData mSaveData;
 
         private IReadOnlyList<SpecFieldValue> mSpecFieldValues = null;
 
-        public ItemInstInfo(ItemSpecData specData, int level = 1)
+        public ItemInstInfo(ItemSpecData specData)
         {
             mSpecRawData = specData;
             mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
             mInstanceID = DateTime.Now.Ticks;
-            mLevel = level;
+            mSaveData = new ItemSaveData();
         }
-        public ItemInstInfo(ItemSpecData specData, long instanceID, int level = 1)
+        public ItemInstInfo(ItemSpecData specData, ItemSaveData saveData)
         {
             mSpecRawData = specData;
             mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
-            mInstanceID = instanceID;
-            mLevel = level;
+            mInstanceID = saveData.InstanceID;
+            mSaveData = saveData;
         }
 
         public int ResourceID => mResourceID;
         public long InstanceID => mInstanceID;
-        public int Level => mLevel;
+        public int Level => mSaveData == null ? 1 : mSaveData.Level;
         public bool IsStackable => mSpecRawData.IsStackable;
         public int MaxStackCount => mSpecRawData.MaxStackCount;
         public int RandomSeed => (int)mInstanceID;
         public ItemSpecData SpecData => mSpecRawData;
+        public ItemSaveData SaveData => mSaveData;
 
-        public EquipmentSlotType SlotType => mSpecRawData.EquipSlot;
+        public EquipmentSlotType SlotType => (int)mSpecRawData.EquipSlot;
 
         public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PahlUnity
 {
@@ -10,23 +11,25 @@ namespace PahlUnity
         int MaxStackCount { get; }
     }
 
-    public class Inventory
+    public class Inventory : MonoBehaviour
     {
-        private readonly List<InventorySlot> mSlots;
+        [SerializeField] private int _SlotCount = 20;
+        
+        private List<InventorySlot> mSlots;
 
         public IReadOnlyList<InventorySlot> Slots => mSlots;
 
-        public event Action<IInvenItem, int> OnItemAdded;
+        public event Action<IInvenItem, int, int> OnItemAdded;
         public event Action<IInvenItem, int> OnItemRemoved;
         public event Action<IInvenItem, int> OnItemMoved;
 
-        public Inventory(int slotCount)
+        void Awake()
         {
-            mSlots = new List<InventorySlot>(slotCount);
+            mSlots = new List<InventorySlot>(_SlotCount);
 
-            for (int i = 0; i < slotCount; i++)
+            for (int i = 0; i < _SlotCount; i++)
             {
-                mSlots.Add(new InventorySlot());
+                mSlots.Add(new InventorySlot(i));
             }
         }
 
@@ -48,7 +51,7 @@ namespace PahlUnity
                 if (sameItemSlot != null)
                 {
                     int addCount = sameItemSlot.AddCount(count);
-                    OnItemAdded?.Invoke(item, addCount);
+                    OnItemAdded?.Invoke(item, addCount, sameItemSlot.PositionIndex);
                     return addCount;
                 }
                 else
@@ -60,7 +63,7 @@ namespace PahlUnity
                     int addCount = Math.Min(count, item.MaxStackCount);
                     emptySlot.Item = item;
                     emptySlot.Count = addCount;
-                    OnItemAdded?.Invoke(item, addCount);
+                    OnItemAdded?.Invoke(item, addCount, emptySlot.PositionIndex);
                     return addCount;
                 }
             }
@@ -72,7 +75,7 @@ namespace PahlUnity
 
                 emptySlot.Item = item;
                 emptySlot.Count = 1;
-                OnItemAdded?.Invoke(item, 1);
+                OnItemAdded?.Invoke(item, 1, emptySlot.PositionIndex);
                 return 1;
             }
         }

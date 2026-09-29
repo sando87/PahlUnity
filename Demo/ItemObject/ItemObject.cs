@@ -15,7 +15,6 @@ namespace PahlUnity.Demo
 
         private Transform mRenderTr = null;
         private Vector3 mRotAxis = Vector3.zero;
-        private bool mIsDropped = false;
 
         public void Init(ItemInstInfo itemInstData)
         {
@@ -26,8 +25,6 @@ namespace PahlUnity.Demo
         {
             mRenderTr = this.ExGetBase().Render.transform;
 
-            mIsDropped = true;
-
             Vector3 rotDir = MyUtils.Random(Vector3.zero, 1);
             rotDir.y = 0;
             float rotateSpeed = 1000;
@@ -36,12 +33,11 @@ namespace PahlUnity.Demo
             DoDropEffect();
         }
 
-        public virtual void OnEuip(BaseObject owner)
+        public virtual void OnPickedUp(BaseObject owner)
         {
             StopAllCoroutines();
 
-            if (mIsDropped)
-                AudioManager.Instance.PlaySFXClip(_SFXonEquip);
+            AudioManager.Instance.PlaySFXClip(_SFXonEquip);
         }
         public virtual void OnDump(BaseObject owner)
         {

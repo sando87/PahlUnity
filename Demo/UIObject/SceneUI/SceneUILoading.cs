@@ -15,7 +15,7 @@ namespace PahlUnity.Demo
 
         [SerializeField] LocalizationManager _ManagerA = null;
 
-        // [SerializeField] ItemDatabase _ItemDB = null;
+        [SerializeField] ItemSpecData[] _ItemSpecDatas = null;
 
         public LocalizationManager ManagerA => _ManagerA;
 
@@ -44,6 +44,8 @@ namespace PahlUnity.Demo
             await GameSettingInfo.LoadAsync();
             GameSettingInfo.ApplySettingsToSystem();
 
+            InitItemDatabase();
+
             // await InitializeGameSystem();
 
             FadeOut(0.5f);
@@ -71,8 +73,6 @@ namespace PahlUnity.Demo
                 });
             }
 
-            InitItemDatabase();
-
             // await LoadTableData<ItemResourceData>();
             // await LoadTableData<CharResourceData>();
             // await LoadTableData<SkillResourceData>();
@@ -92,8 +92,10 @@ namespace PahlUnity.Demo
 
         void InitItemDatabase()
         {
-            // LOG.errorif(_ItemDB == null);
-            // TableDataContainer<ItemResourceData>.Instance.InitDataList(_ItemDB.ItemList.ToArray());
+            if (_ItemSpecDatas != null && _ItemSpecDatas.Length > 0)
+            {
+                TableDataContainer<ItemSpecData>.Instance.InitDataList(_ItemSpecDatas);
+            }
         }
     }
 }

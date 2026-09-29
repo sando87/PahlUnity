@@ -7,8 +7,16 @@ namespace PahlUnity
     {
         public IInvenItem Item;
         public int Count;
+        public int PositionIndex;
 
         public bool IsEmpty => Item == null;
+
+        public InventorySlot(int positionIndex)
+        {
+            Item = null;
+            Count = 0;
+            PositionIndex = positionIndex;
+        }
 
         public void Clear()
         {

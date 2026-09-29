@@ -10,7 +10,7 @@ namespace PahlUnity.Demo
         [SerializeField] private string _ItemDesc = "";
         [SerializeField] private bool _IsStackable = false;
         [SerializeField] private int _MaxStackCount = 1;
-        [SerializeField] private EquipmentSlotType _EquipSlot = 0;
+        [SerializeField] private EquipSlotType _EquipSlot = 0;
         [SerializeField] private Sprite _ItemIcon = null;
         [SerializeField] private List<SpecFieldRaw> _Specs = new List<SpecFieldRaw>();
 
@@ -20,7 +20,7 @@ namespace PahlUnity.Demo
         public Sprite ItemIcon => _ItemIcon;
         public bool IsStackable => _IsStackable;
         public int MaxStackCount => _MaxStackCount;
-        public EquipmentSlotType EquipSlot => _EquipSlot;
+        public EquipSlotType EquipSlot => _EquipSlot;
 
         public IReadOnlyList<SpecFieldRaw> Specs => _Specs;
 

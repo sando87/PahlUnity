@@ -177,6 +177,78 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.2}
   m_EdgeRadius: 0
+--- !u!1 &814521174775641908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7199930416606503046}
+  - component: {fileID: 3881607022730483698}
+  - component: {fileID: 6513947197355905360}
+  - component: {fileID: 4944911782506263070}
+  m_Layer: 6
+  m_Name: Inven
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7199930416606503046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814521174775641908}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1639914491777645587}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3881607022730483698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814521174775641908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78bbc008eccb89544b21bb75419d575b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Inventory
+  _SlotCount: 20
+--- !u!114 &6513947197355905360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814521174775641908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fbcd22e601e58643b7635c237496933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.EquipmentMono
+  _EquipSlotConfig: []
+--- !u!114 &4944911782506263070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814521174775641908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be51bbdc775e5a44bef5af698bbc749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.SpecModifier
 --- !u!1 &1376993584015409261
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,6 +1491,8 @@ GameObject:
   - component: {fileID: 3089512612628829368}
   - component: {fileID: 5458843668528486821}
   - component: {fileID: 6410568853349192858}
+  - component: {fileID: 6795966119112122912}
+  - component: {fileID: 6046232114153740205}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1443,6 +1517,7 @@ Transform:
   - {fileID: 4211538231673325756}
   - {fileID: 3338070449813443077}
   - {fileID: 6802220395081884688}
+  - {fileID: 7199930416606503046}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8976143022281565683
@@ -1580,3 +1655,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.SpecBase
   mModifiers: []
+--- !u!114 &6795966119112122912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9098781383644554432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56fa760d255ac0b499ae28f068a299d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerGrowth
+  OnLevelUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStatPointChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6046232114153740205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9098781383644554432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760e9d0c91c8f744eb6b9fa89b1fed14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerItemInteractor
