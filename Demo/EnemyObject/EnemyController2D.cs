@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using PahlUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PahlUnity.Demo
@@ -30,7 +31,7 @@ namespace PahlUnity.Demo
         [SerializeField] private float _GroundCheckMinHeight = 0.2f;
         [SerializeField] private float _PatrolTurnCooldown = 0.35f;
         [SerializeField] private float _SameHeightTolerance = 2f;
-        [SerializeField] private ProjectileBase _ProjectilePrefab = null;
+        [SerializeField] private ProjectileBase2D _ProjectilePrefab = null;
 
         BaseObject mBaseObj = null;
         ObjectPhysics2D mPhy = null;
@@ -71,6 +72,11 @@ namespace PahlUnity.Demo
             mFSM = mBaseObj.GetComp<FiniteStateMachine>();
             if (mFSM == null)
                 mFSM = mBaseObj.gameObject.AddComponent<FiniteStateMachine>();
+
+            mBaseObj.Body2D.OnTurn += (isRight) =>
+            {
+                mBaseObj.Render.SetFlipX(!isRight);
+            };
 
             mTerrainLayerMask = GetLayerMask(LayerID.Terrain);
             mGroundLayerMask = mTerrainLayerMask | GetLayerMask(LayerID.ThinPlatform);
@@ -147,41 +153,41 @@ namespace PahlUnity.Demo
 
         void BindStates()
         {
-            FiniteStateBase idleState = new();
+            FiniteStateBase idleState = this.AddComponent<FiniteStateBase>();
             idleState.EventEnter += EnterIdleState;
             idleState.EventUpdate += UpdateIdleState;
             idleState.EventLeave += LeaveMoveState;
             mFSM.SetDefaultState(idleState);
             mStates[EnemyState.Idle] = idleState;
 
-            FiniteStateBase patrolState = new();
+            FiniteStateBase patrolState = this.AddComponent<FiniteStateBase>();
             patrolState.EventEnter += EnterPatrolState;
             patrolState.EventUpdate += UpdatePatrolState;
             patrolState.EventLeave += LeaveMoveState;
             mStates[EnemyState.Patrol] = patrolState;
 
-            FiniteStateBase detectState = new();
+            FiniteStateBase detectState = this.AddComponent<FiniteStateBase>();
             detectState.EventEnter += EnterDetectState;
             detectState.EventUpdate += UpdateDetectState;
             detectState.EventLeave += LeaveMoveState;
             mStates[EnemyState.Detect] = detectState;
 
-            FiniteStateBase chaseState = new();
+            FiniteStateBase chaseState = this.AddComponent<FiniteStateBase>();
             chaseState.EventEnter += EnterChaseState;
             chaseState.EventUpdate += UpdateChaseState;
             chaseState.EventLeave += LeaveMoveState;
             mStates[EnemyState.Chase] = chaseState;
 
-            FiniteStateBase attackState = new();
+            FiniteStateBase attackState = this.AddComponent<FiniteStateBase>();
             attackState.EventEnter += EnterAttackState;
             attackState.EventLeave += LeaveAttackState;
             mStates[EnemyState.Attack] = attackState;
 
-            FiniteStateBase damagedState = new();
+            FiniteStateBase damagedState = this.AddComponent<FiniteStateBase>();
             damagedState.EventEnter += EnterDamagedState;
             mStates[EnemyState.Damaged] = damagedState;
 
-            FiniteStateBase deathState = new();
+            FiniteStateBase deathState = this.AddComponent<FiniteStateBase>();
             deathState.EventEnter += EnterDeathState;
             mStates[EnemyState.Death] = deathState;
         }
@@ -342,7 +348,7 @@ namespace PahlUnity.Demo
             ++mAttackMotionID;
             mPhy.StopMoving();
             mPhy.LockGravity = false;
-            mBody.LockBody = true;
+            mBaseObj.Interactor.LockInteract = true;
             mAnim.PlayAnim(AnimStateNameHash.Death);
         }
 
@@ -546,19 +552,18 @@ namespace PahlUnity.Demo
             Vector2 startPos = mBody.Center.ExToVector2() + (mBody.FrontDirVec2 * 0.5f);
             Vector2 attackDir = mBody.FrontDirVec2;
             int targetLayerMask = 0; //mBaseObj.gameObject.layer.GetAttackableLayerMask();
-            ProjectileBase obj = ProjectileBase.Create(_ProjectilePrefab, startPos, attackDir, targetLayerMask);
+            ProjectileBase2D obj = ProjectileBase2D.Create(_ProjectilePrefab, startPos, attackDir, targetLayerMask);
             obj.OnHit += (col) =>
             {
                 // 충돌 시 처리할 내용
                 Health health = col.ExGetCompInBase<Health>();
                 if (health != null)
                 {
-                    DamageInfo damageInfo = new DamageInfo(mSpec[SpecFields.Attack]);
+                    float damage = 1; //mSpec[SpecFields.Attack];
+                    DamageInfo damageInfo = new DamageInfo(damage);
                     health.GetDamaged(damageInfo, mBaseObj);
                 }
             };
-
-            obj.OnEnd += () => obj.ExGetBase().DestroyObj();
         }
     }
 }

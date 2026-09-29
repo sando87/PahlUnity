@@ -80,7 +80,7 @@ namespace PahlUnity
 
         private bool IsInteractable(InteractableCollider other)
         {
-            if (LockInteract || other == null)
+            if (LockInteract || other == null || other.LockInteract)
                 return false;
 
             // 콜라이더 이벤트는 콜라이더가 붙어있는 객체에게만 이벤트가 전달 되도록 하기 위함

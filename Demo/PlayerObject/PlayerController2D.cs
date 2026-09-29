@@ -31,7 +31,6 @@ namespace PahlUnity.Demo
         [SerializeField] private float _CheckDistance = 0.04f;
 
         BaseObject mBaseObj = null;
-        FiniteStateMachine mFSM = null;
         Dictionary<PlayerState, FiniteStateBase> mStates = new();
 
         readonly Collider2D[] mOverlapResults = new Collider2D[4];
@@ -57,9 +56,6 @@ namespace PahlUnity.Demo
         void Awake()
         {
             mBaseObj = this.ExGetBase();
-            mFSM = mBaseObj.FSM;
-            if (mFSM == null)
-                mFSM = mBaseObj.gameObject.AddComponent<FiniteStateMachine>();
 
             mBaseObj.Body2D.OnTurn += (isRight) =>
             {
@@ -131,7 +127,7 @@ namespace PahlUnity.Demo
             FSMPlayerHit hitState = GetComponentInChildren<FSMPlayerHit>(true);
             FSMPlayerDeath deathState = GetComponentInChildren<FSMPlayerDeath>(true);
 
-            mFSM.SetDefaultState(normalState);
+            mBaseObj.FSM.SetDefaultState(normalState);
             mStates[PlayerState.Normal] = normalState;
             mStates[PlayerState.Dashing] = dashState;
             mStates[PlayerState.Damaged] = hitState;
@@ -140,12 +136,12 @@ namespace PahlUnity.Demo
 
         public bool ChangeState(PlayerState state, bool forceChange = false)
         {
-            return mFSM.TryChangeState(mStates[state], forceChange);
+            return mBaseObj.FSM.TryChangeState(mStates[state], forceChange);
         }
 
         public bool IsCurrentState(PlayerState state)
         {
-            return mFSM.CurrentState == mStates[state];
+            return mBaseObj.FSM.CurrentState == mStates[state];
         }
 
         public bool DoDashOnInput()
