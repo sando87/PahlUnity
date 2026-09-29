@@ -25,11 +25,6 @@ namespace PahlUnity.Demo
         protected virtual void Start()
         {
             Init();
-
-            Debug.Log(mSpecBase[SpecFields.MaxHP]);
-            Debug.Log(mSpecBase[SpecFields.MaxMP]);
-            Debug.Log(mSpecBase[SpecFields.MoveSpeed]);
-            Debug.Log(mSpecBase[SpecFields.AttackSpeed]);
         }
 
         void Init()

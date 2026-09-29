@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace PahlUnity
@@ -15,7 +16,8 @@ namespace PahlUnity
         }
 
         [SerializeField] private DetectionMethod _DetectionMethod = DetectionMethod.CustomOverlap;
-        [SerializeField] private LayerMask _TargetLayerMask = 0;
+        [SerializeField, ShowIf(nameof(IsCustomMode))] private LayerMask _TargetLayerMask = 0;
+        bool IsCustomMode => _DetectionMethod == DetectionMethod.CustomOverlap;
 
         public event Action<Collider2D> OnDetectEnter;
         public event Action<Collider2D> OnDetectExit;
@@ -49,8 +51,8 @@ namespace PahlUnity
             if (_DetectionMethod != DetectionMethod.UnityTrigger)
                 return;
 
-            if (!IsDetectable(col))
-                return;
+            // if (!IsDetectable(col))
+            //     return;
 
             if (mDetectedColliders.Add(col))
             {

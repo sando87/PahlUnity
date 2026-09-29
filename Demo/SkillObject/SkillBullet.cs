@@ -101,7 +101,7 @@ namespace PahlUnity.Demo
         {
             Vector3 forwardDir = mBaseObject.Body2D.FrontDirVec2;
             Vector3 startPos = _FirePoint.position;
-            int targetLayerMask = 1 << LayerID.Enemy | 1 << LayerID.Terrain;
+            int targetLayerMask = 0; //1 << LayerID.Enemy | 1 << LayerID.Terrain;
 
             ProjectileBase2D.Create(_ProjPrefab, startPos, forwardDir, targetLayerMask);
         }
