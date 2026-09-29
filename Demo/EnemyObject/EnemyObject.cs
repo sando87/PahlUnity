@@ -8,27 +8,22 @@ namespace PahlUnity.Demo
 {
     public class EnemyObject : MonoBehaviour
     {
+        [SerializeField] EnemySpecData _SpecData;
+
         private EnemyInstData mEnemyInstData;
 
-        private SpecBase mSpecBase;
+        private BaseObject mBaseObject;
 
-        public void Init(EnemyInstData instData)
+        void Awake()
         {
-            mEnemyInstData = instData;
-
-            mSpecBase = GetComponent<SpecBase>();
-
-            mSpecBase.SetSpecs(mEnemyInstData.SpecData.Specs, 0);
-
-            mSpecBase.UpdateAllValuesByStep(mEnemyInstData.LevelIndex);
+            mBaseObject = this.ExGetBase();
         }
 
         void Start()
         {
-            Debug.Log(mSpecBase[SpecFields.MaxHP]);
-            Debug.Log(mSpecBase[SpecFields.MaxMP]);
-            Debug.Log(mSpecBase[SpecFields.MoveSpeed]);
-            Debug.Log(mSpecBase[SpecFields.AttackSpeed]);
+            mEnemyInstData = new EnemyInstData(_SpecData);
+            mBaseObject.Spec.SetSpecs(mEnemyInstData.SpecData.Specs, 0);
+            mBaseObject.Spec.UpdateAllValuesByStep(mEnemyInstData.LevelIndex);
         }
     }
 }
