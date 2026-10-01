@@ -1,12 +1,13 @@
 using System;
-using UnityEngine;
-using DG.Tweening;
 using System.Collections;
+using DG.Tweening;
+using UnityEngine;
 
 namespace PahlUnity.Demo
 {
     public class ItemObject : MonoBehaviour
     {
+        [SerializeField] ItemSpecData _ItemSpecData = null;
         [SerializeField] AudioClip _SFXonDropStart = null;
         [SerializeField] AudioClip _SFXonDropEnd = null;
         [SerializeField] AudioClip _SFXonEquip = null;
@@ -15,6 +16,14 @@ namespace PahlUnity.Demo
 
         private Transform mRenderTr = null;
         private Vector3 mRotAxis = Vector3.zero;
+
+        void Awake()
+        {
+            if (_ItemSpecData != null)
+            {
+                ItemInstData = new ItemInstInfo(_ItemSpecData);
+            }
+        }
 
         public void Init(ItemInstInfo itemInstData)
         {
@@ -38,6 +47,8 @@ namespace PahlUnity.Demo
             StopAllCoroutines();
 
             AudioManager.Instance.PlaySFXClip(_SFXonEquip);
+
+            Destroy(gameObject);
         }
         public virtual void OnDump(BaseObject owner)
         {

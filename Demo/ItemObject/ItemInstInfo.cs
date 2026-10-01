@@ -7,7 +7,7 @@ namespace PahlUnity.Demo
     public class ItemInstInfo : IInvenItem, IEquipItem
     {
         private ItemSpecData mSpecRawData;
-        private int mResourceID;
+        private long mResourceID;
         private long mInstanceID;
         private ItemSaveData mSaveData;
 
@@ -16,19 +16,19 @@ namespace PahlUnity.Demo
         public ItemInstInfo(ItemSpecData specData)
         {
             mSpecRawData = specData;
-            mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
+            mResourceID = mSpecRawData.ID;
             mInstanceID = DateTime.Now.Ticks;
-            mSaveData = new ItemSaveData();
+            mSaveData = new ItemSaveData(mInstanceID, mResourceID);
         }
         public ItemInstInfo(ItemSpecData specData, ItemSaveData saveData)
         {
             mSpecRawData = specData;
-            mResourceID = mSpecRawData.ItemID.ExGetStableHash32();
+            mResourceID = mSpecRawData.ID;
             mInstanceID = saveData.InstanceID;
             mSaveData = saveData;
         }
 
-        public int ResourceID => mResourceID;
+        public long ResourceID => mResourceID;
         public long InstanceID => mInstanceID;
         public int Level => mSaveData == null ? 1 : mSaveData.Level;
         public bool IsStackable => mSpecRawData.IsStackable;

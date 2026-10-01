@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace PahlUnity.Demo
@@ -5,13 +6,24 @@ namespace PahlUnity.Demo
     [System.Serializable]
     public class ItemSaveData
     {
-        public long InstanceID = 0;
-        public long ResourceID = 0;
-        public bool IsEquipped = false;
-        public int Level = 1;
-        public int Count = 1;
-        public int PositionIndex = -1;
+        public long InstanceID;
+        public long ResourceID;
+        public bool IsEquipped;
+        public int Level;
+        public int Count;
+        public int PositionIndex;
 
+        public ItemSaveData(long instanceID, long resourceID)
+        {
+            InstanceID = instanceID;
+            ResourceID = resourceID;
+            IsEquipped = false;
+            Level = 1;
+            Count = 1;
+            PositionIndex = -1;
+        }
+
+        [JsonIgnore]
         public int LevelIndex { get => Level - 1; }
     }
 }

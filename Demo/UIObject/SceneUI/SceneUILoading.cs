@@ -46,32 +46,33 @@ namespace PahlUnity.Demo
 
             InitItemDatabase();
 
-            // await InitializeGameSystem();
+            // ManagerA.gameObject.SetActive(true);
+            // (ManagerA as IInitializer).Initialize(null);
+
+            await InitializeSaveData();
 
             FadeOut(0.5f);
             await UniTask.Delay(500);
             SceneSwitchManager.Instance.ChangeSceneAsync(SceneType.MainTitle).Forget();
         }
 
-        async UniTask InitializeGameSystem()
+        async UniTask InitializeSaveData()
         {
-            ManagerA.gameObject.SetActive(true);
-            (ManagerA as IInitializer).Initialize(null);
-
             IInitializer playerSaveDataManager = SaveManager<InGamePlayingData>.Instance as IInitializer;
             string filename = typeof(InGamePlayingData).Name + ".json";
             string fullPath = Path.Combine(Application.persistentDataPath, filename);
             InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
-            if (state == InitializingState.InitializedSuccess)
-            {
-                EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
-                {
-                    if (eventType.ImmediateSave)
-                        SaveManager<InGamePlayingData>.Instance.SaveImmediate();
-                    else
-                        SaveManager<InGamePlayingData>.Instance.RequestSave();
-                });
-            }
+            LOG.trace(state);
+            // if (state == InitializingState.InitializedSuccess)
+            // {
+            //     EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
+            //     {
+            //         if (eventType.ImmediateSave)
+            //             SaveManager<InGamePlayingData>.Instance.SaveImmediate();
+            //         else
+            //             SaveManager<InGamePlayingData>.Instance.RequestSave();
+            //     });
+            // }
 
             // await LoadTableData<ItemResourceData>();
             // await LoadTableData<CharResourceData>();

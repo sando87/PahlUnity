@@ -6,7 +6,7 @@ namespace PahlUnity
 {
     public interface IInvenItem
     {
-        int ResourceID { get; }
+        long ResourceID { get; }
         bool IsStackable { get; }
         int MaxStackCount { get; }
     }
@@ -14,7 +14,7 @@ namespace PahlUnity
     public class Inventory : MonoBehaviour
     {
         [SerializeField] private int _SlotCount = 20;
-        
+
         private List<InventorySlot> mSlots;
 
         public IReadOnlyList<InventorySlot> Slots => mSlots;
@@ -150,7 +150,7 @@ namespace PahlUnity
             return true;
         }
 
-        private InventorySlot FindSameItem(int resourceId)
+        private InventorySlot FindSameItem(long resourceId)
         {
             foreach (InventorySlot slot in mSlots)
             {

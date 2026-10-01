@@ -55,7 +55,7 @@ namespace PahlUnity.Demo
             mPlayerInstData = new PlayerInstData(_PlayerSpecData);
 
             InGamePlayingData saveData = SaveManager<InGamePlayingData>.Instance.SaveData;
-            saveData.Characters.TryGetValue(mPlayerInstData.InstanceID, out mPlayerSaveData);
+            mPlayerSaveData = saveData.Data;
 
             mBaseObj.GetComp<PlayerGrowth>().Init(mPlayerSaveData.PlayerStat);
 

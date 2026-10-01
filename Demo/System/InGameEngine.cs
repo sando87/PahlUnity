@@ -16,7 +16,7 @@ namespace PahlUnity.Demo
 		{
 			await UniTask.Delay(1000);
 
-			Player = Instantiate(_PlayerPrefab, _PlayerSpawnPoint.position, _PlayerSpawnPoint.rotation, transform);
+			// Player = Instantiate(_PlayerPrefab, _PlayerSpawnPoint.position, _PlayerSpawnPoint.rotation, transform);
 
 			await UniTask.Delay(1000);
 		}

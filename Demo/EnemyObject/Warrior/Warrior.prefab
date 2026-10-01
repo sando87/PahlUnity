@@ -839,7 +839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f39ce698aac3240ab505dbd016f7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.ObjectBody2D
-  _ThinPlatform: {fileID: 0}
+  _ThinPlatform: {fileID: 6006141695361680194}
 --- !u!114 &696699217064389174
 MonoBehaviour:
   m_ObjectHideFlags: 0

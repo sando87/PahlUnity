@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PahlUnity.Demo
 {
@@ -9,6 +9,8 @@ namespace PahlUnity.Demo
     /// </summary>
     public class PlayerItemInteractor : MonoBehaviour
     {
+        [SerializeField] InteractableCollider _Interactor = null;
+
         public event System.Action<ItemObject> OnDetectItem;
         public System.Func<ItemObject, bool> OnTryPickupItem { get; set; } = null;
 
@@ -23,9 +25,10 @@ namespace PahlUnity.Demo
             mPlayerBase = this.ExGetCompInBase<PlayerObject>();
             mPlayerInput = this.ExGetCompInBase<InputPlayer>();
 
-            InteractableCollider interactableCollider = GetComponent<InteractableCollider>();
-            interactableCollider.OnInteractEnter3D += OnInteractEnter3D;
-            interactableCollider.OnInteractLeave3D += OnInteractLeave3D;
+            _Interactor.OnInteractEnter2D += (col) => OnInteractEnter(col.ExGetCompInBase<ItemObject>());
+            _Interactor.OnInteractLeave2D += (col) => OnInteractLeave(col.ExGetCompInBase<ItemObject>());
+            _Interactor.OnInteractEnter3D += (col) => OnInteractEnter(col.ExGetCompInBase<ItemObject>());
+            _Interactor.OnInteractLeave3D += (col) => OnInteractLeave(col.ExGetCompInBase<ItemObject>());
         }
 
 
@@ -58,9 +61,8 @@ namespace PahlUnity.Demo
             }
         }
 
-        void OnInteractEnter3D(Collider col)
+        void OnInteractEnter(ItemObject item)
         {
-            ItemObject item = col.ExGetCompInBase<ItemObject>();
             if (item == null)
                 return;
 
@@ -68,9 +70,8 @@ namespace PahlUnity.Demo
             OnDetectItem?.Invoke(item);
         }
 
-        void OnInteractLeave3D(Collider col)
+        void OnInteractLeave(ItemObject item)
         {
-            ItemObject item = col.ExGetCompInBase<ItemObject>();
             if (item == null)
                 return;
 

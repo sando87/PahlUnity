@@ -1136,6 +1136,7 @@ GameObject:
   - component: {fileID: 2540200354553032319}
   - component: {fileID: 6939143993260173457}
   - component: {fileID: 8953146856441145807}
+  - component: {fileID: 1015644237550875973}
   m_Layer: 6
   m_Name: body
   m_TagString: Untagged
@@ -1218,7 +1219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f39ce698aac3240ab505dbd016f7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.ObjectBody2D
-  _ThinPlatform: {fileID: 0}
+  _ThinPlatform: {fileID: 3053560954115820419}
 --- !u!114 &6939143993260173457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1248,7 +1249,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.InteractableCollider
   _MyProperty: 1
-  _InteractableWith: 0
+  _InteractableWith: 32
+--- !u!114 &1015644237550875973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866702471980408876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760e9d0c91c8f744eb6b9fa89b1fed14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerItemInteractor
+  _Interactor: {fileID: 8953146856441145807}
 --- !u!1 &6200084657353883669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,7 +1506,6 @@ GameObject:
   - component: {fileID: 5458843668528486821}
   - component: {fileID: 6410568853349192858}
   - component: {fileID: 6795966119112122912}
-  - component: {fileID: 6046232114153740205}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1673,15 +1686,3 @@ MonoBehaviour:
   OnStatPointChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6046232114153740205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9098781383644554432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 760e9d0c91c8f744eb6b9fa89b1fed14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerItemInteractor

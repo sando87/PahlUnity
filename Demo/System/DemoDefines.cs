@@ -106,7 +106,7 @@ namespace PahlUnity.Demo
     [System.Serializable]
     public class InGamePlayingData : SaveDataBase
     {
-        public Dictionary<long, PlayerData> Characters = new Dictionary<long, PlayerData>();
+        public PlayerData Data = new PlayerData();
     }
 
     [System.Serializable]
