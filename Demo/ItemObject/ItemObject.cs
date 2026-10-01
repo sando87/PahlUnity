@@ -25,9 +25,9 @@ namespace PahlUnity.Demo
             }
         }
 
-        public void Init(ItemInstInfo itemInstData)
+        public void Init(ItemSpecData itemSpecData)
         {
-            ItemInstData = itemInstData;
+            ItemInstData = new ItemInstInfo(itemSpecData);
         }
 
         public virtual void OnDrop()

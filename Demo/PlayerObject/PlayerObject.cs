@@ -101,7 +101,7 @@ namespace PahlUnity.Demo
 
                 if (saveData.IsEquipped)
                 {
-                    mEquip.TryEquip(instData, 0);
+                    mEquip.TryEquip(instData, instData.SaveData.PositionIndex);
                 }
                 else
                 {

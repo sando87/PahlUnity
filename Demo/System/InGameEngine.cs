@@ -9,8 +9,10 @@ namespace PahlUnity.Demo
 	{
 		[SerializeField] PlayerObject _PlayerPrefab = null;
 		[SerializeField] Transform _PlayerSpawnPoint = null;
+		[SerializeField] ItemObject _ItemPrefab = null;
 
 		public PlayerObject Player { get; private set; }
+		public ItemObject ItemPrefab => _ItemPrefab;
 
 		public async UniTask StartGame()
 		{
