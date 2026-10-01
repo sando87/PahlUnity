@@ -33,6 +33,7 @@ namespace PahlUnity.Demo
         public int Level => mSaveData == null ? 1 : mSaveData.Level;
         public bool IsStackable => mSpecRawData.IsStackable;
         public int MaxStackCount => mSpecRawData.MaxStackCount;
+        public string Name => mSpecRawData.ItemID;
         public int RandomSeed => (int)mInstanceID;
         public ItemSpecData SpecData => mSpecRawData;
         public ItemSaveData SaveData => mSaveData;

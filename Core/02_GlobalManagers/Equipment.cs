@@ -15,7 +15,7 @@ namespace PahlUnity
     public class Equipment
     {
         /// 새 아이템 장착 (slot, newItem)
-        public event Action<IEquipItem> OnEquipped;
+        public event Action<IEquipItem, int> OnEquipped;
 
         /// 장비 해제 (slot, removedItem)
         public event Action<IEquipItem> OnUnequipped;
@@ -54,13 +54,17 @@ namespace PahlUnity
 
         public IEquipItem GetEquipment(EquipmentSlotType slot, int index)
         {
-            LOG.errorif(!IsValid(slot, index));
+            if (!IsValid(slot, index))
+                return null;
+
             return mEquipments[slot][index];
         }
 
         public IReadOnlyList<IEquipItem> GetEquipments(EquipmentSlotType slot)
         {
-            LOG.errorif(!mEquipments.ContainsKey(slot));
+            if (!mEquipments.ContainsKey(slot))
+                return null;
+
             return mEquipments[slot];
         }
 
@@ -126,7 +130,7 @@ namespace PahlUnity
             if (oldItem != null)
                 OnUnequipped?.Invoke(oldItem);
 
-            OnEquipped?.Invoke(item);
+            OnEquipped?.Invoke(item, index);
             return true;
         }
 

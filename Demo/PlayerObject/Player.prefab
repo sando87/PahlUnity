@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Inventory
   _SlotCount: 20
+  _ItemList: []
 --- !u!114 &6513947197355905360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbcd22e601e58643b7635c237496933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.EquipmentMono
-  _EquipSlotConfig: []
+  _EquipSlotConfig:
+  - SlotType: 1
+    SlotCount: 3
 --- !u!114 &4944911782506263070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1585,6 +1588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerObject
   _PlayerSpecData: {fileID: 11400000, guid: 181d80a19adc0124dbc3714d241ff824, type: 2}
+  _EquipItemIndex: 0
 --- !u!114 &2487422465200051258
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace PahlUnity
@@ -9,6 +10,7 @@ namespace PahlUnity
         long ResourceID { get; }
         bool IsStackable { get; }
         int MaxStackCount { get; }
+        string Name { get; }
     }
 
     public class Inventory : MonoBehaviour
@@ -206,6 +208,26 @@ namespace PahlUnity
             }
 
             return -1;
+        }
+
+
+
+
+        [Header("===== Editor Area =====")]
+        bool IsPlayMode => Application.isPlaying;
+        [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
+        List<string> _ItemList = new List<string>();
+        [Button("UpdateItemList"), ShowIf(nameof(IsPlayMode))]
+        void UpdateItemList()
+        {
+            _ItemList.Clear();
+            foreach (InventorySlot slot in mSlots)
+            {
+                if (slot.IsEmpty)
+                    continue;
+
+                _ItemList.Add($"[{slot.PositionIndex}] {slot.Item.Name} : {slot.Count}");
+            }
         }
     }
 }

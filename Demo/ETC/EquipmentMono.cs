@@ -1,7 +1,8 @@
-using UnityEngine;
-using PahlUnity;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using NaughtyAttributes;
+using PahlUnity;
+using UnityEngine;
 
 namespace PahlUnity.Demo
 {
@@ -20,7 +21,7 @@ namespace PahlUnity.Demo
         Equipment mEquipment = null;
         SpecModifier mSpecModifier = null;
 
-        public event Action<ItemInstInfo> OnEquippedItem;
+        public event Action<ItemInstInfo, int> OnEquippedItem;
         public event Action<ItemInstInfo> OnUnequippedItem;
 
         public SpecModifier SpecModifier => mSpecModifier;
@@ -42,12 +43,12 @@ namespace PahlUnity.Demo
             mEquipment.OnEquipped += OnEquipped;
             mEquipment.OnUnequipped += OnUnequipped;
         }
-        void OnEquipped(IEquipItem item)
+        void OnEquipped(IEquipItem item, int index)
         {
             ItemInstInfo itemInstData = item as ItemInstInfo;
             LOG.errorif(itemInstData == null);
             SpecModifier.AddModifier(itemInstData.GetSpecFieldValues());
-            OnEquippedItem?.Invoke(itemInstData);
+            OnEquippedItem?.Invoke(itemInstData, index);
         }
         void OnUnequipped(IEquipItem item)
         {
@@ -96,6 +97,35 @@ namespace PahlUnity.Demo
         public void ExpandMaxSlotCount(EquipmentSlotType slotType, int expandCount)
         {
             mEquipment.ExpandMaxSlotCount(slotType, expandCount);
+        }
+
+
+
+
+        [Header("===== Editor Area =====")]
+        bool IsPlayMode => Application.isPlaying;
+        [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
+        List<string> _EquipItemList = new List<string>();
+        [Button("UpdateEquipItemList"), ShowIf(nameof(IsPlayMode))]
+        void UpdateEquipItemList()
+        {
+            _EquipItemList.Clear();
+            foreach (var slotType in Enum.GetValues(typeof(EquipSlotType)))
+            {
+                if ((EquipSlotType)slotType == EquipSlotType.None)
+                    continue;
+
+                IReadOnlyList<IEquipItem> items = mEquipment.GetEquipments((int)slotType);
+                if (items == null)
+                    continue;
+
+                for (int index = 0; index < items.Count; index++)
+                {
+                    ItemInstInfo itemInstData = items[index] as ItemInstInfo;
+                    if (itemInstData != null)
+                        _EquipItemList.Add($"{slotType}[{index}] : {itemInstData.SpecData.ItemID}");
+                }
+            }
         }
     }
 }

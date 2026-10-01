@@ -16,6 +16,7 @@ MonoBehaviour:
   _ItemDesc: ItemDesc
   _IsStackable: 0
   _MaxStackCount: 1
+  _EquipSlot: 1
   _ItemIcon: {fileID: -3338749442709606003, guid: 13b8859b2964d084eadd92893211dcb7, type: 3}
   _Specs:
   - _Key: MaxHP
