@@ -103,16 +103,19 @@ namespace PahlUnity.Demo
 
 
         [Header("===== Editor Area =====")]
-        bool IsPlayMode => Application.isPlaying;
         [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
-        List<string> _EquipItemList = new List<string>();
+        List<ItemViewerOnInspector> _EquipItemList = new List<ItemViewerOnInspector>();
+        bool IsPlayMode => Application.isPlaying;
         [Button("UpdateEquipItemList"), ShowIf(nameof(IsPlayMode))]
-        void UpdateEquipItemList()
+        public void UpdateEquipItemList()
         {
             _EquipItemList.Clear();
-            foreach (var slotType in Enum.GetValues(typeof(EquipSlotType)))
+            if (mEquipment == null)
+                return;
+
+            foreach (EquipSlotType slotType in Enum.GetValues(typeof(EquipSlotType)))
             {
-                if ((EquipSlotType)slotType == EquipSlotType.None)
+                if (slotType == EquipSlotType.None)
                     continue;
 
                 IReadOnlyList<IEquipItem> items = mEquipment.GetEquipments((int)slotType);
@@ -122,8 +125,16 @@ namespace PahlUnity.Demo
                 for (int index = 0; index < items.Count; index++)
                 {
                     ItemInstInfo itemInstData = items[index] as ItemInstInfo;
-                    if (itemInstData != null)
-                        _EquipItemList.Add($"{slotType}[{index}] : {itemInstData.SpecData.ItemID}");
+                    if (itemInstData == null)
+                        continue;
+
+                    ItemViewerOnInspector itemViewer = new ItemViewerOnInspector();
+                    itemViewer.Name = itemInstData.Name;
+                    itemViewer.Index = index;
+                    itemViewer.Count = 1;
+                    itemViewer.IsEquipped = true;
+                    itemViewer.BaseObj = this.ExGetBase();
+                    _EquipItemList.Add(itemViewer);
                 }
             }
         }

@@ -214,20 +214,38 @@ namespace PahlUnity
 
 
         [Header("===== Editor Area =====")]
-        bool IsPlayMode => Application.isPlaying;
         [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
-        List<string> _ItemList = new List<string>();
+        List<ItemViewerOnInspector> _ItemList = new List<ItemViewerOnInspector>();
+        bool IsPlayMode => Application.isPlaying;
         [Button("UpdateItemList"), ShowIf(nameof(IsPlayMode))]
-        void UpdateItemList()
+        public void UpdateItemList()
         {
             _ItemList.Clear();
+            if (mSlots == null)
+                return;
+
             foreach (InventorySlot slot in mSlots)
             {
                 if (slot.IsEmpty)
                     continue;
 
-                _ItemList.Add($"[{slot.PositionIndex}] {slot.Item.Name} : {slot.Count}");
+                ItemViewerOnInspector itemViewer = new ItemViewerOnInspector();
+                itemViewer.Name = slot.Item.Name;
+                itemViewer.Index = slot.PositionIndex;
+                itemViewer.Count = slot.Count;
+                itemViewer.BaseObj = this.ExGetBase();
+                _ItemList.Add(itemViewer);
             }
         }
+    }
+
+    [Serializable]
+    public class ItemViewerOnInspector
+    {
+        public string Name;
+        public int Index;
+        public int Count;
+        public bool IsEquipped;
+        public BaseObject BaseObj;
     }
 }
