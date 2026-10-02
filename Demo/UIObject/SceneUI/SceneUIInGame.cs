@@ -9,6 +9,10 @@ namespace PahlUnity.Demo
 {
     public class SceneUIInGame : ScreenUIBase
     {
+        [SerializeField] private Image _HPBar;
+        [SerializeField] private Image _MPBar;
+        [SerializeField] private TextMeshProUGUI _GoldText;
+
         PopupMessageBox mSystemMsgPopup = null;
 
         void Start()
@@ -19,6 +23,8 @@ namespace PahlUnity.Demo
 
         void Update()
         {
+            UpdateUIState();
+
             if (InputManager.Instance.JustPressed(InputActionNameHash.System))
             {
                 if (mSystemMsgPopup != null)
@@ -31,6 +37,22 @@ namespace PahlUnity.Demo
                     ShowSystemMenu().Forget();
                 }
             }
+        }
+
+        void UpdateUIState()
+        {
+            if (InGameManager.Instance.Engine == null)
+                return;
+            if (InGameManager.Instance.Engine.Player == null)
+                return;
+
+            Health playerHealth = InGameManager.Instance.Engine.Player.ExGetCompInBase<Health>();
+            if (playerHealth == null)
+                return;
+                
+            _HPBar.fillAmount = playerHealth.HpRate;
+            _MPBar.fillAmount = playerHealth.ManaRate;
+            // _GoldText.text = InGameManager.Instance.Engine.Player.Gold.ToString();
         }
 
         async UniTask ShowSystemMenu()
