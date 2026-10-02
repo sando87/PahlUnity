@@ -10,8 +10,9 @@ namespace PahlUnity.Demo
         [SerializeField] SkillSpecData _SkillSpecData = null;
 
         protected BaseObject mBaseObject;
-        protected SpecBase mSpecBase;
+        protected SpecBase mSkillSpec;
         protected SkillInstData mSkillInstData;
+        protected PlayerController2D mPlayerCtrl = null;
 
         protected bool IsEquipped { get; private set; } = false;
         protected SkillInputState InputState { get; private set; } = SkillInputState.None;
@@ -19,7 +20,8 @@ namespace PahlUnity.Demo
         protected virtual void Awake()
         {
             mBaseObject = this.ExGetBase();
-            mSpecBase = GetComponent<SpecBase>();
+            mSkillSpec = GetComponent<SpecBase>();
+            mPlayerCtrl = mBaseObject.GetComp<PlayerController2D>();
         }
 
         protected virtual void Start()
@@ -31,9 +33,9 @@ namespace PahlUnity.Demo
         {
             mSkillInstData = new SkillInstData(_SkillSpecData);
 
-            mSpecBase.SetSpecs(mSkillInstData.SpecData.Specs, 0);
+            mSkillSpec.SetSpecs(mSkillInstData.SpecData.Specs, 0);
 
-            mSpecBase.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
+            mSkillSpec.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
 
         public virtual void OnEquip()
@@ -55,6 +57,25 @@ namespace PahlUnity.Demo
         public virtual void OnInputUp()
         {
             InputState = SkillInputState.JustUp;
+        }
+
+
+        public void DoDamage(Collider2D col)
+        {
+            float damage = 1;
+            Health health = col.ExGetBase().Health;
+            if (health != null)
+            {
+                health.GetDamaged(new DamageInfo(damage), mBaseObject);
+            }
+        }
+
+        protected float GetAttackSpeedMultiplier()
+        {
+            float percentModifier = mBaseObject.Spec.GetPercentModifier(SpecFields.AttackSpeed);
+            float multiplier = percentModifier / 100f;
+            float finalMultiplier = multiplier > 0 ? 1f + multiplier : (1 / (1f - multiplier));
+            return finalMultiplier;
         }
     }
 }

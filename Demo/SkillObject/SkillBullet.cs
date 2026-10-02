@@ -9,30 +9,23 @@ namespace PahlUnity.Demo
 {
     public class SkillBullet : SkillObject
     {
-        [SerializeField] protected string _AnimStateName = "Attack";
-
         [SerializeField] protected ProjectileBase2D _ProjPrefab;
         [SerializeField] protected Transform _FirePoint;
         [SerializeField] protected bool _AlignFireRotation = false;
         [SerializeField] protected bool _IsMultiShot = false;
-        [SerializeField, ShowIf(nameof(_IsMultiShot))] protected float _ProjSpreadAngle = 10f;
-        [SerializeField] protected int _BaseProjCount = 1;
+        [SerializeField, ShowIf(nameof(_IsMultiShot))] protected float _ProjSpreadAngle = 60f;
+        [SerializeField, ShowIf(nameof(_IsMultiShot))] protected int _BaseProjCount = 1;
 
         [Foldout("Events"), SerializeField] protected UnityEvent _OnStart;
         [Foldout("Events"), SerializeField] protected UnityEvent<int> _OnFire;
         [Foldout("Events"), SerializeField] protected UnityEvent _OnEnd;
 
-        protected PlayerController2D mPlayerCtrl = null;
-
-        protected int mAnimStateNameHash = 0;
-
-        private bool mIsAttacking = false;
+        bool mIsAttacking = false;
+        float mAttackTime = 0f;
 
         protected override void Awake()
         {
             base.Awake();
-            mPlayerCtrl = mBaseObject.GetComp<PlayerController2D>();
-            mAnimStateNameHash = Animator.StringToHash(_AnimStateName);
         }
 
         public override void OnInputPressing()
@@ -67,7 +60,20 @@ namespace PahlUnity.Demo
 
         bool IsCanAttack()
         {
-            if (mPlayerCtrl.IsCurrentState(PlayerState.Normal))
+            if (mPlayerCtrl.IsCurrentState(PlayerState.Normal)
+            && IsCooltimeOver())
+                return true;
+
+            return false;
+        }
+
+        bool IsCooltimeOver()
+        {
+            float cooltime = mSkillSpec[SpecFields.Cooltime];
+            if (cooltime <= 0)
+                return true;
+
+            if (MyUtils.IsCooltimeOver(mAttackTime, cooltime))
                 return true;
 
             return false;
@@ -79,13 +85,21 @@ namespace PahlUnity.Demo
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, true);
             mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, GetAttackSpeedMultiplier());
             mBaseObject.Anim.SetLayerWeight(1, 1);
-            mBaseObject.Anim.PlayAnim(mAnimStateNameHash, OnFireAttackState, null, 1);
+            mBaseObject.Anim.PlayAnim(AnimStateNameHash.Attack, OnFireAttackState, null, 1);
 
             _OnStart.Invoke();
         }
         void OnFireAttackState(int idx)
         {
-            CreateProjectiles();
+            mAttackTime = Time.time;
+            if (_IsMultiShot)
+            {
+                CreateProjectiles();
+            }
+            else
+            {
+                CreateProjectile();
+            }
             _OnFire.Invoke(idx);
         }
         void StopAttackState()
@@ -97,7 +111,7 @@ namespace PahlUnity.Demo
             _OnEnd.Invoke();
         }
 
-        public virtual void CreateProjectiles()
+        void CreateProjectile()
         {
             Vector3 forwardDir = mBaseObject.Body2D.FrontDirVec2;
             Vector3 startPos = _FirePoint.position;
@@ -106,22 +120,27 @@ namespace PahlUnity.Demo
             ProjectileBase2D.Create(_ProjPrefab, startPos, forwardDir, targetLayerMask);
         }
 
-        public void DoDamage(Collider2D col)
+        void CreateProjectiles()
         {
-            float damage = 1;
-            Health health = col.ExGetBase().Health;
-            if (health != null)
+            Vector3 forwardDir = mBaseObject.Body2D.FrontDirVec2;
+            Vector3 startPos = _FirePoint.position;
+            int targetLayerMask = 0; //1 << LayerID.Enemy | 1 << LayerID.Terrain;
+            int projCount = _BaseProjCount;
+
+            for (int i = 0; i < projCount; ++i)
             {
-                health.GetDamaged(new DamageInfo(damage), mBaseObject);
+                float angleOffset = GetSpreadAngle(i, projCount, _ProjSpreadAngle);
+                Vector2 attackDir = Quaternion.AngleAxis(angleOffset, Vector3.forward) * forwardDir;
+                ProjectileBase2D.Create(_ProjPrefab, startPos, attackDir, targetLayerMask);
             }
         }
-
-        float GetAttackSpeedMultiplier()
+        float GetSpreadAngle(int index, int count, float totalSpread)
         {
-            float percentModifier = mBaseObject.Spec.GetPercentModifier(SpecFields.AttackSpeed);
-            float multiplier = percentModifier / 100f;
-            float finalMultiplier = multiplier > 0 ? 1f + multiplier : (1 / (1f - multiplier));
-            return finalMultiplier;
+            if (count <= 1)
+                return 0f;
+
+            float step = totalSpread / (count - 1);
+            return -totalSpread * 0.5f + step * index;
         }
     }
 }

@@ -1,11 +1,11 @@
-using UnityEngine;
-using PahlUnity;
-using System.Collections.Generic;
 using System;
-using UnityEngine.Events;
+using System.Collections.Generic;
 using NaughtyAttributes;
+using PahlUnity;
+using UnityEngine;
+using UnityEngine.Events;
 
-namespace PahlUnity.Demo
+namespace PahlUnity.Demo.ThreeD
 {
     public class ProjectileBoomerang : ProjectileBase
     {

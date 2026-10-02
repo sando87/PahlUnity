@@ -1476,7 +1476,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.SkillBullet
   _SkillSpecData: {fileID: 11400000, guid: f27804cc580fa2b47ad6f75e67849084, type: 2}
-  _AnimStateName: Attack
   _ProjPrefab: {fileID: 3994577398865098462}
   _FirePoint: {fileID: 8785663149568534261}
   _AlignFireRotation: 0
@@ -1589,9 +1588,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerObject
   _PlayerSpecData: {fileID: 11400000, guid: 181d80a19adc0124dbc3714d241ff824, type: 2}
-  _EquipItemIndex: 0
-  _UnequipItemSlotType: 1
-  _UnequipItemIndex: 0
 --- !u!114 &2487422465200051258
 MonoBehaviour:
   m_ObjectHideFlags: 0

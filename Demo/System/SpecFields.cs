@@ -8,5 +8,6 @@
       public static readonly int MaxHP = PahlUnity.StableHash.ToInt32("MaxHP");
       public static readonly int MaxMP = PahlUnity.StableHash.ToInt32("MaxMP");
       public static readonly int MoveSpeed = PahlUnity.StableHash.ToInt32("MoveSpeed");
+      public static readonly int Cooltime = PahlUnity.StableHash.ToInt32("Cooltime");
    }
 }
