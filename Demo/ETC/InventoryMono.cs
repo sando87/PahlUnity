@@ -37,6 +37,11 @@ namespace PahlUnity.Demo
             return mInventory.AddItem(item, count);
         }
 
+        public bool HasEmptySlot()
+        {
+            return mInventory.HasEmptySlot();
+        }
+
         public int RemoveItem(int slotIndex, int count = 1)
         {
             return mInventory.RemoveItem(slotIndex, count);
@@ -97,6 +102,7 @@ namespace PahlUnity.Demo
         public string Name;
         public int Index;
         public int Count;
+        public EquipSlotType SlotType;
         public bool IsEquipped;
         public BaseObject BaseObj;
     }

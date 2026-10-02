@@ -176,6 +176,12 @@ namespace PahlUnity
             return null;
         }
 
+        public bool HasEmptySlot()
+        {
+            InventorySlot emptySlot = FindEmptySlot();
+            return emptySlot != null;
+        }
+
         public int CountItemSlot()
         {
             int count = 0;

@@ -132,6 +132,7 @@ namespace PahlUnity.Demo
                     itemViewer.Name = itemInstData.Name;
                     itemViewer.Index = index;
                     itemViewer.Count = 1;
+                    itemViewer.SlotType = slotType;
                     itemViewer.IsEquipped = true;
                     itemViewer.BaseObj = this.ExGetBase();
                     _EquipItemList.Add(itemViewer);

@@ -44,12 +44,11 @@ namespace PahlUnity.Demo
             mItemInteractor.OnTryPickupItem = OnTryPickupItem;
         }
 
-        void OnItemAdded(IInvenItem item, int count, int positionIndex)
+        void OnItemAdded(ItemInstInfo item, int count, int positionIndex)
         {
-            ItemInstInfo instData = item as ItemInstInfo;
-            instData.SaveData.IsEquipped = false;
-            instData.SaveData.PositionIndex = positionIndex;
-            mPlayerSaveData.Items[instData.InstanceID] = instData.SaveData;
+            item.SaveData.IsEquipped = false;
+            item.SaveData.PositionIndex = positionIndex;
+            mPlayerSaveData.Items[item.InstanceID] = item.SaveData;
             SaveManager<InGamePlayingData>.Instance.SaveImmediate();
         }
 
@@ -63,17 +62,22 @@ namespace PahlUnity.Demo
 
         public void DoEquipItem(int invenSlotIndex)
         {
-            ItemInstInfo item = mInven.GetItem(invenSlotIndex) as ItemInstInfo;
+            ItemInstInfo item = mInven.GetItem(invenSlotIndex);
             if (item != null)
             {
-                mInven.RemoveItem(item);
-                mEquip.TryEquip(item);
+                if (mEquip.TryEquip(item))
+                {
+                    mInven.RemoveItem(item);
+                }
             }
         }
         public void DoUnequipItem(EquipSlotType itemSlotType, int invenSlotIndex)
         {
             ItemInstInfo item = mEquip.GetEquipment((int)itemSlotType, invenSlotIndex);
-            if (item != null)
+            if (item == null)
+                return;
+
+            if (mInven.HasEmptySlot())
             {
                 mEquip.Unequip(item);
                 mInven.AddItem(item);
