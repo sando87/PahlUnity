@@ -13,10 +13,8 @@ namespace PahlUnity
         string Name { get; }
     }
 
-    public class Inventory : MonoBehaviour
+    public class Inventory
     {
-        [SerializeField] private int _SlotCount = 20;
-
         private List<InventorySlot> mSlots;
 
         public IReadOnlyList<InventorySlot> Slots => mSlots;
@@ -25,22 +23,22 @@ namespace PahlUnity
         public event Action<IInvenItem, int> OnItemRemoved;
         public event Action<IInvenItem, int> OnItemMoved;
 
-        void Awake()
+        public Inventory(int slotCount)
         {
-            mSlots = new List<InventorySlot>(_SlotCount);
+            mSlots = new List<InventorySlot>(slotCount);
 
-            for (int i = 0; i < _SlotCount; i++)
+            for (int i = 0; i < slotCount; i++)
             {
                 mSlots.Add(new InventorySlot(i));
             }
         }
 
-        public InventorySlot GetItem(int slotIndex)
+        public IInvenItem GetItem(int slotIndex)
         {
             if (slotIndex >= mSlots.Count)
                 return null;
 
-            return mSlots[slotIndex];
+            return mSlots[slotIndex].IsEmpty ? null : mSlots[slotIndex].Item;
         }
 
         public int AddItem(IInvenItem item, int count = 1)
@@ -209,43 +207,5 @@ namespace PahlUnity
 
             return -1;
         }
-
-
-
-
-        [Header("===== Editor Area =====")]
-        [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
-        List<ItemViewerOnInspector> _ItemList = new List<ItemViewerOnInspector>();
-        bool IsPlayMode => Application.isPlaying;
-        [Button("UpdateItemList"), ShowIf(nameof(IsPlayMode))]
-        public void UpdateItemList()
-        {
-            _ItemList.Clear();
-            if (mSlots == null)
-                return;
-
-            foreach (InventorySlot slot in mSlots)
-            {
-                if (slot.IsEmpty)
-                    continue;
-
-                ItemViewerOnInspector itemViewer = new ItemViewerOnInspector();
-                itemViewer.Name = slot.Item.Name;
-                itemViewer.Index = slot.PositionIndex;
-                itemViewer.Count = slot.Count;
-                itemViewer.BaseObj = this.ExGetBase();
-                _ItemList.Add(itemViewer);
-            }
-        }
-    }
-
-    [Serializable]
-    public class ItemViewerOnInspector
-    {
-        public string Name;
-        public int Index;
-        public int Count;
-        public bool IsEquipped;
-        public BaseObject BaseObj;
     }
 }

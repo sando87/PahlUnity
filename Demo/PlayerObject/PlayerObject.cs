@@ -15,14 +15,14 @@ namespace PahlUnity.Demo
         BaseObject mBaseObj = null;
         PlayerItemInteractor mItemInteractor = null;
 
-        Inventory mInven = null;
+        InventoryMono mInven = null;
         EquipmentMono mEquip = null;
 
         void Awake()
         {
             mBaseObj = this.ExGetBase();
 
-            mInven = mBaseObj.GetComp<Inventory>();
+            mInven = mBaseObj.GetComp<InventoryMono>();
 
             mEquip = mBaseObj.GetComp<EquipmentMono>();
             mItemInteractor = mBaseObj.GetComp<PlayerItemInteractor>();
@@ -63,7 +63,7 @@ namespace PahlUnity.Demo
 
         public void DoEquipItem(int invenSlotIndex)
         {
-            ItemInstInfo item = mInven.GetItem(invenSlotIndex).Item as ItemInstInfo;
+            ItemInstInfo item = mInven.GetItem(invenSlotIndex) as ItemInstInfo;
             if (item != null)
             {
                 mInven.RemoveItem(item);
@@ -140,25 +140,6 @@ namespace PahlUnity.Demo
             }
 
             return false;
-        }
-
-
-
-
-        [Header("===== Editor Area =====")]
-        [SerializeField, ShowIf(nameof(IsPlayMode))] int _EquipItemIndex = 0;
-        bool IsPlayMode => Application.isPlaying;
-        [Button("EquipItem"), ShowIf(nameof(IsPlayMode))]
-        void EquipItem()
-        {
-            DoEquipItem(_EquipItemIndex);
-        }
-        [SerializeField, ShowIf(nameof(IsPlayMode))] EquipSlotType _UnequipItemSlotType = EquipSlotType.Weapon;
-        [SerializeField, ShowIf(nameof(IsPlayMode))] int _UnequipItemIndex = 0;
-        [Button("UnequipItem"), ShowIf(nameof(IsPlayMode))]
-        void UnequipItem()
-        {
-            DoUnequipItem(_UnequipItemSlotType, _UnequipItemIndex);
         }
     }
 }

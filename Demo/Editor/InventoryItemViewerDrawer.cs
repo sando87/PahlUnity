@@ -55,7 +55,7 @@ namespace PahlUnity.Demo
 
         static void Equip(SerializedProperty property, int slotIndex)
         {
-            Inventory inventory = property.serializedObject.targetObject as Inventory;
+            InventoryMono inventory = property.serializedObject.targetObject as InventoryMono;
             if (inventory == null)
                 return;
 
@@ -85,7 +85,7 @@ namespace PahlUnity.Demo
             if (behaviour == null)
                 return;
 
-            Inventory inventory = behaviour.ExGetCompInBase<Inventory>();
+            InventoryMono inventory = behaviour.ExGetCompInBase<InventoryMono>();
             if (inventory == null)
                 return;
 
@@ -99,12 +99,12 @@ namespace PahlUnity.Demo
         }
     }
 
-    [CustomEditor(typeof(Inventory))]
+    [CustomEditor(typeof(InventoryMono))]
     public class InventoryEditor : NaughtyInspector
     {
         override protected void OnEnable()
         {
-            Inventory inventory = (Inventory)target;
+            InventoryMono inventory = (InventoryMono)target;
             if (Application.isPlaying)
                 inventory.UpdateItemList();
 

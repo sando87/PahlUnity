@@ -186,7 +186,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7199930416606503046}
-  - component: {fileID: 3881607022730483698}
+  - component: {fileID: 8541402457853057402}
   - component: {fileID: 6513947197355905360}
   - component: {fileID: 4944911782506263070}
   m_Layer: 6
@@ -211,7 +211,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1639914491777645587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3881607022730483698
+--- !u!114 &8541402457853057402
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,9 +220,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 814521174775641908}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78bbc008eccb89544b21bb75419d575b, type: 3}
+  m_Script: {fileID: 11500000, guid: a5dde593315d2d4478570514cc8380cb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Inventory
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.InventoryMono
   _SlotCount: 20
   _ItemList: []
 --- !u!114 &6513947197355905360
@@ -240,6 +240,7 @@ MonoBehaviour:
   _EquipSlotConfig:
   - SlotType: 1
     SlotCount: 3
+  _EquipItemList: []
 --- !u!114 &4944911782506263070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589,6 +1590,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerObject
   _PlayerSpecData: {fileID: 11400000, guid: 181d80a19adc0124dbc3714d241ff824, type: 2}
   _EquipItemIndex: 0
+  _UnequipItemSlotType: 1
+  _UnequipItemIndex: 0
 --- !u!114 &2487422465200051258
 MonoBehaviour:
   m_ObjectHideFlags: 0
