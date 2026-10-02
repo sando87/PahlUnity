@@ -32,9 +32,10 @@ namespace PahlUnity.Demo
         {
             // Drop Random Item
             ItemSpecData dropItemSpec = TableDataContainer<ItemSpecData>.Instance.GetRandomItem();
-            ItemObject itemPrefab = InGameManager.Instance.Engine.ItemPrefab;
-            ItemObject itemObj = Instantiate(itemPrefab, transform.position, Quaternion.identity);
-            itemObj.Init(dropItemSpec);
+            GameObject itemPrefab = ResourceManager.Instance.GetPrefab("Item");
+            GameObject itemObj = Instantiate(itemPrefab, transform.position, Quaternion.identity);
+            ItemObject item = itemObj.GetComponentInChildren<ItemObject>();
+            item.Init(dropItemSpec);
         }
     }
 }

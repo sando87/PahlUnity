@@ -7,18 +7,17 @@ namespace PahlUnity.Demo
 {
 	public class InGameEngine : MonoBehaviour
 	{
-		[SerializeField] PlayerObject _PlayerPrefab = null;
 		[SerializeField] Transform _PlayerSpawnPoint = null;
-		[SerializeField] ItemObject _ItemPrefab = null;
 
 		public PlayerObject Player { get; private set; }
-		public ItemObject ItemPrefab => _ItemPrefab;
 
 		public async UniTask StartGame()
 		{
 			await UniTask.Delay(1000);
 
-			// Player = Instantiate(_PlayerPrefab, _PlayerSpawnPoint.position, _PlayerSpawnPoint.rotation, transform);
+			GameObject playerPrefab = ResourceManager.Instance.GetPrefab("Player");
+			GameObject player = Instantiate(playerPrefab, _PlayerSpawnPoint.position, _PlayerSpawnPoint.rotation, transform);
+			Player = player.GetComponentInChildren<PlayerObject>();
 
 			await UniTask.Delay(1000);
 		}
