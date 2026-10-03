@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace PahlUnity.Demo
 {
-    public class SkillBullet : SkillObject
+    public class SkillBasic : SkillObject
     {
         [SerializeField] protected ProjectileBase2D _ProjPrefab;
         [SerializeField] protected Transform _FirePoint;

@@ -2997,7 +2997,7 @@ GameObject:
   - component: {fileID: 677016693353787288}
   - component: {fileID: 4305235549668557116}
   m_Layer: 6
-  m_Name: SkillBullet
+  m_Name: SkillGathling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
