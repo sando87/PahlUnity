@@ -7,20 +7,21 @@ namespace PahlUnity.Demo.TwoD
     {
         [SerializeField] private float _ReturnReachDistance = 0.5f;
 
-        BaseObject mOwner = null;
         bool mIsReturning = false;
-
-        public static ProjectileBoomerang Create(ProjectileBoomerang prefab, Vector2 position, Vector2 direction, int targetLayerMask, BaseObject owner)
-        {
-            ProjectileBase2D obj = ProjectileBase2D.Create(prefab, position, direction, targetLayerMask);
-            ProjectileBoomerang boomerang = obj as ProjectileBoomerang;
-            boomerang.mOwner = owner;
-            return boomerang;
-        }
 
         protected override void Update()
         {
-            base.Update();
+            if (Stats.Interval > 0)
+                HitEventEveryInterval();
+
+            if (Stats.AimToVelocity)
+            {
+                AimToVelocity();
+            }
+            else if (Stats.RotateSpeed != 0)
+            {
+                transform.Rotate(0, 0, Stats.RotateSpeed * Time.deltaTime);
+            }
 
             UpdateBoomerangMovement();
         }
@@ -56,10 +57,10 @@ namespace PahlUnity.Demo.TwoD
 
         Vector2 GetReturnTargetPos()
         {
-            if (mOwner == null)
+            if (mCaster == null)
                 return mStartPos;
 
-            ObjectBody2D ownerBody = mOwner.GetComp<ObjectBody2D>();
+            ObjectBody2D ownerBody = mCaster.GetComp<ObjectBody2D>();
             if (ownerBody == null)
                 return mStartPos;
 

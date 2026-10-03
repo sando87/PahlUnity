@@ -50,7 +50,7 @@ namespace PahlUnity.Demo
             Vector2 startPos = mBase.Body2D.Center.ExToVector2() + (mBase.Body2D.FrontDirVec2 * 0.5f);
             Vector2 attackDir = mBase.Body2D.FrontDirVec2;
             int targetLayerMask = 0;
-            ProjectileBase2D obj = ProjectileBase2D.Create(_ProjectilePrefab, startPos, attackDir, targetLayerMask);
+            ProjectileBase2D obj = ProjectileBase2D.Create(_ProjectilePrefab, startPos, attackDir, targetLayerMask, mBase);
             obj.OnHit += (col) =>
             {
                 Health health = col.ExGetCompInBase<Health>();

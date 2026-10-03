@@ -130,7 +130,7 @@ namespace PahlUnity.Demo
             Vector3 startPos = _FirePoint.position;
             int targetLayerMask = 0; //1 << LayerID.Enemy | 1 << LayerID.Terrain;
 
-            ProjectileBase2D.Create(_ProjPrefab, startPos, forwardDir, targetLayerMask);
+            ProjectileBase2D.Create(_ProjPrefab, startPos, forwardDir, targetLayerMask, mBaseObject);
         }
 
         void CreateProjectiles()
@@ -144,7 +144,7 @@ namespace PahlUnity.Demo
             {
                 float angleOffset = GetSpreadAngle(i, projCount, _ProjSpreadAngle);
                 Vector2 attackDir = Quaternion.AngleAxis(angleOffset, Vector3.forward) * forwardDir;
-                ProjectileBase2D.Create(_ProjPrefab, startPos, attackDir, targetLayerMask);
+                ProjectileBase2D.Create(_ProjPrefab, startPos, attackDir, targetLayerMask, mBaseObject);
             }
         }
         float GetSpreadAngle(int index, int count, float totalSpread)

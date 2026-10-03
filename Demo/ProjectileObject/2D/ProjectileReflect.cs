@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PahlUnity.Demo.TwoD
 {
-    public class ProjectileShuriken : ProjectileBase2D
+    public class ProjectileReflect : ProjectileBase2D
     {
         [SerializeField] private float _EnemyDetectDistance = 5f;
         [SerializeField] private float _EnemyDetectHalfAngle = 30f;
@@ -14,17 +14,10 @@ namespace PahlUnity.Demo.TwoD
         ContactFilter2D mEnemyDetectFilter;
         readonly Collider2D[] mDetectResults = new Collider2D[16];
 
-        public static ProjectileShuriken Create(ProjectileShuriken prefab, Vector2 position, Vector2 direction, int targetLayerMask, int terrainLayerMask, int enemyLayerMask)
-        {
-            ProjectileBase2D obj = ProjectileBase2D.Create(prefab, position, direction, targetLayerMask);
-            ProjectileShuriken shuriken = obj as ProjectileShuriken;
-            shuriken.mTerrainLayerMask = terrainLayerMask;
-            shuriken.mEnemyLayerMask = enemyLayerMask;
-            return shuriken;
-        }
-
         protected override void Start()
         {
+            mTerrainLayerMask = 1 << LayerID.Terrain;
+            mEnemyLayerMask = 1 << LayerID.Enemy;
             OnHit += HandleHit;
             mEnemyDetectFilter = new ContactFilter2D();
             mEnemyDetectFilter.useTriggers = true;

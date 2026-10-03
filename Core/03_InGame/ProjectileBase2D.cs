@@ -22,27 +22,30 @@ namespace PahlUnity
         protected List<HitColliderInfo> mHitColliders = new();
         protected int mTargetLayerMask = 0;
         protected Vector3 mStartPos = Vector3.zero;
+        protected BaseObject mCaster = null;
 
         public event Action OnStart;
         public event Action<Collider2D> OnHit;
         public event Action OnEnd;
 
-        public static ProjectileBase2D Create(ProjectileBase2D prefab, Vector3 position, Vector3 direction, int targetLayerMask)
+        public static ProjectileBase2D Create(ProjectileBase2D prefab, Vector3 position, Vector3 direction, int targetLayerMask, BaseObject caster)
         {
             ProjectileBase2D obj = Instantiate(prefab, position, Quaternion.identity);
             obj.gameObject.SetActive(true);
             obj.mStartPos = position;
             obj.transform.right = direction;
             obj.mTargetLayerMask = targetLayerMask;
+            obj.mCaster = caster;
             obj._AttackCollider.SetTargetLayerMask(targetLayerMask);
             return obj;
         }
-        public static ProjectileBase2D Create(ProjectileBase2D prefab, Vector3 position, Quaternion rotation, int targetLayerMask)
+        public static ProjectileBase2D Create(ProjectileBase2D prefab, Vector3 position, Quaternion rotation, int targetLayerMask, BaseObject caster)
         {
             ProjectileBase2D obj = Instantiate(prefab, position, rotation);
             obj.gameObject.SetActive(true);
             obj.mStartPos = position;
             obj.mTargetLayerMask = targetLayerMask;
+            obj.mCaster = caster;
             obj._AttackCollider.SetTargetLayerMask(targetLayerMask);
             return obj;
         }
@@ -159,7 +162,7 @@ namespace PahlUnity
             }
         }
 
-        void AimToVelocity()
+        protected void AimToVelocity()
         {
             Vector3 velocity = mPhy.Velocity;
             if (velocity == Vector3.zero)
@@ -199,7 +202,7 @@ namespace PahlUnity
                 mBaseObj.DestroyObj();
         }
 
-        void HitEventEveryInterval()
+        protected void HitEventEveryInterval()
         {
             // 현재 Hit된 콜라이더들을 interval마다 OnHit콜백 호출해줌
             double interval = Stats.Interval;
