@@ -52,6 +52,7 @@ namespace PahlUnity
             mBaseObj = this.ExGetBase();
             mPhy = mBaseObj.ExGetCompInBase<ObjectPhysics2D>();
             mBody = mBaseObj.ExGetCompInBase<ObjectBodyBase>();
+            mStartPos = transform.position;
             InitColliderEvents();
 
             OnStart += () => _OnStart?.Invoke();
