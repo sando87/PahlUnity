@@ -33,7 +33,7 @@ namespace PahlUnity
 
             mAnimator.CrossFade(stateNameHash, 0, layer, 0);
         }
-        public void PlayAnim(int stateNameHash, Action<int> onFire, Action onEnd, int layer = 0)
+        public AnimStateEvent PlayAnim(int stateNameHash, Action<int> onFire, Action onEnd, int layer = 0)
         {
             CancelPreviousAnim(layer);
 
@@ -45,6 +45,7 @@ namespace PahlUnity
             };
             SetAnimStateEvent(animStateEvent);
             mAnimator.CrossFade(stateNameHash, 0, layer, 0);
+            return animStateEvent;
         }
         // public void PlayAnim(int stateNameHash, Action onLoopStart, Action<int> onFire, Action<bool> onEnd, int layer = 0)
         // {
@@ -129,6 +130,7 @@ namespace PahlUnity
             if (mAnimStateEvents[layer] != null)
             {
                 mAnimStateEvents[layer].IsCanceled = true;
+                mAnimStateEvents[layer].IsEnd = true;
                 mAnimStateEvents[layer] = null;
             }
         }

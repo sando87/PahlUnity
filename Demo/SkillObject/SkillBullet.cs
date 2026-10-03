@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using NaughtyAttributes;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
@@ -28,20 +29,37 @@ namespace PahlUnity.Demo
             base.Awake();
         }
 
+        public override void OnInputDown()
+        {
+            base.OnInputDown();
+
+            if (mPlayerCtrl.IsCurrentState(PlayerState.Normal)
+            && IsCooltimeOver())
+            {
+                StartAttackState();
+            }
+        }
+
         public override void OnInputPressing()
         {
             base.OnInputPressing();
 
             if (mIsAttacking)
             {
-                if (!IsCanAttack())
+                if (!mPlayerCtrl.IsCurrentState(PlayerState.Normal))
                 {
                     StopAttackState();
+                }
+                else
+                {
+                    bool isAttackable = IsCooltimeOver();
+                    mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, isAttackable);
                 }
             }
             else
             {
-                if (IsCanAttack())
+                if (mPlayerCtrl.IsCurrentState(PlayerState.Normal)
+                && IsCooltimeOver())
                 {
                     StartAttackState();
                 }
@@ -54,17 +72,8 @@ namespace PahlUnity.Demo
 
             if (mIsAttacking)
             {
-                StopAttackState();
+                mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, false);
             }
-        }
-
-        bool IsCanAttack()
-        {
-            if (mPlayerCtrl.IsCurrentState(PlayerState.Normal)
-            && IsCooltimeOver())
-                return true;
-
-            return false;
         }
 
         bool IsCooltimeOver()
@@ -83,9 +92,9 @@ namespace PahlUnity.Demo
         {
             mIsAttacking = true;
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, true);
-            mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, GetAttackSpeedMultiplier());
+            // mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, GetAttackSpeedMultiplier());
             mBaseObject.Anim.SetLayerWeight(1, 1);
-            mBaseObject.Anim.PlayAnim(AnimStateNameHash.Attack, OnFireAttackState, null, 1);
+            mBaseObject.Anim.PlayAnim(AnimStateNameHash.Attack, OnFireAttackState, OnEndAttackState, 1);
 
             _OnStart.Invoke();
         }
@@ -102,12 +111,16 @@ namespace PahlUnity.Demo
             }
             _OnFire.Invoke(idx);
         }
+        void OnEndAttackState()
+        {
+            StopAttackState();
+        }
         void StopAttackState()
         {
             mIsAttacking = false;
             mBaseObject.Anim.SetLayerWeight(1, 0);
             mBaseObject.Anim.SetParamBool(AnimatorParams.IsAttacking, false);
-            mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, 1);
+            // mBaseObject.Anim.SetParamFloat(AnimatorParams.AttackSpeed, 1);
             _OnEnd.Invoke();
         }
 
