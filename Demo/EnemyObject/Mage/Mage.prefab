@@ -11,11 +11,7 @@ PrefabInstance:
     - target: {fileID: 2765824303556691787, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8180171696930044909, guid: cab0662c5ca46f1458697f51b9cc038e, type: 3}
-    - target: {fileID: 2765824303556691787, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: -7285376162372006033, guid: b8d4ed1c70ce4c145bce55c20d9db942, type: 3}
     - target: {fileID: 3972840463786470686, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -58,16 +54,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5132953175078152348, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
       propertyPath: m_Name
-      value: Warrior
+      value: Mage
       objectReference: {fileID: 0}
     - target: {fileID: 6539257515812832393, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
       propertyPath: _SpecData
       value: 
-      objectReference: {fileID: 11400000, guid: 08d47d1ada2c24541bf4fa714c479ce3, type: 2}
+      objectReference: {fileID: 11400000, guid: d09f7a4b977314f478f63db02cb6f1ce, type: 2}
     - target: {fileID: 9143336758062331205, guid: b90a9e01fa16160429c68ae39fd2d324, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: c58d87302732da74cb4d93e31a35c91e, type: 2}
+      objectReference: {fileID: 9100000, guid: 231eed96bd57a274c8d15a434c48822c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
