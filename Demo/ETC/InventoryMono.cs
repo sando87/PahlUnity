@@ -71,12 +71,14 @@ namespace PahlUnity.Demo
 
 
         [Header("===== Editor Area =====")]
-        [SerializeField, ShowIf(nameof(IsPlayMode)), NaughtyAttributes.ReadOnly]
+        [SerializeField, NaughtyAttributes.ReadOnly]
         List<ItemViewerOnInspector> _ItemList = new List<ItemViewerOnInspector>();
-        bool IsPlayMode => Application.isPlaying;
-        [Button("UpdateItemList"), ShowIf(nameof(IsPlayMode))]
+        [Button("UpdateItemList")]
         public void UpdateItemList()
         {
+            if (!Application.isPlaying)
+                return;
+
             _ItemList.Clear();
             if (mInventory == null || mInventory.Slots == null || mInventory.Slots.Count == 0)
                 return;

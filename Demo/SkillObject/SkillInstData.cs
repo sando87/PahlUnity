@@ -33,6 +33,11 @@ namespace PahlUnity.Demo
         public int RandomSeed => (int)mInstanceID;
         public int Level => mLevel;
         public int LevelIndex => mLevel - 1;
+
+        public void AddSkillPoint()
+        {
+            mLevel++;
+        }
         public SkillSpecData SpecData => mSpecRawData;
 
         public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()

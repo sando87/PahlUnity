@@ -14,7 +14,8 @@ namespace PahlUnity.Demo
         protected SkillInstData mSkillInstData;
         protected PlayerController2D mPlayerCtrl = null;
 
-        protected bool IsEquipped { get; private set; } = false;
+        public SkillInstData InstData => mSkillInstData;
+        public bool IsEquipped { get; private set; } = false;
         protected SkillInputState InputState { get; private set; } = SkillInputState.None;
 
         protected virtual void Awake()
@@ -45,6 +46,15 @@ namespace PahlUnity.Demo
         public virtual void OnUnequip()
         {
             IsEquipped = false;
+        }
+        public void AddSkillPoint()
+        {
+            if (mSkillInstData == null)
+                return;
+
+            mSkillInstData.AddSkillPoint();
+            if (mSkillSpec != null)
+                mSkillSpec.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
         public virtual void OnInputDown()
         {

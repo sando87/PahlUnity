@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +38,51 @@ namespace PahlUnity.Demo
             {
                 skillObject.OnInputPressing();
             }
+        }
+
+
+
+
+        [Header("===== Editor Area =====")]
+        [SerializeField, NaughtyAttributes.ReadOnly]
+        List<SkillViewerOnInspector> _SkillList = new List<SkillViewerOnInspector>();
+        [Button("UpdateSkillList")]
+        public void UpdateSkillList()
+        {
+            if (!Application.isPlaying)
+                return;
+
+            _SkillList.Clear();
+            SkillObject[] skillObjects = GetComponentsInChildren<SkillObject>();
+
+            foreach (SkillObject skill in skillObjects)
+            {
+                if (skill.InstData == null || skill.InstData.SpecData == null)
+                    continue;
+
+                SkillViewerOnInspector viewer = new SkillViewerOnInspector();
+                viewer.Bind(skill, this.ExGetBase());
+                _SkillList.Add(viewer);
+            }
+        }
+    }
+
+    [System.Serializable]
+    public class SkillViewerOnInspector
+    {
+        public string Name;
+        public int SkillPoint;
+        public bool IsEquipped;
+        public SkillObject SkillObj;
+        public BaseObject BaseObj;
+
+        public void Bind(SkillObject skill, BaseObject baseObj)
+        {
+            SkillObj = skill;
+            BaseObj = baseObj;
+            Name = skill.InstData.SpecData.SkillID;
+            SkillPoint = skill.InstData.Level;
+            IsEquipped = skill.IsEquipped;
         }
     }
 }
