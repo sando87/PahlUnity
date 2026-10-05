@@ -17,7 +17,7 @@ namespace PahlUnity.Demo
     /// </summary>
     public class PlayerController2D : MonoBehaviour
     {
-        [SerializeField] private float _JumpForce = 12f;
+        [SerializeField] private float _JumpForce = 15f;
         [SerializeField] private bool _EnableWallAttach = false;
         [SerializeField] private float _WallSlideSpeed = 1.5f;
         [SerializeField] private float _WallAttachMinFallSpeed = 0.5f;

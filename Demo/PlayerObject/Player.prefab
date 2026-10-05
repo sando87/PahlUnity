@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.FSMPlayerDash
   _DashCooldown: 0.3
-  _DashSpeed: 5
-  _DashDistance: 5
+  _DashSpeed: 15
+  _DashDistance: 7
 --- !u!114 &2382978877325345259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2474,7 +2474,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: fbbdd2fa140dba64eb361a639c1df9a7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3510,7 +3510,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3547,7 +3547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a934b32f6cdce4f8ae98b3c2bf1acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.PlayerController2D
-  _JumpForce: 12
+  _JumpForce: 15
   _EnableWallAttach: 0
   _WallSlideSpeed: 1.5
   _WallAttachMinFallSpeed: 0.5
