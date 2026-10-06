@@ -18,5 +18,7 @@ namespace PahlUnity.Demo
 
         public IReadOnlyList<SpecFieldRaw> Specs => _Specs;
 
+        public long ResourceID => SkillID.ExGetStableHash64();
+
     }
 }

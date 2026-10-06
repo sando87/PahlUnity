@@ -7,38 +7,35 @@ namespace PahlUnity.Demo
     public class SkillInstData
     {
         private SkillSpecData mSpecRawData;
-        private int mResourceID;
+        private SkillSaveData mSaveData;
+        private long mResourceID;
         private long mInstanceID;
-        private int mLevel;
 
         private IReadOnlyList<SpecFieldValue> mSpecFieldValues = null;
 
-        public SkillInstData(SkillSpecData specData, int level = 1)
+        public SkillInstData(SkillSpecData specData)
         {
-            mSpecRawData = specData;
-            mResourceID = mSpecRawData.SkillID.ExGetStableHash32();
+            mResourceID = mSpecRawData.SkillID.ExGetStableHash64();
             mInstanceID = DateTime.Now.Ticks;
-            mLevel = level;
+            mSpecRawData = specData;
+            mSaveData = new SkillSaveData(mInstanceID, mResourceID);
         }
-        public SkillInstData(SkillSpecData specData, long instanceID, int level = 1)
+        public SkillInstData(SkillSpecData specData, SkillSaveData saveData)
         {
             mSpecRawData = specData;
-            mResourceID = mSpecRawData.SkillID.ExGetStableHash32();
-            mInstanceID = instanceID;
-            mLevel = level;
+            mResourceID = mSpecRawData.ResourceID;
+            mInstanceID = saveData.InstanceID;
+            mSaveData = saveData;
         }
 
-        public int ResourceID => mResourceID;
+        public long ResourceID => mResourceID;
         public long InstanceID => mInstanceID;
         public int RandomSeed => (int)mInstanceID;
-        public int Level => mLevel;
-        public int LevelIndex => mLevel - 1;
-
-        public void AddSkillPoint()
-        {
-            mLevel++;
-        }
+        public int Level => mSaveData.Level;
+        public int LevelIndex => mSaveData.LevelIndex;
+        public bool IsEquipped => mSaveData.IsEquipped;
         public SkillSpecData SpecData => mSpecRawData;
+        public SkillSaveData SaveData => mSaveData;
 
         public IReadOnlyList<SpecFieldValue> GetSpecFieldValues()
         {

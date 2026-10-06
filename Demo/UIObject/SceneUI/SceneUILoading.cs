@@ -63,16 +63,16 @@ namespace PahlUnity.Demo
             string fullPath = Path.Combine(Application.persistentDataPath, filename);
             InitializingState state = await playerSaveDataManager.InitializeAsync((new LocalFileIO(), fullPath), 10);
             LOG.trace(state);
-            // if (state == InitializingState.InitializedSuccess)
-            // {
-            //     EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
-            //     {
-            //         if (eventType.ImmediateSave)
-            //             SaveManager<InGamePlayingData>.Instance.SaveImmediate();
-            //         else
-            //             SaveManager<InGamePlayingData>.Instance.RequestSave();
-            //     });
-            // }
+            if (state == InitializingState.InitializedSuccess)
+            {
+                EventManager.Instance.GlobalEvents.Register((SaveUserPlayData eventType) =>
+                {
+                    if (eventType.ImmediateSave)
+                        SaveManager<InGamePlayingData>.Instance.SaveImmediate();
+                    else
+                        SaveManager<InGamePlayingData>.Instance.RequestSave();
+                });
+            }
 
             // await LoadTableData<ItemResourceData>();
             // await LoadTableData<CharResourceData>();

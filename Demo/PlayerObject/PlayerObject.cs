@@ -49,7 +49,8 @@ namespace PahlUnity.Demo
             item.SaveData.IsEquipped = false;
             item.SaveData.PositionIndex = positionIndex;
             mPlayerSaveData.Items[item.InstanceID] = item.SaveData;
-            SaveManager<InGamePlayingData>.Instance.SaveImmediate();
+
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         void OnItemEquipped(ItemInstInfo item, int positionIndex)
@@ -57,7 +58,8 @@ namespace PahlUnity.Demo
             item.SaveData.IsEquipped = true;
             item.SaveData.PositionIndex = positionIndex;
             mPlayerSaveData.Items[item.InstanceID] = item.SaveData;
-            SaveManager<InGamePlayingData>.Instance.SaveImmediate();
+
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
         }
 
         public void DoEquipItem(int invenSlotIndex)
@@ -94,6 +96,8 @@ namespace PahlUnity.Demo
             mBaseObj.GetComp<PlayerGrowth>().Init(mPlayerSaveData.PlayerStat);
 
             InitItems();
+
+            mBaseObj.GetComp<SkillController>().Init(mPlayerSaveData);
         }
 
         void InitItems()

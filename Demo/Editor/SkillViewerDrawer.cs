@@ -23,7 +23,7 @@ namespace PahlUnity.Demo
             SerializedProperty skillProperty = property.FindPropertyRelative("SkillObj");
 
             SkillObject skill = skillProperty != null ? skillProperty.objectReferenceValue as SkillObject : null;
-            bool isEquipped = skill != null ? skill.IsEquipped : equippedProperty != null && equippedProperty.boolValue;
+            bool isEquipped = skill != null ? skill.InstData.IsEquipped : equippedProperty != null && equippedProperty.boolValue;
 
             Rect equipRect = new Rect(position.xMax - EquipButtonWidth, position.y, EquipButtonWidth, position.height);
             Rect upgradeRect = new Rect(equipRect.x - FieldSpacing - UpgradeButtonWidth, position.y, UpgradeButtonWidth, position.height);
@@ -44,19 +44,21 @@ namespace PahlUnity.Demo
 
             if (GUI.Button(upgradeRect, "강화") && skill != null)
             {
-                skill.AddSkillPoint();
-                RefreshList(property);
+                SkillController skillController = property.serializedObject.targetObject as SkillController;
+                skillController.AddSkillPoint(skill);
+                skillController.UpdateSkillList();
             }
 
             string equipLabel = isEquipped ? "해제" : "장착";
             if (GUI.Button(equipRect, equipLabel) && skill != null)
             {
+                SkillController skillController = property.serializedObject.targetObject as SkillController;
                 if (isEquipped)
-                    skill.OnUnequip();
+                    skillController.UnequipSkill(skill);
                 else
-                    skill.OnEquip();
+                    skillController.EquipSkill(skill);
 
-                RefreshList(property);
+                skillController.UpdateSkillList();
             }
 
             GUI.enabled = previousEnabled;
@@ -66,15 +68,6 @@ namespace PahlUnity.Demo
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUIUtility.singleLineHeight;
-        }
-
-        static void RefreshList(SerializedProperty property)
-        {
-            SkillController skillController = property.serializedObject.targetObject as SkillController;
-            if (skillController == null)
-                return;
-
-            skillController.UpdateSkillList();
         }
     }
 

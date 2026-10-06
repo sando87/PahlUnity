@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
@@ -7,25 +8,63 @@ namespace PahlUnity.Demo
 {
     public class SkillController : MonoBehaviour
     {
-        [SerializeField] SkillObject[] _SkillSlots = null;
+        [SerializeField, NaughtyAttributes.ReadOnly]
+        SkillObject[] mSkillSlots = null;
 
         BaseObject mBaseObject = null;
+        SkillObject[] mAllSkillTree = null;
 
         void Awake()
         {
             mBaseObject = this.ExGetBase();
+            mAllSkillTree = GetComponentsInChildren<SkillObject>();
+            mSkillSlots = new SkillObject[4];
+        }
+
+        public void Init(PlayerData playerSaveData)
+        {
+            long idCounter = 0;
+            bool needSave = false;
+            Dictionary<long, SkillSaveData> skillSaveData = playerSaveData.Skills;
+            foreach (SkillObject skill in mAllSkillTree)
+            {
+                if (skillSaveData.ContainsKey(skill.ResourceID))
+                {
+                    skill.Init(skillSaveData[skill.ResourceID]);
+                    if (skill.InstData.SaveData.IsEquipped)
+                    {
+                        mSkillSlots[skill.InstData.SaveData.PositionIndex] = skill;
+                    }
+                }
+                else
+                {
+                    SkillSaveData newSaveData = new SkillSaveData(DateTime.Now.Ticks + idCounter, skill.ResourceID);
+                    skill.Init(newSaveData);
+                    playerSaveData.Skills[skill.ResourceID] = newSaveData;
+                    needSave = true;
+                    idCounter++;
+                }
+            }
+
+            if (needSave)
+            {
+                EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+            }
         }
 
         void Update()
         {
-            DoInputSlot(InputActionNameHash.SkillSlotA, _SkillSlots[0]);
-            DoInputSlot(InputActionNameHash.SkillSlotB, _SkillSlots[1]);
-            DoInputSlot(InputActionNameHash.SkillSlotC, _SkillSlots[2]);
-            DoInputSlot(InputActionNameHash.SkillSlotD, _SkillSlots[3]);
+            DoInputSlot(InputActionNameHash.SkillSlotA, mSkillSlots[0]);
+            DoInputSlot(InputActionNameHash.SkillSlotB, mSkillSlots[1]);
+            DoInputSlot(InputActionNameHash.SkillSlotC, mSkillSlots[2]);
+            DoInputSlot(InputActionNameHash.SkillSlotD, mSkillSlots[3]);
         }
 
         void DoInputSlot(int inputType, SkillObject skillObject)
         {
+            if (skillObject == null)
+                return;
+
             if (mBaseObject.Input.JustPressed(inputType))
             {
                 skillObject.OnInputDown();
@@ -37,6 +76,43 @@ namespace PahlUnity.Demo
             else if (mBaseObject.Input.IsPressing(inputType))
             {
                 skillObject.OnInputPressing();
+            }
+        }
+
+        public void AddSkillPoint(SkillObject skill)
+        {
+            skill.AddSkillPoint();
+
+            EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+        }
+
+        public void EquipSkill(SkillObject skill)
+        {
+            for (int i = 0; i < mSkillSlots.Length; i++)
+            {
+                if (mSkillSlots[i] == null)
+                {
+                    mSkillSlots[i] = skill;
+                    skill.OnEquip(i);
+
+                    EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+                    break;
+                }
+            }
+        }
+
+        public void UnequipSkill(SkillObject skill)
+        {
+            for (int i = 0; i < mSkillSlots.Length; i++)
+            {
+                if (mSkillSlots[i] == skill)
+                {
+                    mSkillSlots[i] = null;
+                    skill.OnUnequip();
+
+                    EventManager.Instance.GlobalEvents.InvokeEvent(new SaveUserPlayData(true));
+                    break;
+                }
             }
         }
 
@@ -82,7 +158,7 @@ namespace PahlUnity.Demo
             BaseObj = baseObj;
             Name = skill.InstData.SpecData.SkillID;
             SkillPoint = skill.InstData.Level;
-            IsEquipped = skill.IsEquipped;
+            IsEquipped = skill.InstData.IsEquipped;
         }
     }
 }

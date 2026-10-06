@@ -14,8 +14,8 @@ namespace PahlUnity.Demo
         protected SkillInstData mSkillInstData;
         protected PlayerController2D mPlayerCtrl = null;
 
+        public long ResourceID => _SkillSpecData.ResourceID;
         public SkillInstData InstData => mSkillInstData;
-        public bool IsEquipped { get; private set; } = false;
         protected SkillInputState InputState { get; private set; } = SkillInputState.None;
 
         protected virtual void Awake()
@@ -25,36 +25,29 @@ namespace PahlUnity.Demo
             mPlayerCtrl = mBaseObject.GetComp<PlayerController2D>();
         }
 
-        protected virtual void Start()
+        public void Init(SkillSaveData saveData)
         {
-            Init();
-        }
-
-        void Init()
-        {
-            mSkillInstData = new SkillInstData(_SkillSpecData);
+            mSkillInstData = new SkillInstData(_SkillSpecData, saveData);
 
             mSkillSpec.SetSpecs(mSkillInstData.SpecData.Specs, 0);
 
             mSkillSpec.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
 
-        public virtual void OnEquip()
+        public virtual void OnEquip(int positionIndex)
         {
-            IsEquipped = true;
+            mSkillInstData.SaveData.IsEquipped = true;
+            mSkillInstData.SaveData.PositionIndex = positionIndex;
         }
         public virtual void OnUnequip()
         {
-            IsEquipped = false;
+            mSkillInstData.SaveData.IsEquipped = false;
+            mSkillInstData.SaveData.PositionIndex = -1;
         }
         public void AddSkillPoint()
         {
-            if (mSkillInstData == null)
-                return;
-
-            mSkillInstData.AddSkillPoint();
-            if (mSkillSpec != null)
-                mSkillSpec.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
+            mSkillInstData.SaveData.Level++;
+            mSkillSpec.UpdateAllValuesByStep(mSkillInstData.LevelIndex);
         }
         public virtual void OnInputDown()
         {

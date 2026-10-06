@@ -2197,11 +2197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92d3adec7d348e641ae0afa504c77ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.SkillController
-  _SkillSlots:
-  - {fileID: 4305235549668557116}
-  - {fileID: 32949469062978933}
-  - {fileID: 7264329636170067180}
-  - {fileID: 8350359925266614917}
+  _SkillSlots: []
+  _SkillList: []
 --- !u!1 &5693347739859428579
 GameObject:
   m_ObjectHideFlags: 0
