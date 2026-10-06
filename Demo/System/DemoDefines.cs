@@ -139,4 +139,9 @@ namespace PahlUnity.Demo
     public struct SaveUserSettingData : IEventParam
     {
     }
+    public struct KillEnemy : IEventParam
+    {
+        public readonly int Exp;
+        public KillEnemy(int _exp) => Exp = _exp;
+    }
 }

@@ -70,6 +70,11 @@ namespace PahlUnity.Demo
             if (health != null)
             {
                 health.GetDamaged(new DamageInfo(damage), mBaseObject);
+
+                if (health.IsDead)
+                {
+                    EventManager.Instance.GlobalEvents.InvokeEvent(new KillEnemy(10));
+                }
             }
         }
 

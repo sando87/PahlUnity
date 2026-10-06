@@ -1,4 +1,5 @@
 
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -147,6 +148,31 @@ namespace PahlUnity.Demo
             return Mathf.FloorToInt(L) + 1;
         }
 
+
+
+
+        [Header("===== Editor Area =====")]
+        [ShowNativeProperty]
+        string RemainPT => $"Remain Point: {RemainPoint}";
+        [ShowNativeProperty]
+        string HealthPT => $"Health Point: {HealthPoint}";
+        [ShowNativeProperty]
+        string ManaPT => $"Mana Point: {ManaPoint}";
+        [ShowNativeProperty]
+        string AttackPT => $"Attack Point: {AttackPoint}";
+        [ShowNativeProperty]
+        string DefensePT => $"Defense Point: {DefensePoint}";
+        [ShowNativeProperty]
+        string CurrentExpText => $"Current Exp: {CurrentExp}";
+
+        [Button("HealthPoint Up")]
+        public void HealthPointUp() { if (Application.isPlaying) AddHealthPoint(); }
+        [Button("ManaPoint Up")]
+        public void ManaPointUp() { if (Application.isPlaying) AddManaPoint(); }
+        [Button("AttackPoint Up")]
+        public void AttackPointUp() { if (Application.isPlaying) AddAttackPoint(); }
+        [Button("DefensePoint Up")]
+        public void DefensePointUp() { if (Application.isPlaying) AddDefensePoint(); }
     }
 
 }

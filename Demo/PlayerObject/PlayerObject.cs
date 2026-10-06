@@ -42,6 +42,13 @@ namespace PahlUnity.Demo
             mEquip.OnEquippedItem += OnItemEquipped;
 
             mItemInteractor.OnTryPickupItem = OnTryPickupItem;
+
+            EventManager.Instance.GlobalEvents.Register((KillEnemy eventType) => OnKillEnemy(eventType.Exp));
+        }
+
+        void OnKillEnemy(int exp)
+        {
+            mBaseObj.GetComp<PlayerGrowth>().AddExp(exp);
         }
 
         void OnItemAdded(ItemInstInfo item, int count, int positionIndex)
