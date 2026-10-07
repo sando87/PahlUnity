@@ -9,6 +9,8 @@ namespace PahlUnity.Demo
 {
     public class SceneUIInGame : ScreenUIBase
     {
+        [SerializeField] private TextMeshProUGUI _LevelText;
+        [SerializeField] private Image _LevelBar;
         [SerializeField] private Image _HPBar;
         [SerializeField] private Image _MPBar;
         [SerializeField] private TextMeshProUGUI _GoldText;
@@ -18,7 +20,6 @@ namespace PahlUnity.Demo
         void Start()
         {
             FadeIn(0.5f);
-
         }
 
         void Update()
@@ -47,9 +48,12 @@ namespace PahlUnity.Demo
                 return;
 
             Health playerHealth = InGameManager.Instance.Engine.Player.ExGetCompInBase<Health>();
-            if (playerHealth == null)
+            PlayerGrowth playerGrowth = InGameManager.Instance.Engine.Player.ExGetCompInBase<PlayerGrowth>();
+            if (playerHealth == null || playerGrowth == null)
                 return;
-                
+
+            _LevelText.text = $"Lv.{playerGrowth.CurrentLevel}";
+            _LevelBar.fillAmount = playerGrowth.CurrentExpRate;
             _HPBar.fillAmount = playerHealth.HpRate;
             _MPBar.fillAmount = playerHealth.ManaRate;
             // _GoldText.text = InGameManager.Instance.Engine.Player.Gold.ToString();

@@ -32,7 +32,7 @@ namespace PahlUnity.Demo
         public float ExpForNextLevel => mToExp;
         public float ExpDeltaOfCurrentLevel => mToExp - mFromExp;
         public float RemainExp { get { return mToExp - CurrentExp; } }
-        public float CurrentExpRate { get { return (CurrentExp - mFromExp) / (float)ExpDeltaOfCurrentLevel; } }
+        public float CurrentExpRate { get { return mCharacterSaveData == null ? 0 : (CurrentExp - mFromExp) / (float)ExpDeltaOfCurrentLevel; } }
         public float CurrentExp { get; private set; } = 0;
 
         public UnityEvent OnLevelUp = new UnityEvent();
