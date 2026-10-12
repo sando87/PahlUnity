@@ -153,15 +153,15 @@ namespace PahlUnity.Demo
 
         [Header("===== Editor Area =====")]
         [ShowNativeProperty]
-        string RemainPT => $"Remain Point: {RemainPoint}";
+        string RemainPT => $"Remain Point: {(mCharacterSaveData == null ? "-" : RemainPoint.ToString())}";
         [ShowNativeProperty]
-        string HealthPT => $"Health Point: {HealthPoint}";
+        string HealthPT => $"Health Point: {(mCharacterSaveData == null ? "-" : HealthPoint.ToString())}";
         [ShowNativeProperty]
-        string ManaPT => $"Mana Point: {ManaPoint}";
+        string ManaPT => $"Mana Point: {(mCharacterSaveData == null ? "-" : ManaPoint.ToString())}";
         [ShowNativeProperty]
-        string AttackPT => $"Attack Point: {AttackPoint}";
+        string AttackPT => $"Attack Point: {(mCharacterSaveData == null ? "-" : AttackPoint.ToString())}";
         [ShowNativeProperty]
-        string DefensePT => $"Defense Point: {DefensePoint}";
+        string DefensePT => $"Defense Point: {(mCharacterSaveData == null ? "-" : DefensePoint.ToString())}";
         [ShowNativeProperty]
         string CurrentExpText => $"Current Exp: {CurrentExp}";
 
