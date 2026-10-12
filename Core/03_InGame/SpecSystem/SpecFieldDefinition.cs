@@ -15,6 +15,7 @@ namespace PahlUnity
     public class SpecFieldDefinition : ScriptableObject
     {
         [SerializeField] private List<string> _Fields = new List<string>();
+        [SerializeField] private string _Namespace;
 
         public IReadOnlyList<string> Fields => _Fields;
 
@@ -25,7 +26,15 @@ namespace PahlUnity
             string assetPath = AssetDatabase.GetAssetPath(this);
             string directory = Path.GetDirectoryName(assetPath);
             string projectRoot = GetProjectRootFromAssetPath(assetPath);
-            string namespaceName = GetNamespaceName(projectRoot);
+            string namespaceName = string.IsNullOrWhiteSpace(_Namespace) ? "" : _Namespace.Trim();
+            if (!IsValidNamespace(namespaceName))
+            {
+                Debug.LogError(
+                    $"[{nameof(SpecFieldDefinition)}] '{namespaceName}' is not a valid C# namespace.",
+                    this);
+                return;
+            }
+
             GenerateSpecFieldsFile(directory, projectRoot, namespaceName);
         }
 
@@ -165,21 +174,47 @@ namespace PahlUnity
             return $"Assets/{parts[1]}";
         }
 
-        static string GetNamespaceName(string projectRoot)
+        static bool IsValidNamespace(string namespaceName)
         {
-            if (string.IsNullOrEmpty(projectRoot))
+            if (string.IsNullOrEmpty(namespaceName))
             {
-                return "";
+                return true;
             }
 
-            string normalizedPath = projectRoot.Replace('\\', '/');
-            string[] parts = normalizedPath.Split('/');
-            if (parts.Length < 2)
+            string[] parts = namespaceName.Split('.');
+            for (int i = 0; i < parts.Length; i++)
             {
-                return "";
+                if (!IsValidIdentifier(parts[i]))
+                {
+                    return false;
+                }
             }
 
-            return ToIdentifier(parts[1]);
+            return true;
+        }
+
+        static bool IsValidIdentifier(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            if (!char.IsLetter(value[0]) && value[0] != '_')
+            {
+                return false;
+            }
+
+            for (int i = 1; i < value.Length; i++)
+            {
+                char c = value[i];
+                if (!char.IsLetterOrDigit(c) && c != '_')
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         static string ToIdentifier(string value)

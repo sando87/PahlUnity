@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88710584f1622741bf11018b281d2f3, type: 3}
   m_Name: SpecFieldDefinition
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.SpecFieldDefinition
+  _Namespace: PahlUnity.Demo
   _Fields:
   - MaxHP
   - MaxMP
