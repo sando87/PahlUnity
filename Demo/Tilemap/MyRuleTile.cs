@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace BulletRush
+namespace PahlUnity.Demo
 {
     [CreateAssetMenu]
     public class MyRuleTile : RuleTile<MyRuleTile.Neighbor>

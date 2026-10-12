@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7fd8cc0bac40e348b3b9ff8b9d62320, type: 3}
   m_Name: Grass
-  m_EditorClassIdentifier: Assembly-CSharp::BulletRush.MyRuleTile
+  m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.Demo.MyRuleTile
   m_DefaultSprite: {fileID: -215392406208037642, guid: f909612270ed5ff4093ff035548ab2ad, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 2
