@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff9fcb318a15e249bdb4a105a9b84b5, type: 3}
   m_Name: InteractMaskDef
   m_EditorClassIdentifier: Assembly-CSharp::PahlUnity.InteractMaskDef
+  _Namespace: PahlUnity.Demo
   _Names:
   - Unit
   - Skill
