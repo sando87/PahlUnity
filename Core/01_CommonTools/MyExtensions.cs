@@ -470,7 +470,7 @@ namespace PahlUnity
         {
             return index < 0 || index >= list.Length;
         }
-        public static bool ExIsOutOfRange<T>(this List<T> list, int index)
+        public static bool ExIsOutOfRange<T>(this IReadOnlyList<T> list, int index)
         {
             return index < 0 || index >= list.Count;
         }
@@ -654,7 +654,7 @@ namespace PahlUnity
             me.position += offset;
         }
 
-        public static T ExGetRandom<T>(this List<T> list)
+        public static T ExGetRandom<T>(this IReadOnlyList<T> list)
         {
             return list.Count > 0 ? list[UnityEngine.Random.Range(0, list.Count)] : default;
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -14,8 +15,11 @@ namespace PahlUnity
 
         [SerializeField] private List<PrefabEntry> _PrefabEntries = new();
 
+        [SerializeField] private List<ScriptableObject> _ScriptableObjects = new();
+
         private readonly Dictionary<string, ResourceHandle> mCache = new();
         private readonly Dictionary<string, GameObject> mPrefabTable = new();
+        private readonly Dictionary<string, ScriptableObject> mScriptableObjectTable = new();
 
         protected override void Awake()
         {
@@ -25,6 +29,7 @@ namespace PahlUnity
                 return;
 
             BuildPrefabTable();
+            BuildScriptableObjectTable();
         }
 
         public void Initialize(IResourceProvider provider)
@@ -41,11 +46,32 @@ namespace PahlUnity
             return null;
         }
 
+        public ScriptableObject GetScriptableObject(string key)
+        {
+            if (mScriptableObjectTable.TryGetValue(key, out ScriptableObject scriptableObject))
+                return scriptableObject;
+
+            Debug.LogError($"Scriptable Object Not Found : {key}");
+            return null;
+        }
+
+        public IReadOnlyList<ScriptableObject> GetAllScriptableObjects()
+        {
+            return _ScriptableObjects;
+        }
+
         public async UniTask<T> LoadAsync<T>(string key) where T : Object
         {
             if (mPrefabTable.TryGetValue(key, out GameObject registeredPrefab))
             {
                 T registered = registeredPrefab as T;
+                if (registered != null)
+                    return registered;
+            }
+
+            if (mScriptableObjectTable.TryGetValue(key, out ScriptableObject registeredScriptableObject))
+            {
+                T registered = registeredScriptableObject as T;
                 if (registered != null)
                     return registered;
             }
@@ -109,6 +135,25 @@ namespace PahlUnity
                     continue;
 
                 mPrefabTable.Add(entry.Key, entry.Prefab);
+            }
+        }
+
+        private void BuildScriptableObjectTable()
+        {
+            mScriptableObjectTable.Clear();
+
+            for (int i = 0; i < _ScriptableObjects.Count; i++)
+            {
+                ScriptableObject scriptableObject = _ScriptableObjects[i];
+                if (scriptableObject == null)
+                    continue;
+
+                bool duplicated = mScriptableObjectTable.ContainsKey(scriptableObject.name);
+                LOG.errorif(duplicated, $"Duplicate scriptable object key : {scriptableObject.name}");
+                if (duplicated)
+                    continue;
+
+                mScriptableObjectTable.Add(scriptableObject.name, scriptableObject);
             }
         }
 
