@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PahlUnity
 {
@@ -43,6 +43,11 @@ namespace PahlUnity
                     mSpecs.Remove(key);
                 }
             }
+        }
+
+        public bool HasModifier(int key)
+        {
+            return mSpecs.ContainsKey(key);
         }
 
         public float GetAddModifier(int key)
