@@ -33,6 +33,7 @@ namespace PahlUnity
 
         [SerializeField] private float _Step;
 
+        public string Key => _Key;
         public int FieldKey => StableHash.ToInt32(_Key);
         public SpecModifierType ModifierType => _ModifierType;
         public SpecValueType ValueType => _ValueType;
