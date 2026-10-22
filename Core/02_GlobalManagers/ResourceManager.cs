@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -58,6 +59,11 @@ namespace PahlUnity
         public IReadOnlyList<ScriptableObject> GetAllScriptableObjects()
         {
             return _ScriptableObjects;
+        }
+
+        public IReadOnlyList<ScriptableObject> GetScriptableObjects(System.Func<ScriptableObject, bool> predicate)
+        {
+            return _ScriptableObjects.Where(predicate).ToList();
         }
 
         public async UniTask<T> LoadAsync<T>(string key) where T : Object
