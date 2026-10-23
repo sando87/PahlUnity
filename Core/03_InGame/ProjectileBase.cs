@@ -1,8 +1,8 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-using UnityEngine.Events;
+using System.Collections.Generic;
 using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace PahlUnity
 {
@@ -13,7 +13,7 @@ namespace PahlUnity
         [SerializeField] protected InteractableCollider _AttackCollider = null;
 
         [Foldout("Events"), SerializeField] UnityEvent _OnStart;
-        [Foldout("Events"), SerializeField] UnityEvent<Collider> _OnHit;
+        [Foldout("Events"), SerializeField] UnityEvent<HitColliderInfo> _OnHit;
         [Foldout("Events"), SerializeField] UnityEvent _OnEnd;
 
         protected BaseObject mBaseObj = null;
@@ -24,7 +24,7 @@ namespace PahlUnity
         protected Vector3 mStartPos = Vector3.zero;
 
         public event Action OnStart;
-        public event Action<Collider> OnHit;
+        public event Action<HitColliderInfo> OnHit;
         public event Action OnEnd;
 
         public static ProjectileBase Create(ProjectileBase prefab, Vector3 position, Vector3 direction, int targetLayerMask)
@@ -63,7 +63,7 @@ namespace PahlUnity
         {
             _AttackCollider.OnInteractEnter3D += (col) =>
             {
-                HitColliderInfo colInfo = new HitColliderInfo { Collider = col, HitTime = Time.time };
+                HitColliderInfo colInfo = new HitColliderInfo { Collider = col, HitTime = Time.time, Projectile = this };
                 mHitColliders.Add(colInfo);
 
                 DoHit(colInfo);
@@ -207,7 +207,7 @@ namespace PahlUnity
         protected virtual void DoHit(HitColliderInfo colInfo)
         {
             colInfo.HitTime = Time.time;
-            OnHit?.Invoke(colInfo.Collider);
+            OnHit?.Invoke(colInfo);
 
             if (Stats.PierceChance > 0)
             {
@@ -229,6 +229,7 @@ namespace PahlUnity
         {
             public float HitTime;
             public Collider Collider;
+            public ProjectileBase Projectile;
         }
     }
     [System.Serializable]

@@ -13,7 +13,7 @@ namespace PahlUnity
         [SerializeField] protected InteractableCollider _AttackCollider = null;
 
         [Foldout("Events"), SerializeField] UnityEvent _OnStart;
-        [Foldout("Events"), SerializeField] UnityEvent<Collider2D> _OnHit;
+        [Foldout("Events"), SerializeField] UnityEvent<HitColliderInfo> _OnHit;
         [Foldout("Events"), SerializeField] UnityEvent _OnEnd;
 
         protected BaseObject mBaseObj = null;
@@ -25,7 +25,7 @@ namespace PahlUnity
         protected BaseObject mCaster = null;
 
         public event Action OnStart;
-        public event Action<Collider2D> OnHit;
+        public event Action<HitColliderInfo> OnHit;
         public event Action OnEnd;
 
         public static ProjectileBase2D Create(ProjectileBase2D prefab, Vector3 position, Vector3 direction, int targetLayerMask, BaseObject caster)
@@ -67,7 +67,7 @@ namespace PahlUnity
         {
             _AttackCollider.OnInteractEnter2D += (col) =>
             {
-                HitColliderInfo colInfo = new HitColliderInfo { Collider = col, HitTime = Time.time };
+                HitColliderInfo colInfo = new HitColliderInfo { Collider = col, HitTime = Time.time, Projectile = this };
                 mHitColliders.Add(colInfo);
 
                 DoHit(colInfo);
@@ -219,7 +219,7 @@ namespace PahlUnity
         protected virtual void DoHit(HitColliderInfo colInfo)
         {
             colInfo.HitTime = Time.time;
-            OnHit?.Invoke(colInfo.Collider);
+            OnHit?.Invoke(colInfo);
 
             if (Stats.PierceChance > 0)
             {
@@ -241,6 +241,7 @@ namespace PahlUnity
         {
             public float HitTime;
             public Collider2D Collider;
+            public ProjectileBase2D Projectile;
         }
     }
 }

@@ -101,12 +101,12 @@ namespace PahlUnity.Demo.TwoD
             return closestTarget;
         }
 
-        void HandleHit(Collider2D col)
+        void HandleHit(HitColliderInfo hitInfo)
         {
-            if (!IsTerrain(col))
+            if (!IsTerrain(hitInfo.HitCollider))
                 return;
 
-            ReflectOnTerrain(col);
+            ReflectOnTerrain(hitInfo.HitCollider);
         }
 
         bool IsTerrain(Collider2D col)
