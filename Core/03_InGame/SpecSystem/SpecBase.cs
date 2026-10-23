@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PahlUnity
 {
@@ -79,6 +79,19 @@ namespace PahlUnity
                 float addModifier = GetAddModifier(key);
                 float percentModifier = GetPercentModifier(key);
                 return addModifier > 0 ? addModifier : percentModifier > 0 ? percentModifier : 0f;
+            }
+        }
+
+        public float GetBaseValue(int key)
+        {
+            if (mSpecs.TryGetValue(key, out SpecFieldValue spec))
+            {
+                float baseValue = spec.CurrentValue;
+                return baseValue;
+            }
+            else
+            {
+                return 0;
             }
         }
 
