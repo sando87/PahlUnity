@@ -39,6 +39,9 @@ namespace PahlUnity
         private AnimatorHelper mAnim = null;
         public AnimatorHelper Anim { get { CacheComp(ref mAnim); return mAnim; } }
 
+        private EventBus mEventBus = null;
+        public EventBus Events { get { CacheComp(ref mEventBus); return mEventBus; } }
+
         public T GetComp<T>(bool includeInactive = false) where T : MonoBehaviour
         {
             return GetComponentInChildren<T>(includeInactive);
