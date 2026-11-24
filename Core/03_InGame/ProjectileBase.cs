@@ -209,19 +209,25 @@ namespace PahlUnity
             colInfo.HitTime = Time.time;
             OnHit?.Invoke(colInfo);
 
-            if (Stats.PierceChance > 0)
+            // int targetLayer = colInfo.Collider.ExGetBase().gameObject.layer;
+            // if (targetLayer == LayerID.Enemy)
+            // {
+            //     if (Stats.EndOnEnemyHit)
+            //     {
+            //         DoEndProjectile();
+            //     }
+            // }
+            // else if (targetLayer == LayerID.Terrain)
+            // {
+            //     if (Stats.EndOnTerrainHit)
+            //     {
+            //         DoEndProjectile();
+            //     }
+            // }
+
+            if (Stats.EndOnEnemyHit || Stats.EndOnTerrainHit)
             {
-                if (!MyUtils.IsPercentHit((int)Stats.PierceChance))
-                {
-                    DoEndProjectile();
-                }
-            }
-            else
-            {
-                if (Stats.EndOnHit)
-                {
-                    DoEndProjectile();
-                }
+                DoEndProjectile();
             }
         }
 
@@ -245,9 +251,9 @@ namespace PahlUnity
         public float Interval;
         public float StartDelay;
         public float RotateSpeed;
-        public float PierceChance;
         public bool AimToVelocity;
-        public bool EndOnHit;
+        public bool EndOnEnemyHit;
+        public bool EndOnTerrainHit;
         public float DestroyDelay;
     }
 }
