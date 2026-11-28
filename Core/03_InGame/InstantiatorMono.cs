@@ -17,7 +17,7 @@ namespace PahlUnity
 
         public void InstantiateThis(Transform positionTr)
         {
-            GameObject obj = Instantiate(gameObject, positionTr.position, Quaternion.identity);
+            GameObject obj = Instantiate(gameObject, positionTr.position, positionTr.rotation);
             obj.SetActive(true);
         }
 
